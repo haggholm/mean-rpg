@@ -9,7 +9,6 @@ var bodyParser = require('body-parser'),
     methodOverride = require('method-override'),
     passport = require('passport'),
     session = require('express-session'),
-	consolidate = require('consolidate'),
 	  mongoStore = require('connect-mongo')({
       session: session
     }),
@@ -52,11 +51,13 @@ module.exports = function(db) {
 	}));
 
 
-		// Set swig as the template engine
-	app.engine('server.view.html', consolidate['swig']);
+  require('hogan');
+  app.engine('html.mustache', require('hogan-express'));
 
 	// Set views path and view engine
-	app.set('view engine', 'server.view.html');
+  app.set('views', paths.server('views'));
+	app.set('view engine', 'html.mustache');
+//  app.use(express.static(paths.server('views/**')));
 
 
   // Request body parsing middleware should be above methodOverride
