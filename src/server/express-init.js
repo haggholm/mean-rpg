@@ -1,3 +1,4 @@
+// jshint node:true
 'use strict';
 
 var bodyParser = require('body-parser'),
@@ -8,13 +9,14 @@ var bodyParser = require('body-parser'),
     helmet = require('helmet'),
     methodOverride = require('method-override'),
     passport = require('passport'),
+    path = require('path'),
     session = require('express-session'),
 	  mongoStore = require('connect-mongo')({
       session: session
-    }),
-    config = require('./config'),
-	  path = require('path'),
-    paths = require('./paths');
+    });
+
+var config = require('./config'),
+	  paths = require('./paths');
 
 function info(txt) {
   console.info(chalk.green(txt));
@@ -30,17 +32,10 @@ module.exports = function(db) {
 	app.set('showStackError', true);
 
   info('Loading models...');
-//  glob.sync('./**').forEach(function(err, pths) {
-//    debug(JSON.stringify(arguments));
-//    debug('Globbbb: '+pths);
-//  });
-  info(paths.lib('models/*.js'));
   glob.sync(paths.lib('models/*.js')).forEach(function(pth){
-    require(path.resolve(pth));
-    debug('Glob: '+pth);
+    debug('  ' + path.relative('.', pth));
     require(pth);
   });
-  info('hm');
 
 	// Should be placed before express.static
 	app.use(compress({
@@ -50,14 +45,12 @@ module.exports = function(db) {
 		level: 9
 	}));
 
-
-  require('hogan');
-  app.engine('html.mustache', require('hogan-express'));
-
 	// Set views path and view engine
   app.set('views', paths.server('views'));
-	app.set('view engine', 'html.mustache');
-//  app.use(express.static(paths.server('views/**')));
+	app.set('view engine', 'mustache'); // Template extension .mustache
+  app.set('layout', paths.server('layout'));
+  // Handler for extension .mustache
+  app.engine('mustache', require('hogan-express'));
 
 
   // Request body parsing middleware should be above methodOverride
@@ -68,6 +61,7 @@ module.exports = function(db) {
 	app.use(methodOverride()); // Allow HTTP method overrides
 
   // Session management
+  info('Initializing session management');
   app.use(session({
 		saveUninitialized: true,
 		resave: true,
@@ -82,11 +76,14 @@ module.exports = function(db) {
 
 
   // Security fixes
+  info('Putting on Helmet');
   app.use(helmet());
 
-  require('./routes');
+  info('Loading routes...');
+  require('./routes')(app);
 
-  // Assume 'not found' in the error msgs is a 404. this is somewhat silly, but valid, you can do whatever you like, set properties, use instanceof etc.
+  // Assume 'not found' in the error msgs is a 404. this is somewhat silly,
+  // but valid, you can do whatever you like, set properties, use instanceof etc.
 	app.use(function(err, req, res, next) {
 		// If the error object doesn't exists
 		if (!err) return next();
@@ -103,10 +100,12 @@ module.exports = function(db) {
 	// Assume 404 since no middleware responded
 	app.use(function(req, res) {
 		res.status(404).render('404', {
+      title: 'Quoth the raven, “404!”',
 			url: req.originalUrl,
 			error: 'Not Found'
 		});
 	});
 
+  info('Express initialization complete');
   return app;
 };

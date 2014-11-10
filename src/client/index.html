@@ -1,21 +1,19 @@
 <!doctype html>
-<html ng-app="meanrpgclient">
+<html ng-app="meanrpgclient" ng-strict-di>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="author" content="Petter Häggholm"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>{{ title }}</title>
+  <title ng-bind="title"></title>
   <link rel="stylesheet" href="index.css"/>
 </head>
 <body ng-controller="MainCtrl">
-  <h1>{{ title }}</h1>
+  <h1 ng-bind="title"></h1>
 
-  <main>
-    <div class="row">
-    </div>
+  <main ng-view>
   </main>
 
   <script src="index.js"></script>
-  <script src="templates.js" async></script>
+  <script src="templates.js"></script>
 </body>
 </html>

@@ -1,17 +1,38 @@
-// jshint node:true
+//jshint node:true
 'use strict';
+
+var paths = require('./paths');
+
+var Skill = require(paths.lib('models/Skill'));
 
 
 module.exports = function(app) {
-	// Article Routes
-	app.route('/users/')
+	app.route('/api/users/')
 		.get(function(req, res) {
       res.json(['Hullo']);
     })
 //		.post(users.requiresLogin, articles.create);
   ;
-  app.route('/users/:id')
-    .get('Hullo');
+
+  app.route('/api/skills/')
+    .get(function(req, res) {
+      res.json(Skill.find());
+    })
+    .post(function(req, res) {
+      var skill = new Skill(req.body);
+
+      skill.save(function(err) {
+        if (err) {
+          return res.status(400).send({
+            message: 'Error'//errorHandler.getErrorMessage(err)
+          });
+        } else {
+          res.json(skill);
+        }
+      });
+    });
+//  app.route('/users/:id')
+//    .get('Hullo');
 
 //	app.route('/articles/:articleId')
 //		.get(articles.read)

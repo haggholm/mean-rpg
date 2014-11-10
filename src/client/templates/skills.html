@@ -1,0 +1,8 @@
+<ul ng-repeat="skill in skills">
+  <li ng-click="selectSkill(skill)" ng-bind="skill.name"></li>
+</ul>
+
+<div>
+  <input ng-model="skill.name" placeholder="Name"/>
+  <textarea ng-model="skill.description" placeholder="description"></textarea>
+</div>

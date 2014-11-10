@@ -28,3 +28,6 @@ var PlayerSchema = new Schema({
 		ref: 'User'
 	}
 });
+
+
+module.exports = mongoose.model('Player', PlayerSchema);
