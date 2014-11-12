@@ -1,36 +1,15 @@
-//jshint node:true
 'use strict';
 
-var paths = require('./paths');
-
-var Skill = require(paths.lib('models/Skill'));
+var attributeRoutes = require('./routes/attributes');
 
 
 module.exports = function(app) {
 	app.route('/api/users/')
 		.get(function(req, res) {
       res.json(['Hullo']);
-    })
-//		.post(users.requiresLogin, articles.create);
-  ;
-
-  app.route('/api/skills/')
-    .get(function(req, res) {
-      res.json(Skill.find());
-    })
-    .post(function(req, res) {
-      var skill = new Skill(req.body);
-
-      skill.save(function(err) {
-        if (err) {
-          return res.status(400).send({
-            message: 'Error'//errorHandler.getErrorMessage(err)
-          });
-        } else {
-          res.json(skill);
-        }
-      });
     });
+
+  app.use('/api/attributes', attributeRoutes);
 //  app.route('/users/:id')
 //    .get('Hullo');
 

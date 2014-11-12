@@ -1,3 +1,5 @@
+'use strict';
+
 var chalk = require('chalk'),
     mongoose = require('mongoose');
 
@@ -23,7 +25,7 @@ var app = require('./express-init')(db);
 app.listen(config.port);
 
 // Expose app
-exports = module.exports = app;
+module.exports = module.exports = app;
 
 // Logging initialization
 console.log('MEAN.JS application started on port ' + config.port);

@@ -6,7 +6,9 @@ var bodyParser = require('body-parser'),
     compress = require('compression'),
 	  express = require('express'),
     glob = require('glob'),
+    debug = require('debug'),
     helmet = require('helmet'),
+    logger = require('morgan'),
     methodOverride = require('method-override'),
     passport = require('passport'),
     path = require('path'),
@@ -15,8 +17,7 @@ var bodyParser = require('body-parser'),
       session: session
     });
 
-var config = require('./config'),
-	  paths = require('./paths');
+var config = require('./config');
 
 function info(txt) {
   console.info(chalk.green(txt));
@@ -26,13 +27,27 @@ function debug(txt) {
   console.info(chalk.blue(txt));
 }
 
+//CORS middleware
+var allowCORS = function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');//http://localhost:9000');
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Accept,Origin,Content-Type');
+
+  next();
+};
+
 module.exports = function(db) {
   var app = express();
 
 	app.set('showStackError', true);
 
+  app.use(logger('combined', {
+    stream: process.stdout
+  }));
+
   info('Loading models...');
-  glob.sync(paths.lib('models/*.js')).forEach(function(pth){
+  glob.sync(config.paths.lib('models/*.js')).forEach(function(pth){
     debug('  ' + path.relative('.', pth));
     require(pth);
   });
@@ -46,9 +61,9 @@ module.exports = function(db) {
 	}));
 
 	// Set views path and view engine
-  app.set('views', paths.server('views'));
+  app.set('views', config.paths.server('views'));
 	app.set('view engine', 'mustache'); // Template extension .mustache
-  app.set('layout', paths.server('layout'));
+  app.set('layout', config.paths.server('layout'));
   // Handler for extension .mustache
   app.engine('mustache', require('hogan-express'));
 
@@ -59,6 +74,11 @@ module.exports = function(db) {
 	}));
 	app.use(bodyParser.json());
 	app.use(methodOverride()); // Allow HTTP method overrides
+
+  app.use(allowCORS);
+  app.options("*", function(req,res,next){
+    res.sendStatus(200);
+  });
 
   // Session management
   info('Initializing session management');
@@ -82,11 +102,9 @@ module.exports = function(db) {
   info('Loading routes...');
   require('./routes')(app);
 
-  // Assume 'not found' in the error msgs is a 404. this is somewhat silly,
-  // but valid, you can do whatever you like, set properties, use instanceof etc.
-	app.use(function(err, req, res, next) {
+  app.use(function(err, req, res, next) {
 		// If the error object doesn't exists
-		if (!err) return next();
+		if (!err) { return next(); }
 
 		// Log it
 		console.error(err.stack);
@@ -107,5 +125,14 @@ module.exports = function(db) {
 	});
 
   info('Express initialization complete');
+
+  if (config.debug && 0) {
+    info('Debug mode: Launching livereload server...');
+    require('express-livereload')(app, {
+      port: 35739, // Not the same as Gulp will occupy!
+      watchDir: config.paths.server('../')
+    });
+  }
+
   return app;
 };

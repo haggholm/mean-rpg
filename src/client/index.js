@@ -1,5 +1,7 @@
+'use strict';
+
 require('es5-shim');
 
 require('./meanrpgclient');
-require('./routes');
+require('./states');
 

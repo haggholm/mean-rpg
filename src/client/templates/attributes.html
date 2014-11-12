@@ -1,0 +1,11 @@
+<div class="col-md-2 col-sm-12">
+  <div class="list-group" ng-repeat="a in attributes|orderBy:'name'">
+    <a class="list-group-item"
+       ng-class="{active: a === attribute}"
+       ui-sref="attribute.edit({id: a._id})"
+       ng-bind="a.name"></a>
+  </div>
+</div>
+
+<div class="col-md-9 col-md-offset-1 col-sm-12" ui-view>
+</div>

@@ -1,4 +1,4 @@
-// jshint node:true gulp:true
+'use strict';
 
 var browserify = require('gulp-browserify'),
     concat = require('gulp-concat'),
@@ -10,22 +10,24 @@ var browserify = require('gulp-browserify'),
     htmlmin = require('gulp-htmlmin'),
     imagemin = require('gulp-imagemin'),
     less = require('gulp-less'),
-    livereload = require('gulp-livereload'),
-    ngAnnotate = require('gulp-ng-annotate'),
+//    livereload = require('gulp-livereload'),
+//    merge = require('merge-stream'),
     ngTemplates = require('gulp-angular-templatecache'),
-    path = require('path'),
+//    path = require('path'),
     rename = require('gulp-rename'),
     revall = require('gulp-rev-all'),
     runSequence = require('run-sequence'),
     sourcemaps = require('gulp-sourcemaps'),
     uglify = require('gulp-uglify');
 
+require('clean-css');
+
 var paths = {
   images: 'src/client/{,**}.{jpg,jpeg,png,gif}',
   index: 'src/client/index.html',
   less: 'src/client/{,**}/*.{less,css}',
   scripts: 'src/client/{,**}/*.js',
-  templates: 'src/client/controllers/{,**}/*.html'
+  templates: 'src/client/templates/{,**}/*.html'
 };
 
 var opts = {
@@ -40,11 +42,11 @@ var opts = {
 };
 
 var config = {
+  debug: true,
   port: 9000,
+  sourcemaps: false,
   uglify: false
 };
-
-var debug = true;
 
 gulp.task('clean', function(cb) {
   del(['build', 'dist'], cb);
@@ -52,23 +54,24 @@ gulp.task('clean', function(cb) {
 
 gulp.task('scripts', function() {
     gulp.src(['src/client/index.js'])
-      .pipe(sourcemaps.init())
+      .pipe(gulpif(config.sourcemaps, sourcemaps.init()))
       .pipe(browserify({
-          shim: {
-            angular: {
-              path: 'node_modules/angular/angular.js',
-              exports: 'angular'
-            },
-            'angular-resource': {
-              path: 'node_modules/angular-resource/angular-resource.js',
-              exports: 'ngResource',
-              depends: { angular: 'angular' }
-            },
-            'angular-route': {
-              path: 'node_modules/angular-route/angular-route.js',
-              exports: 'ngRoute',
-              depends: { angular: 'angular' }
-            }
+        transform: ['browserify-ngannotate'],
+        shim: {
+          angular: {
+            path: 'node_modules/angular/angular.min.js',
+            exports: 'angular'
+          },
+          'angular-resource': {
+            path: 'node_modules/angular-resource/angular-resource.min.js',
+            exports: 'ngResource',
+            depends: { angular: 'angular' }
+          }
+//          'angular-route': {
+//            path: 'node_modules/angular-ui-router/release/angular-ui-router.min.js',
+//            exports: 'uiRouter',
+//            depends: { angular: 'angular' }
+//          }
 //            'es5-shim': {
 //              path: 'node_modules/es5-shim/es5-shim.js',
 //              exports: null
@@ -76,16 +79,15 @@ gulp.task('scripts', function() {
           },
           debug: true
         }))
-        .pipe(ngAnnotate())
         .pipe(concat('index.js'))
         .pipe(gulpif(config.uglify, uglify()))
-        .pipe(sourcemaps.write('./sourcemaps'))
+        .pipe(gulpif(config.sourcemaps, sourcemaps.write('./sourcemaps')))
         .pipe(gulp.dest('./build'));
 });
 
 gulp.task('templates', function() {
   gulp.src(['src/client/templates/{,**}/*.html'])
-    .pipe(htmlmin(opts.htmlmin))
+    .pipe(gulpif(config.uglify, htmlmin(opts.htmlmin)))
     .pipe(ngTemplates({module: 'meanrpgclient'}))
     .pipe(gulpif(config.uglify, uglify()))
     .pipe(gulp.dest('./build'));
@@ -99,9 +101,14 @@ gulp.task('images', function() {
 
 gulp.task('less', function() {
   gulp.src('src/client/index.less')
-    .pipe(sourcemaps.init())
-    .pipe(less({compress: config.uglify}))
-    .pipe(sourcemaps.write('./sourcemaps'))
+    .pipe(gulpif(config.sourcemaps, sourcemaps.init()))
+    .pipe(less({
+      cleancss: config.uglify,
+//      compress: config.uglify,
+      ieCompat: false,
+      strictImports: true
+    }))
+    .pipe(gulpif(config.sourcemaps, sourcemaps.write('./sourcemaps')))
     .pipe(gulp.dest('./build'));
 });
 
@@ -116,7 +123,7 @@ gulp.task('watch', function() {
 
 gulp.task('html', function() {
   gulp.src(paths.index)
-    .pipe(htmlmin(opts.htmlmin))
+    .pipe(gulpif(config.uglify, htmlmin(opts.htmlmin)))
     .pipe(gulp.dest('./build'));
 });
 
