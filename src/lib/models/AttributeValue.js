@@ -1,6 +1,6 @@
 'use strict';
 
-var mongoose = require('mongoose'),
+var mongoose = require('mongoose-q')(),
 	  Schema = mongoose.Schema;
 
 var ObjectId = mongoose.Schema.Types.ObjectId;

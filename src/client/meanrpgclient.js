@@ -6,11 +6,22 @@ require('../../node_modules/angular-ui-router/release/angular-ui-router');
 
 var app = ng.module('meanrpgclient', ['ui.router', 'ngResource']);
 
-app.config(function($httpProvider, $locationProvider, $resourceProvider) {
+app.config(function($httpProvider, $locationProvider, $resourceProvider,
+                    $stateProvider) {
 //  $locationProvider.hashPrefix = '!';
 
   $httpProvider.defaults.useXDomain = true;
   $resourceProvider.defaults.stripTrailingSlashes = false;
+
+});
+
+app.run(function($rootScope) {
+  $rootScope.$on(
+    '$stateChangeSuccess',
+    //function(event, toState, toParams, fromState, fromParams){
+    function(event, toState) {
+        console.debug('Transitioned to state: '+toState.name);
+  });
 });
 
 module.exports = app;

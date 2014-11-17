@@ -1,7 +1,8 @@
 'use strict';
 
-var chalk = require('chalk'),
-    mongoose = require('mongoose');
+var chalk = require('chalk')
+  , mongoose = require('mongoose')
+  , yargs = require('yargs');
 
 var config = require('./config');
 
@@ -16,16 +17,28 @@ var db = mongoose.connect(config.db.host, config.db.database, config.db.options,
   });
 
 
-var app = require('./express-init')(db);
+var app = require('./app')(db);
 
-// Bootstrap passport config
-//require('./config/passport')();
+var args = yargs
+  .usage('main [--user USER --pass PASSWORD [--create --email EMAIL]]')
+  .alias('u', 'user')
+  .alias('p', 'pass')
+  .implies('user', 'pass')
+  .implies('create', 'email')
+  .argv;
 
-// Start the app by listening on <port>
-app.listen(config.port);
+if (args.user) {
+  require('./cli')(args, app);
+} else {
+  // Bootstrap passport config
+  //require('./config/passport')();
 
-// Expose app
-module.exports = module.exports = app;
+  // Start the app by listening on <port>
+  app.listen(config.port);
 
-// Logging initialization
-console.log('MEAN.JS application started on port ' + config.port);
+  // Expose app
+  module.exports = module.exports = app;
+
+  // Logging initialization
+  console.log('MEAN.JS application started on port ' + config.port);
+}

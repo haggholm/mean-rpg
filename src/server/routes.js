@@ -1,6 +1,7 @@
 'use strict';
 
-var attributeRoutes = require('./routes/attributes');
+var attributeRoutes = require('./routes/attributes'),
+    authRoutes = require('./routes/auth');
 
 
 module.exports = function(app) {
@@ -9,6 +10,7 @@ module.exports = function(app) {
       res.json(['Hullo']);
     });
 
+  app.use('/api/auth', authRoutes);
   app.use('/api/attributes', attributeRoutes);
 //  app.route('/users/:id')
 //    .get('Hullo');

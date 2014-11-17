@@ -18,7 +18,8 @@ var browserify = require('gulp-browserify'),
     revall = require('gulp-rev-all'),
     runSequence = require('run-sequence'),
     sourcemaps = require('gulp-sourcemaps'),
-    uglify = require('gulp-uglify');
+    uglify = require('gulp-uglify')
+  , plumber = require('gulp-plumber');
 
 require('clean-css');
 
@@ -26,7 +27,7 @@ var paths = {
   images: 'src/client/{,**}.{jpg,jpeg,png,gif}',
   index: 'src/client/index.html',
   less: 'src/client/{,**}/*.{less,css}',
-  scripts: 'src/client/{,**}/*.js',
+  scripts: ['src/client/{,**}/*.js', 'src/lib/{,**}/*.js'],
   templates: 'src/client/templates/{,**}/*.html'
 };
 
@@ -54,6 +55,7 @@ gulp.task('clean', function(cb) {
 
 gulp.task('scripts', function() {
     gulp.src(['src/client/index.js'])
+      .pipe(plumber())
       .pipe(gulpif(config.sourcemaps, sourcemaps.init()))
       .pipe(browserify({
         transform: ['browserify-ngannotate'],
@@ -87,6 +89,7 @@ gulp.task('scripts', function() {
 
 gulp.task('templates', function() {
   gulp.src(['src/client/templates/{,**}/*.html'])
+    .pipe(plumber())
     .pipe(gulpif(config.uglify, htmlmin(opts.htmlmin)))
     .pipe(ngTemplates({module: 'meanrpgclient'}))
     .pipe(gulpif(config.uglify, uglify()))
@@ -95,12 +98,14 @@ gulp.task('templates', function() {
 
 gulp.task('images', function() {
   gulp.src(paths.images)
+    .pipe(plumber())
     .pipe(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true }))
     .pipe(gulp.dest('./build'));
 });
 
 gulp.task('less', function() {
   gulp.src('src/client/index.less')
+    .pipe(plumber())
     .pipe(gulpif(config.sourcemaps, sourcemaps.init()))
     .pipe(less({
       cleancss: config.uglify,
@@ -123,6 +128,7 @@ gulp.task('watch', function() {
 
 gulp.task('html', function() {
   gulp.src(paths.index)
+    .pipe(plumber())
     .pipe(gulpif(config.uglify, htmlmin(opts.htmlmin)))
     .pipe(gulp.dest('./build'));
 });

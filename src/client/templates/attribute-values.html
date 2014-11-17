@@ -1,0 +1,12 @@
+<form class="form-horizontal" role="form">
+  <div class="form-group row" ng-repeat="a in attributes|orderBy:'name'">
+  <div class="col-md-4">{{a.name}} ({{a.children.length||0}} children)</div>
+    <div class="col-md-4">
+      <label for="attr-points-{{a._id}}" class="sr-only" ng-bind="a.name"></label>
+      <input class="form-control"
+          id="attr-points-{{a._id}}" type="number" ng-model="a.points"/>
+    </div>
+    <div class="col-md-4">
+      <p class="form-control-static">{{a.value|number:0}}|{{a.accumulatedPoints|number:0}}|{{a.effectivePoints|number:0}}</p></div>
+  </div>
+</form>

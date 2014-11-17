@@ -1,7 +1,7 @@
 'use strict';
 
-var mongoose = require('mongoose'),
-    crypto = require('crypto');
+var mongoose = require('mongoose-q')()
+  , crypto = require('crypto');
 
 var Schema = mongoose.Schema;
 
@@ -58,7 +58,7 @@ var UserSchema = new Schema({
 	roles: {
 		type: [{
 			type: String,
-			enum: ['user', 'admin']
+			enum: ['user', 'gm', 'admin']
 		}],
 		default: ['user']
 	},
@@ -83,12 +83,21 @@ var UserSchema = new Schema({
  */
 UserSchema.pre('save', function(next) {
 	if (this.password && this.password.length > 6) {
-		this.salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
+		this.resalt();
 		this.password = this.hashPassword(this.password);
 	}
 
 	next();
 });
+
+UserSchema.methods.resalt = function() {
+	this.salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
+};
+
+UserSchema.methods.changePassword = function(password) {
+  this.resalt();
+	this.password = this.hashPassword(password);
+};
 
 /**
  * Create instance method for hashing a password
@@ -129,5 +138,6 @@ UserSchema.statics.findUniqueUsername = function(username, suffix, callback) {
 		}
 	});
 };
+
 
 module.exports = mongoose.model('User', UserSchema);
