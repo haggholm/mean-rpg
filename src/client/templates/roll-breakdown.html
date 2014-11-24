@@ -1,9 +1,115 @@
-<!doctype html>
-<html>
-<head>
-  <title></title>
-</head>
-<body>
+<h1>Dice in detail</h1>
+<div class="row">
+    <div class="single-col">
+        <p>To recapitulate, when performing a check with the dice, you</p>
+        <ol>
+            <li>
+            Roll <span roll="1d10*"></span>; that is, roll a ten-sided die,
+            and if you roll a 10, roll again and add up (as long as you keep
+            rolling tens).
+            </li>
+            <li>Add up any bonuses.</li>
+            <li>Subtract the difficulty.
+              <ul>
+                  <li>
+                  If you are competing against a living opponent, the “difficulty”
+                  is represented by their doing a roll just like yours, i.e.
+                  <span roll="1d10*"></span> + bonuses.
+                  </li>
+              </ul>
+            </li>
+            <li>
+            See if you succeed (if the result is over 0), fail (if it’s under 0), 
+            or “stalemate” (if it’s 0).
+            </li>
+            <li>Keep track of the difference value (i.e. how close to 0 you were).</li>
+        </ol>
+        <p>
+        I hope we can agree that’s fairly straightforward, but I’m sure we can agree
+        that it’s not obvious what this actually means in terms of outcome. If your
+        bonuses add up to +2 above your opponent, whats is the chance that you’ll
+        win the roll? The answer is <q>About 55%</q>, but it’s not quite intutive,
+        what with potentially-unlimited rerolls and so forth. After making a computer
+        roll a billion or so virtual dice, I can present the following visual aids.
+        </p>
+    </div>
+</div>
+<h3>Outcomes by advantage</h3>
+<div class="row">
+  <div class="col-md-12">
+    <nvd3-multi-bar-chart
+        id="odds-vs-advantage"
+        style="width: 100%;"
 
-</body>
-</html>
+        data="oddsVsAdvantageData"
+        stacked="true"
+        color="getColour"
+
+        interactive="true"
+        tooltips="true"
+        tooltipcontent="mkTooltip"
+        delay="0"
+
+        showlegend="true"
+        legendcolor="getColour"
+        xaxislabel="Advantage"
+        yaxislabel="% win/draw/loss"
+        yaxisrotateylabel="true"
+        yaxistickformat="formatYTick"
+        xaxistickformat="formatXTick"
+        xaxisstaggerlabels="true"
+
+        showxaxis="true"
+        showyaxis="true"
+
+        height="500">
+
+      <svg></svg>
+    </nvd3-multi-bar-chart>
+  </div>
+</div>
+<div class="row">
+    <div class="single-col">
+        <p>
+        The chart above shows the likelihood of winning, losing, or drawing
+        even on a roll against an opponent, for any of a wide range of
+        relative advantages (or disadvantages). Of course, in many situations,
+        there’s effectively just a draw, as for instance two combatants in
+        brief stalemate will simply try again. If we account for retries (and
+        the fact that the person more likely to win will also win most of the
+        retries!), we end up with a chart like this instead:
+        </p>
+    </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <nvd3-multi-bar-chart
+        id="odds-vs-advantage-no-draw"
+
+        data="oddsVsAdvantageDataNoDraw"
+        stacked="true"
+        color="getColour"
+
+        interactive="true"
+        tooltips="true"
+        tooltipcontent="mkTooltip"
+        delay="0"
+
+        showlegend="true"
+        legendcolor="getColour"
+        xaxislabel="Advantage"
+        yaxislabel="% win/loss"
+        yaxisrotateylabel="true"
+        yaxistickformat="formatYTick"
+        xaxistickformat="formatXTick"
+        xaxisstaggerlabels="true"
+
+        showxaxis="true"
+        showyaxis="true"
+
+        height="500">
+
+      <svg></svg>
+    </nvd3-multi-bar-chart>
+  </div>
+</div>

@@ -1,3 +1,4 @@
+// jshint node:true
 'use strict';
 
 var browserify = require('gulp-browserify'),
@@ -46,7 +47,7 @@ var config = {
   debug: true,
   port: 9000,
   sourcemaps: false,
-  uglify: false
+  uglify: true
 };
 
 gulp.task('clean', function(cb) {
@@ -68,23 +69,24 @@ gulp.task('scripts', function() {
             path: 'node_modules/angular-resource/angular-resource.min.js',
             exports: 'ngResource',
             depends: { angular: 'angular' }
-          }
-//          'angular-route': {
-//            path: 'node_modules/angular-ui-router/release/angular-ui-router.min.js',
-//            exports: 'uiRouter',
-//            depends: { angular: 'angular' }
-//          }
-//            'es5-shim': {
-//              path: 'node_modules/es5-shim/es5-shim.js',
-//              exports: null
-//            }
           },
-          debug: true
-        }))
-        .pipe(concat('index.js'))
-        .pipe(gulpif(config.uglify, uglify()))
-        .pipe(gulpif(config.sourcemaps, sourcemaps.write('./sourcemaps')))
-        .pipe(gulp.dest('./build'));
+          'angularjs-nvd3-directives': {
+            path: 'node_modules/angularjs-nvd3-directives/' +
+                  'dist/angularjs-nvd3-directives.js',
+            exports: null,
+            depends: { angular: 'angular' }
+          },
+          'es5-shim': {
+            path: 'node_modules/es5-shim/es5-shim.js',
+            exports: null
+          }
+        },
+        debug: config.sourcemaps
+      }))
+      .pipe(concat('index.js'))
+      .pipe(gulpif(config.uglify, uglify()))
+      .pipe(gulpif(config.sourcemaps, sourcemaps.write('./sourcemaps')))
+      .pipe(gulp.dest('./build'));
 });
 
 gulp.task('templates', function() {
@@ -99,7 +101,10 @@ gulp.task('templates', function() {
 gulp.task('images', function() {
   gulp.src(paths.images)
     .pipe(plumber())
-    .pipe(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true }))
+    .pipe(imagemin({
+      optimizationLevel: 3,
+      progressive: true,
+      interlaced: true }))
     .pipe(gulp.dest('./build'));
 });
 

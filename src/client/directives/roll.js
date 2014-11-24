@@ -31,9 +31,9 @@ app.directive('roll', function() {
   return {
     restrict: 'A',
     scope: {roll: '@'},
-    template: '<strong class="roll" title="{{min}} – {{max}} ({{mean}})">'+
+    template: '<span class="roll" title="{{min}} – {{max}} ({{mean}})">'+
               '{{rolls}}d{{die}}<span ng-if="bonus" ng-bind="bonus"></span>' +
-              '<span ng-if="infinite">*</span></strong>',
+              '<span ng-if="infinite">*</span></span>',
     link: function(scope, el, attrs) {
       var match = re.exec(attrs.roll);
       if (match) {

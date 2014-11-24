@@ -3,8 +3,15 @@
 var ng = require('angular');
 require('angular-resource');
 require('../../node_modules/angular-ui-router/release/angular-ui-router');
+require('d3');
+require('nvd3');
+require('angularjs-nvd3-directives');
 
-var app = ng.module('meanrpgclient', ['ui.router', 'ngResource']);
+var app = ng.module('meanrpgclient', [
+  'ui.router',
+  'ngResource',
+  'nvd3ChartDirectives'
+]);
 
 app.config(function($httpProvider, $locationProvider, $resourceProvider,
                     $stateProvider) {

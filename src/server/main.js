@@ -20,14 +20,14 @@ var db = mongoose.connect(config.db.host, config.db.database, config.db.options,
 var app = require('./app')(db);
 
 var args = yargs
-  .usage('main [--user USER --pass PASSWORD [--create --email EMAIL]]')
+  .usage('main [--user USER --pass PASSWORD [--create --email EMAIL]] [--sim]')
   .alias('u', 'user')
   .alias('p', 'pass')
   .implies('user', 'pass')
   .implies('create', 'email')
   .argv;
 
-if (args.user) {
+if (args.user || args.sim) {
   require('./cli')(args, app);
 } else {
   // Bootstrap passport config

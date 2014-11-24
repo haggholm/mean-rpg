@@ -2,8 +2,15 @@
 
 var app = require('./meanrpgclient');
 require('./controllers/_all');
+require('./directives/roll');
 
 app.config(function($stateProvider) {
+  $stateProvider.state('roll-stats', {
+    url: '/roll-stats',
+    templateUrl: 'roll-breakdown.html',
+    controller: 'RollBreakdownCtrl'
+  });
+
   $stateProvider.state('attribute', {
     url: '/attributes',
     templateUrl: 'attributes.html',

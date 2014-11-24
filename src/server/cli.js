@@ -3,6 +3,7 @@
 
 var chalk = require('chalk')
   , q = require('q')
+  , fs = require('fs')
   , User = require('../lib/models/User');
 
 
@@ -40,5 +41,31 @@ module.exports = function(args/*, app*/) {
         console.log(chalk.red(err.message));
         process.exit(1);
       }).done();
+  }
+
+  if (args.sim) {
+    // megaIters -> error
+    //    1 -> 0.044  (% pts)
+    //   10 -> 0.018  (% pts)
+    //   50 -> 0.0087 (% pts)    58s/adv
+    //  100 -> 0.0058 (% pts)   112s/adv
+    // 1000 -> 0.001  (% pts)  1134s/adv.
+    var megaIters = 50;
+    var data = require('../lib/calculation/roll-simulation')(megaIters);
+    console.log(chalk.blue(Math.abs(data.stats[0].wins - data.stats[0].losses)));
+    if (typeof(args.sim) === 'string') {
+      fs.writeFile(args.sim, JSON.stringify(data),
+        function(err) {
+          if (err) {
+            console.log(chalk.red(err));
+            process.exit(1);
+          } else {
+            process.exit(0);
+          }
+        });
+    } else {
+      console.log(chalk.yellow(JSON.stringify(data, null, '  ')));
+      process.exit(0);
+    }
   }
 };
