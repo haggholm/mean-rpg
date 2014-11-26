@@ -1,12 +1,32 @@
 <form class="form-horizontal" role="form">
+  <div class="form-group row">
+    <div class="col-md-3 text-center"><strong>Skill</strong></div>
+    <div class="col-lg-2 col-sm-4 text-center"><strong>Points</strong></div>
+    <div class="col-lg-1 col-sm-2 text-center"><strong>Value</strong></div>
+    <div class="col-lg-1 col-sm-2 text-center"><strong>—</strong></div>
+  </div>
   <div class="form-group row" ng-repeat="a in attributes|orderBy:'name'">
-  <div class="col-md-4">{{a.name}} ({{a.children.length||0}} children)</div>
-    <div class="col-md-4">
+    <div class="col-lg-3">
+      <p class="form-control-static">{{a.name}} ({{a.children.length||0}} children)</p>
+    </div>
+    <div class="col-lg-2 col-sm-4">
       <label for="attr-points-{{a._id}}" class="sr-only" ng-bind="a.name"></label>
       <input class="form-control"
           id="attr-points-{{a._id}}" type="number" ng-model="a.points"/>
     </div>
-    <div class="col-md-4">
-      <p class="form-control-static">{{a.value|number:0}}|{{a.accumulatedPoints|number:0}}|{{a.effectivePoints|number:0}}</p></div>
+    <div class="col-lg-1 col-sm-2 text-right">
+      <p class="form-control-static">{{a.value|number:0}}</p>
+    </div>
+    <div class="col-lg-1 col-sm-2 text-right">
+      <p class="form-control-static text-muted">{{a.accumulatedPoints|number:0}}|{{a.effectivePoints|number:0}}</p>
+    </div>
+    <div class="col-lg-2 col-sm-4">
+      <p ng-repeat="e in a.vs">
+        <span ng-bind="e.description"></span>:
+        <span ng-bind="e.chance|number:2"></span>%
+      </p>
+    </div>
   </div>
 </form>
+
+

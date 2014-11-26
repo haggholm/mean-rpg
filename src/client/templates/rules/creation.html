@@ -1,0 +1,201 @@
+<section>
+    <h2>Creating a character</h2>
+
+    <p>
+        When creating a character, you will have to select
+    </p>
+    <ol>
+        <li><em>Race</em> and <em>sex</em></li>
+        <li>A <em>class</em></li>
+        <li>Talents</li>
+        <li>Skills</li>
+        <li>Optionally, feats</li>
+    </ol>
+
+    <section>
+        <h3>Race</h3>
+    </section>
+
+    <section>
+        <h3>Sex</h3>
+
+        <p>
+            You may freely choose your character’s sex. It has the following
+            effects:
+        </p>
+        <ul>
+            <li>Men receive {{ 50|bonus }} points in the Brawn and Constitution
+                talents
+            </li>
+            <li>Women receive {{ 30|bonus }} points in the Social talent</li>
+        </ul>
+        <p>
+            Apart from this, sex has no impact on talents, skills, classes,
+            or anything much else (in terms of rules).
+        </p>
+    </section>
+
+    <section>
+        <h3>Attributes</h3>
+
+        <p>
+            When you create a character, you will have a certain number of
+            <strong>talent points</strong> and <strong>skill points</strong> to
+            spend. Since skills and talents work the same, we can call these
+            <strong>attribute points</strong> for short. (They work exactly the
+            same;
+            it’s just that you can only spend talent points on talents, not
+            skills, and
+            vice versa.)
+        </p>
+
+        <p>
+            Skills have different <em>levels</em> in parent/child relationships.
+            For instance, the Longsword skill is a Sword skill is a Hand-to-hand
+            weapons skill, which gives us levels:
+        </p>
+        <ol>
+            <li>Hand-to-hand weapons</li>
+            <li>Sword</li>
+            <li>Longsword</li>
+        </ol>
+        <p>
+            The most general skills are most widely applicable and harder to
+            learn, since they represent a general knowledge of all their child
+            skills: Obviously it’s harder to be good at wielding swords in
+            general than it is to wield one particular kind of sword, and being
+            good at hand-to-hand weapons in general is very difficult indeed.
+            This is represented by a different <em>cost</em> for different
+            skills:
+        </p>
+        <ol>
+            <li>Level 1 skills (very specific): 1 point</li>
+            <li>Level 2 skills (somewhat specific): 2 points</li>
+            <li>Level 3 skills (most general): 3 points</li>
+        </ol>
+        <p>
+            This means that you can more easily get better at very specific
+            skills; but
+            on the other hand, these are more specific—less generally
+            applicable.
+        </p>
+    </section>
+
+    <section>
+        <h4>Points and values</h4>
+
+        <p>
+            Every attribute has two numbers associated with it: The
+            <strong>attribute points</strong> and
+            <strong>attribute value</strong>. The points represent how much
+            time, effort, training, or experience you have put into improving
+            that attribute; the value represents how strong it is.
+        </p>
+
+        <p>
+            The relationship between the points and the value is simple: The
+            attribute value is the <em>square root</em> of the attribute points.
+            This reflects the fact that you learn most quickly early in the
+            process of improving any skill or attribute. A beginner can learn a
+            lot in his first few weeks and months of practice, whereas a master
+            may have to train for years to get even better than he already is.
+        </p>
+    </section>
+    <section>
+        <h4>Parent/child relationships</h4>
+
+        <p>
+            Since a child skill is a specialised version of a parent skill,
+            you
+            can
+            never be worse at a child skill than at a parent skill. (Going
+            back
+            to our
+            standby example, it makes little sense to suggest that you’re
+            better
+            with
+            swords than you are with a longsword!) This is reflected in the
+            following
+            rule:
+        </p>
+
+        <p>
+            When computing the value of an attribute, add to its specific
+            points
+            the
+            sum of all its parent points.
+        </p>
+        <aside class="example">
+            <p>
+                Suppose you have the following point distribution:
+            </p>
+            <ul>
+                <li>Hand-to-hand weapons: 2</li>
+                <li>Swords: 8</li>
+                <li>Longsword: 5</li>
+            </ul>
+            <p>
+                With specific training in Longsword, your character has 5
+                skill points (for a skill value, in itself, of
+                {% math %}<msqrt>5</msqrt><mo>≃</mo>2{% endmath %});
+                but added to this he has 8 points from being generally good
+                with swords, and another 2 points from wide experience with
+                hand-to-hand weapons. Thus the total Longsword value is
+                {% math %}
+                    <msqrt>5<mo>+</mo>8<mo>+</mo>2</msqrt>
+                    <mo>=</mo>
+                    <msqrt>15</msqrt>
+                    <mo>≃</mo>
+                    4
+                {% endmath %}
+            </p>
+            <p>
+                Note that by specifically training with a longsword, your
+                character is better at this than had they placed their skill
+                points in general hand-to-hand skills, because the more general
+                skill is more expensive.
+            </p>
+            <ul>
+                <li>Hand-to-hand weapons: 2 costs 6 points</li>
+                <li>Swords: 8 costs 16 points</li>
+                <li>Longsword: 5 costs 5 points</li>
+            </ul>
+            <p>
+                for a total cost of 27, for 15 points in Longsword. By placing
+                all 27 points in Hand-to-hand weapons, you would only get 9
+                points. By specialising entirely in Longsword you could get 27
+                points and a value of 5, but on the other hand be quite useless
+                with other weapons.
+            </p>
+        </aside>
+
+        <section>
+            <h4>Buying your attributes</h4>
+            <p>
+                You have a certain number of points, and a maximum cap on
+                spending per attribute. Normally this is set to
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th class="number">Points</th>
+                        <th class="number">Cap</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Talents</td>
+                        <td class="number">200</td>
+                        <td class="number">50</td>
+                    </tr>
+                    <tr>
+                        <td>Skills</td>
+                        <td class="number">500</td>
+                        <td class="number">100</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </section>
+</section>

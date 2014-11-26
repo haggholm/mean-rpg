@@ -1,0 +1,8 @@
+<div id="sidebar-menu">
+  <ul class="main-menu nav nav-stacked affix">
+    <li ng-repeat="heading in headings">
+      <a href="#{{ heading.id }}" ng-class="heading.tag" ng-bind="heading.title"></a>
+    </li>
+    <li><br/><a href="#">Back to top</a></li>
+  </ul>
+</div>

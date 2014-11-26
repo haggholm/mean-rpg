@@ -28,9 +28,10 @@ function sum(values) {
 }
 
 function valueFromPoints(points) {
-  return Math.floor(
-    (Math.sqrt(8.0 * points + 1.0) - 1.0) / 2.0
-  );
+  return Math.floor(Math.sqrt(4.0 * points));
+  //return Math.floor(
+  //  (Math.sqrt(8.0 * points + 1.0) - 1.0) / 2.0
+  //);
 }
 
 function getParentId(node) {
@@ -64,7 +65,7 @@ function treeify(nodes) {
   return nodes;
 }
 
-var N = 5;
+var EXP_SHARE_FACTOR = 3;
 
 module.exports = {
   /**
@@ -91,8 +92,9 @@ module.exports = {
     }, getId);
     var getEffectivePoints = _.memoize(function(node) {
       if (node.parent !== undefined && node.parent !== null) {
-        node.effectivePoints = node.points * (N-1)/N +
-                               getAccumulatedPoints(node.parent) / N;
+        node.effectivePoints =
+          node.points * (EXP_SHARE_FACTOR-1)/EXP_SHARE_FACTOR +
+          getAccumulatedPoints(node.parent) / EXP_SHARE_FACTOR;
       } else {
         node.effectivePoints = node.points;
       }

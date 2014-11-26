@@ -1,5 +1,8 @@
-var app = require('../meanrpgclient')
+'use strict';
+
+var app = require('./_module')
   , sim = require('../../lib/calculation/roll-simulation');
+
 
 var re = /\s*(\d+)d(\d+)\s?([+±−-]\d+)?(\*)?\s*/i;
 

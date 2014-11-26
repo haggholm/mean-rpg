@@ -7,10 +7,14 @@ require('d3');
 require('nvd3');
 require('angularjs-nvd3-directives');
 
+require('./directives/bsmenu');
+require('./directives/roll');
+
 var app = ng.module('meanrpgclient', [
   'ui.router',
   'ngResource',
-  'nvd3ChartDirectives'
+  'nvd3ChartDirectives',
+  'meanrpg.directives'
 ]);
 
 app.config(function($httpProvider, $locationProvider, $resourceProvider,
