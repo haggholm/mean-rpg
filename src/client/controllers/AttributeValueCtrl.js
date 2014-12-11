@@ -1,16 +1,15 @@
 'use strict';
 
 var _ = require('lodash')
-  , app = require('../meanrpgclient')
+  , app = require('../app')
   , tree = require('../../lib/calculation/tree')
-  , d3 = require('d3')
-  , simdata = require('../rolls.json');
+  , simdata = require('../../data/rolls.json');
+require('d3-browserify');
 
 require('../services/models');
 
 
 module.exports = app.controller('AttributeValueCtrl', function($scope, ModelService) {
-  console.log('?');
   ModelService.Attribute.query(function(attrs) {
     attrs.forEach(function(a) {
       a.points = 0;
@@ -30,6 +29,17 @@ module.exports = app.controller('AttributeValueCtrl', function($scope, ModelServ
       function(){
         tree.recalculateValues($scope.attributes);
         _.each($scope.attributes, function(attr) {
+          attr.d3data = {
+            key: 'Versus level',
+            values: _.map(levels, function(l, idx) {
+              var v = attr.value - idx;
+              return [Number(v < 0) ?
+                  simdata.stats[-v].losses :
+                  simdata.stats[v].wins,
+                l];
+            })
+          };
+          console.log(attr.d3data);
           attr.vs = _.map(levels, function(l, idx) {
             var v = attr.value - idx;
             return {

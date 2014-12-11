@@ -1,10 +1,11 @@
 'use strict';
 
 var ng = require('angular');
+// Load Angular modules needed for app initialization
 require('angular-resource');
-require('../../node_modules/angular-ui-router/release/angular-ui-router');
-require('d3');
-require('nvd3');
+require('angular-ui-router');
+// Directives module must be loaded; disable dev logging.
+require('nvd3').dev = false;
 require('angularjs-nvd3-directives');
 
 require('./directives/bsmenu');

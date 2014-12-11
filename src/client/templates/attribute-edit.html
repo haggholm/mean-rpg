@@ -18,3 +18,8 @@
     <button class="btn btn-primary" ng-click="saveAttribute()">Save</button>
   </div>
 </form>
+<div class="row">
+  <ul>
+    <li ng-each="child in a.children" ng-bind="a.name"></li>
+  </ul>
+</div>

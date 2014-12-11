@@ -8,15 +8,15 @@
   <link rel="stylesheet" href="index.css"/>
 </head>
 <body ng-controller="MainCtrl" class="container-fluid">
-  <div ng-include="menu.html"></div>
+  <div ng-include="'menu.html'"></div>
   <div class="col-md-9">
-    <main ui-view class="container"></main>
+    <main ui-view id="main" class="container"></main>
   </div>
   <div class="col-md-2 col-md-offset-1" style="padding-top:20px;">
     <bsmenu></bsmenu>
   </div>
 
-  <script src="index.js"></script>
+  <script src="meanrpg2.min.js"></script>
   <script src="templates.js"></script>
 </body>
 </html>

@@ -1,12 +1,18 @@
 'use strict';
 
-var app = require('../meanrpgclient');
+var app = require('../app');
 require('../services/models');
 
 app.controller('AttributeEditCtrl',
   function($scope, $stateParams, ModelService) {
     if ($stateParams.id) {
-      $scope.attribute = ModelService.Attribute.get({id: $stateParams.id});
+      $scope.attribute = ModelService.Attribute.get({id: $stateParams.id},
+      function(){
+        var a = $scope.attribute;
+        if ($scope.attrById.hasOwnProperty(a._id)) {
+          a.children = $scope.attrById[a._id].children;
+        }
+      });
     } else {
       $scope.attribute = new ModelService.Attribute();
     }

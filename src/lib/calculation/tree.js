@@ -34,8 +34,17 @@ function valueFromPoints(points) {
   //);
 }
 
+function ensureParent(parent, child) {
+  if (parent.children === undefined || parent.children === null) {
+    parent.children = [child];
+  } else if (parent.children.indexOf(child) === -1) {
+    parent.children.push(child);
+  }
+}
+
 function getParentId(node) {
   if (typeof(node.parent) === 'object') {
+    ensureParent(node.parent, node);
     return node.parent._id;
   } else if (typeof(node.parent) === 'string') {
     return node.parent;
@@ -54,12 +63,7 @@ function treeify(nodes) {
     var parentId = getParentId(node);
     if (parentId) {
       var parent = node.parent = nodesById[parentId];
-      console.log(parent.name, 'is parent to', node.name);
-      if (parent.children === undefined || parent.children === null) {
-        parent.children = [node];
-      } else if (parent.children.indexOf(node) === -1) {
-        parent.children.push(node);
-      }
+      ensureParent(parent, node);
     }
   });
   return nodes;

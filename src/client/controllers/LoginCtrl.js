@@ -1,6 +1,6 @@
 'use strict';
 
-var app = require('../meanrpgclient');
+var app = require('../app');
 require('../services/SessionService');
 
 module.exports = app.controller('LoginCtrl', function($scope, SessionService) {

@@ -1,6 +1,6 @@
 'use strict';
 
-var app = require('./meanrpgclient');
+var app = require('./app');
 require('./controllers/_all');
 require('./directives/roll');
 

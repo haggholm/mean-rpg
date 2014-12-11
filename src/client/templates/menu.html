@@ -1,6 +1,5 @@
 <nav class="navbar navbar-default navbar-fixed-top"
-     role="navigation"
-     ui-view="menu">
+     role="navigation">
   <div class="navbar-header">
     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
       <span class="sr-only">Toggle navigation</span>
@@ -15,18 +14,17 @@
 
       <li class="dropdown">
         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-          <span class="fa fa-group"></span>
-          <span ng-show="currentSubject">{{ currentSubject.code }}</span>
-          <span ng-hide="currentSubject">Subjects</span>
+          <span class="fa fa-database"></span>
+          Attributes
           <span class="fa fa-caret-down"></span>
         </a>
         <ul class="dropdown-menu">
-          <li ng-repeat="subject in subjects|orderBy:'code'">
-            <a ui-sref="subject({subjectId: subject.id})">{{ subject.code }}</a>
-          </li>
-          <li><a ui-sref="subject({subjectId:'new'})">
-            <span class="fa fa-plus"></span>
-            Add subject
+          <li><a ui-sref="attribute.edit">
+            Edit attributes
+
+          </a></li>
+          <li><a ui-sref="attribute-values.edit">
+            Edit attribute values
           </a></li>
         </ul>
       </li>
@@ -34,65 +32,21 @@
       <li class="dropdown" ng-show="currentSubject">
         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
           <span class="fa fa-flask"></span>
-          <span ng-show="currentSeries">{{ currentSeries.label }}</span>
-          <span ng-hide="currentSeries">Series</span>
+          Rules
           <b class="caret"></b>
         </a>
         <ul class="dropdown-menu">
-          <li ng-repeat="series in sessionSeries">
-            <a ui-sref="subject.series({subjectId:currentSubject.id,seriesId:series.id})">
-            {{ series.label }}
-            </a>
-          </li>
-          <li><a ui-sref="subject.series({subjectId:currentSubject.id,seriesId:'new'})">
-            <span class="fa fa-plus"></span>
-            Add session
-          </a></li>
+
         </ul>
       </li>
-
-      <li class="dropdown" ng-show="currentSeries">
-        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-          <span class="fa fa-calendar"></span>
-          <span ng-show="currentSession">#{{ currentSession.order+1 }}</span>
-          <span ng-hide="currentSession">Session</span>
-          <b class="caret"></b>
-        </a>
-        <ul class="dropdown-menu">
-          <li ng-repeat="session in sessions">
-            <a ui-sref="subject.series.session({subjectId:currentSubject.id,seriesId:session.series,sessionId:session.id})">
-            #{{ session.order+1 }}
-            </a>
-          </li>
-        </ul>
-      </li>
-
     </ul>
 
     <ul class="nav navbar-nav navbar-right">
 
-      <li><a ui-sref="randomizer">
-        <span class="fa fa-random"></span>
-        Randomizer
+      <li><a ui-sref="roll-stats">
+        <span class="fa fa-bar-chart"></span>
+        Roll statistics
       </a></li>
-
-       <li class="dropdown">
-        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-          <span class="fa fa-cog"></span>
-          Admin <b class="caret"></b>
-        </a>
-        <ul class="dropdown-menu">
-          <li><a ui-sref="stimuli">
-            <span class="fa fa-picture-o"></span>
-            Stimulus library
-          </a></li>
-          <li><a href="/app/admin/">
-            <span class="fa fa-cogs"></span>
-            Advanced panel
-          </a></li>
-        </ul>
-      </li>
-
       <li class="dropdown">
         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
           <span class="fa fa-user"></span>
