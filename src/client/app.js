@@ -7,6 +7,7 @@ require('angular-ui-router');
 // Directives module must be loaded; disable dev logging.
 require('nvd3').dev = false;
 require('angularjs-nvd3-directives');
+require('angular-nvd3');
 
 require('./directives/bsmenu');
 require('./directives/roll');
@@ -15,7 +16,8 @@ var app = ng.module('meanrpgclient', [
   'ui.router',
   'ngResource',
   'nvd3ChartDirectives',
-  'meanrpg.directives'
+  'meanrpg.directives',
+  'nvd3'
 ]);
 
 app.config(function($httpProvider, $locationProvider, $resourceProvider,

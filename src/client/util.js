@@ -1,13 +1,14 @@
 'use strict';
 
-var numeral = require('numeral');
+var _ = require('lodash')
+  , numeral = require('numeral');
 
 function bracketify(zeroes) {
   return zeroes ? '[' + zeroes + ']' : '';
 }
 
 module.exports = {
-  getPercentFormatter: function(sigFigs) {
+  getPercentFormatter: _.memoize(function(sigFigs) {
     var a = '0[.]' + bracketify('0'.repeat(sigFigs-2))
       , b = '0[.]' + bracketify('0'.repeat(sigFigs-1))
       , c = '0[.]' + bracketify('0'.repeat(sigFigs));
@@ -25,17 +26,21 @@ module.exports = {
       //    output += mantissa[i+1];
       //  }
       //}
-
-      var rounded = Number(percent.toPrecision(sigFigs));
-      if (rounded >= 100) {
-        return '100%';
-      } else if (rounded >= 10) {
-        return numeral(rounded).format(a) + '%';
-      } else if (rounded >= 1) {
-        return numeral(rounded).format(b) + '%';
-      } else {
-        return numeral(rounded).format(c) + '%';
+      try {
+        var rounded = Number(percent.toPrecision(sigFigs));
+        if (rounded >= 100) {
+          return '100%';
+        } else if (rounded >= 10) {
+          return numeral(rounded).format(a) + '%';
+        } else if (rounded >= 1) {
+          return numeral(rounded).format(b) + '%';
+        } else {
+          return numeral(rounded).format(c) + '%';
+        }
+      } catch(e) {
+        console.error(e);
+        return '?';
       }
     };
-  }
+  })
 };

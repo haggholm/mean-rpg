@@ -7,12 +7,6 @@ function getId(node) {
   return node._id;
 }
 
-function isLeaf2(node) {
-  return node.children === undefined ||
-         node.children === null ||
-         node.children.length === 0;
-}
-
 function isLeaf(node) {
   return node.children === undefined ||
          node.children === null ||
@@ -28,6 +22,9 @@ function sum(values) {
 }
 
 function valueFromPoints(points) {
+  if (points < 0) {
+    return -valueFromPoints(-points);
+  }
   return Math.floor(Math.sqrt(4.0 * points));
   //return Math.floor(
   //  (Math.sqrt(8.0 * points + 1.0) - 1.0) / 2.0
