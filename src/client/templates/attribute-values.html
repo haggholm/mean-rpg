@@ -20,14 +20,27 @@
     <div class="col-lg-1 col-sm-2 text-right">
       <p class="form-control-static text-muted">{{a.accumulatedPoints|number:0}}|{{a.effectivePoints|number:0}}</p>
     </div>
-    <div class="col-lg-2 col-sm-4">
+    <div class="col-lg-2 col-sm-4" ng-if="a.d3data.length" style="min-height:200px">
       <nvd3-multi-bar-horizontal-chart
-          ng-if="a.d3data"
-          data="a.d3data"
-          id="sv-{{a._id}}-vs"
-          width="550"
-          height="10">
-        	  <svg></svg>
+        ng-if="a.d3data"
+        data="a.d3data"
+        id="sv-{{a._id}}-vs"
+
+        showValues="true"
+        valueFormat="formatPercentage"
+        tooltipcontent="mkTooltip"
+        color="getColour"
+
+        showxaxis="true"
+        showyaxis="true"
+        yaxistickformat="formatPercentage"
+        forcey="[0, 100]"
+        clipedge="true"
+        interactive="true"
+        tooltips="true"
+        margin="margin"
+      >
+          <svg style="width:300px;height:200px;"></svg>
       </nvd3-multi-bar-horizontal-chart>
         <!--<span ng-bind="e.description"></span>:-->
         <!--<span ng-bind="e.chance|number:2"></span>%-->

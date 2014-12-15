@@ -1,0 +1,20 @@
+{
+  "name": "meanrpg2",
+  "version": "0.0.0",
+  "homepage": "https://github.com/haggholm/mean-rpg",
+  "authors": [
+    "Petter Häggholm <petter@petterhaggholm.net>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "angular-nvd3": "~0.0.9"
+  }
+}
