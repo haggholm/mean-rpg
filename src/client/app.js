@@ -1,30 +1,38 @@
 'use strict';
 
-var ng = require('angular');
 // Load Angular modules needed for app initialization
+var ng = require('angular');
 require('angular-resource');
 require('angular-ui-router');
+
+require('bootstrap');
+
 // Directives module must be loaded; disable dev logging.
 require('nvd3').dev = false;
 require('angular-nvd3');
-require('bootstrap');
 
-require('./directives/bsmenu');
-require('./directives/roll');
-
+// Submodules
 require('./RPG.Controllers');
 require('./RPG.Directives');
+require('./RPG.Filters');
 require('./RPG.Services');
+
+// Directives and filters are implicitly pulled in by templates;
+// make sure they're always available.
+require('./directives/_all');
+require('./filters/_all');
+
 
 var app = ng.module('meanrpgclient', [
   'ui.router',
   'ngResource',
-  'meanrpg.directives',
   'nvd3',
   'RPG.Controllers',
   'RPG.Directives',
+  'RPG.Filters',
   'RPG.Services'
 ]);
+module.exports = app;
 
 app.config(function($httpProvider, $locationProvider, $resourceProvider/*,
                     $stateProvider*/) {
@@ -43,5 +51,3 @@ app.run(function($rootScope) {
         console.debug('Transitioned to state: '+toState.name);
   });
 });
-
-module.exports = app;

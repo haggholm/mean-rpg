@@ -1,7 +1,8 @@
 'use strict';
 
-var ServiceModule = require('ServiceModule');
+var ServiceModule = require('../RPG.Services');
 
-module.exports = ServiceModule.service('CharacterService', function(){
+module.exports = ServiceModule.service('CharacterService',
+  function() {
 
-});
+  });

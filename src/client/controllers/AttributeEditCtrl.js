@@ -3,7 +3,7 @@
 var ngModule = require('../RPG.Controllers');
 require('../services/models');
 
-ngModule.controller('AttributeEditCtrl',
+module.exports = ngModule.controller('AttributeEditCtrl',
   function($scope, $stateParams, ModelService) {
     if ($stateParams.id) {
       $scope.attribute = ModelService.Attribute.get({id: $stateParams.id},

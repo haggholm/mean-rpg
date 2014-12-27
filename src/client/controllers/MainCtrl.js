@@ -1,7 +1,7 @@
 'use strict';
 
-var app = require('../app');
+var ngModule = require('../RPG.Controllers');
 
-app.controller('MainCtrl', function($scope) {
+module.exports = ngModule.controller('MainCtrl', function($scope) {
   $scope.title = 'Test';
 });

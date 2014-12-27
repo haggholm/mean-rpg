@@ -1,7 +1,8 @@
 'use strict';
 
-var app = require('../app');
+var ngModule = require('../RPG.Services');
 
-module.exports = app.service('SessionService', function($http){
+module.exports = ngModule.service('SessionService',
+  function($http) {
 
-});
+  });

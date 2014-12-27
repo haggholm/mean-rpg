@@ -23,7 +23,8 @@
     </ul>
 
     <p>
-        When checking for success, you will roll {{ "1d10*"|roll }}, add the
+        When checking for success, you will roll <span roll="1d10*"></span>,
+        add the
         values of the relevant skill and attribute, and any modifiers. If the
         result is greater than the <dfn>difficulty</dfn>, the roll is a success;
         if equal, a draw; if less, a failure.
@@ -337,7 +338,7 @@
         <aside class="float">
             <h5>Note</h5>
             <p>
-            The average value of {{"1d10*"|roll}} is 6<br/>
+            The average value of <span roll="1d10*"></span> is 6<br/>
             (6.1 if you want to be more precise).
             </p>
         </aside>
@@ -345,7 +346,7 @@
             Most of the rolls in the game are performed using the ten-sided die,
             the <strong>d10</strong>. Moreover, they are typically
             <em>unlimited rolls</em>—we’ll borrow a convention and denote this
-            by <strong>{{"1d10*"|roll}}</strong>.
+            by <strong roll="1d10*"></strong>.
             This means that if you roll a 10, you may re-roll; if you
             roll <em>another</em> 10, you may re-roll again; and so on. This
             means that the roll value is theoretically unlimited, though in
@@ -442,7 +443,7 @@
             in that you get to count an attribute value <em>as well as</em>
             your skill value.
 
-            To perform a skill check, roll {{ "1d10*"|roll }} and add
+            To perform a skill check, roll <span roll="1d10*"></span> and add
             your stats:
         </p>
         {% mathblock %}
@@ -826,9 +827,9 @@
         </p>
         <ul>
             <li>
-                If you roll a double 10 (roll {{ "1d10"|roll }} for 10, re-roll,
-                and roll another 10), you gain an experience point in the skill
-                used.
+                If you roll a double 10 (roll <span roll="1d10*"></span> for 10,
+                re-roll, and roll another 10), you gain an experience point in
+                the skill used.
             </li>
             <li>
                 If you roll a <em>triple</em> 10, you also gain a point to the

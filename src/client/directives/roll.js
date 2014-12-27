@@ -1,6 +1,6 @@
 'use strict';
 
-var app = require('./_module')
+var ngModule = require('../RPG.Directives')
   , sim = require('../../lib/calculation/roll-simulation');
 
 
@@ -25,51 +25,52 @@ function formatBonus(adv) {
     return adv.toString().replace('-', '−');
   } else if (adv === 0) {
     return '±0';
-  } else  {
+  } else {
     return '+' + adv.toString();
   }
 }
 
-app.directive('roll', function() {
-  return {
-    restrict: 'A',
-    scope: {roll: '@'},
-    template: '<span class="roll" title="{{min}} – {{max}} ({{mean}})">'+
-              '{{rolls}}d{{die}}<span ng-if="bonus" ng-bind="bonus"></span>' +
-              '<span ng-if="infinite">*</span></span>',
-    link: function(scope, el, attrs) {
-      var match = re.exec(attrs.roll);
-      if (match) {
-        var rolls = Number(match[1])
-          , die = Number(match[2]);
+module.exports = ngModule.directive('roll',
+  function() {
+    return {
+      restrict: 'A',
+      scope: {roll: '@'},
+      template: '<span class="roll" title="{{min}} – {{max}} ({{mean}})">' +
+                '{{rolls}}d{{die}}<span ng-if="bonus" ng-bind="bonus"></span>' +
+                '<span ng-if="infinite">*</span></span>',
+      link: function(scope, el, attrs) {
+        var match = re.exec(attrs.roll);
+        if (match) {
+          var rolls = Number(match[1])
+            , die = Number(match[2]);
 
-        var bonus = 0;
-        if (match[3]) {
-          bonus = parseBonus(match[3]);
-        }
-        var min = rolls + bonus;
+          var bonus = 0;
+          if (match[3]) {
+            bonus = parseBonus(match[3]);
+          }
+          var min = rolls + bonus;
 
-        if (match[4]) {
-          scope.infinite = true;
-          var mean = rolls * sim.meanRoll(1, die) + bonus;
-          scope.mean = mean.toFixed(1);
-          // Normally, mean = min + (max-min)/2; since we have
-          // mean but not max, let's just solve for max
-          var max = (mean - min) * 2 + min;
-          scope.max = max.toFixed(1) + '/∞';
-        } else {
-          scope.infinite = false;
-          scope.mean = rolls + (rolls * (die-1))/2
-          scope.max = rolls * die + bonus;
-        }
+          if (match[4]) {
+            scope.infinite = true;
+            var mean = rolls * sim.meanRoll(1, die) + bonus;
+            scope.mean = mean.toFixed(1);
+            // Normally, mean = min + (max-min)/2; since we have
+            // mean but not max, let's just solve for max
+            var max = (mean - min) * 2 + min;
+            scope.max = max.toFixed(1) + '/∞';
+          } else {
+            scope.infinite = false;
+            scope.mean = rolls + (rolls * (die - 1)) / 2
+            scope.max = rolls * die + bonus;
+          }
 
-        scope.rolls = rolls;
-        scope.die = die;
-        scope.min = min;
-        if (bonus !== 0) {
-          scope.bonus = formatBonus(bonus);
+          scope.rolls = rolls;
+          scope.die = die;
+          scope.min = min;
+          if (bonus !== 0) {
+            scope.bonus = formatBonus(bonus);
+          }
         }
       }
-    }
-  };
-});
+    };
+  });
