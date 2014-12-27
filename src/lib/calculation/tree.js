@@ -25,7 +25,7 @@ function valueFromPoints(points) {
   if (points < 0) {
     return -valueFromPoints(-points);
   }
-  return Math.floor(Math.sqrt(4.0 * points));
+  return Math.floor(Math.sqrt(5.0 * points));
   //return Math.floor(
   //  (Math.sqrt(8.0 * points + 1.0) - 1.0) / 2.0
   //);

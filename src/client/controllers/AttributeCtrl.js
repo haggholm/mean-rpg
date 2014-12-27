@@ -12,9 +12,10 @@ app.controller('AttributeCtrl', function($scope, ModelService) {
       a.children = [];
     });
     _.each($scope.attributes, function(a) {
-
-      a.parent = $scope.attrById[a.parent];
-      a.parent.children.push(a);
+      if (a.parent !== undefined) {
+        a.parent = $scope.attrById[a.parent];
+        a.parent.children.push(a);
+      }
     });
   });
 });

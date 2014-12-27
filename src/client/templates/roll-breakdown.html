@@ -37,35 +37,40 @@
 <h3>Outcomes by advantage</h3>
 <div class="row">
   <div class="col-md-12">
-    <nvd3-multi-bar-chart
-        id="odds-vs-advantage"
-        style="width: 100%;"
+   <nvd3 config="nvd3config"
+         options="nvd3optionsWithAdvantage"
+         data="oddsVsAdvantageData"></nvd3>
+         <!--api="a.nvd3api"-->
 
-        data="::oddsVsAdvantageData"
-        stacked="true"
-        color="getColour"
+    <!--<nvd3-multi-bar-chart-->
+        <!--id="odds-vs-advantage"-->
+        <!--style="width: 100%;"-->
 
-        interactive="true"
-        tooltips="true"
-        tooltipcontent="mkTooltip"
-        delay="0"
+        <!--data="::oddsVsAdvantageData"-->
+        <!--stacked="true"-->
+        <!--color="getColour"-->
 
-        showlegend="true"
-        legendcolor="getColour"
-        xaxislabel="Advantage"
-        yaxislabel="% win/draw/loss"
-        yaxisrotateylabel="true"
-        yaxistickformat="formatYTick"
-        xaxistickformat="formatXTick"
-        xaxisstaggerlabels="true"
+        <!--interactive="true"-->
+        <!--tooltips="true"-->
+        <!--tooltipcontent="mkTooltip"-->
+        <!--delay="0"-->
 
-        showxaxis="true"
-        showyaxis="true"
+        <!--showlegend="true"-->
+        <!--legendcolor="getColour"-->
+        <!--xaxislabel="Advantage"-->
+        <!--yaxislabel="% win/draw/loss"-->
+        <!--yaxisrotateylabel="true"-->
+        <!--yaxistickformat="formatYTick"-->
+        <!--xaxistickformat="formatXTick"-->
+        <!--xaxisstaggerlabels="true"-->
 
-        height="500">
+        <!--showxaxis="true"-->
+        <!--showyaxis="true"-->
 
-      <svg></svg>
-    </nvd3-multi-bar-chart>
+        <!--height="500">-->
+
+      <!--<svg></svg>-->
+    <!--</nvd3-multi-bar-chart>-->
   </div>
 </div>
 <div class="row">
@@ -82,34 +87,38 @@
     </div>
 </div>
 <div class="row">
-  <div class="col-md-12">
-    <nvd3-multi-bar-chart
-        id="odds-vs-advantage-no-draw"
+  {{containerWidth}}
+  <div class="col-md-12" id="no-draw-container">
+    <nvd3 config="nvd3config"
+          options="nvd3optionsNoDraw"
+          data="oddsVsAdvantageDataNoDraw"></nvd3>
+    <!--<nvd3-multi-bar-chart-->
+        <!--id="odds-vs-advantage-no-draw"-->
 
-        data="::oddsVsAdvantageDataNoDraw"
-        stacked="true"
-        color="getColour"
+        <!--data="::oddsVsAdvantageDataNoDraw"-->
+        <!--stacked="true"-->
+        <!--color="getColour"-->
 
-        interactive="true"
-        tooltips="true"
-        tooltipcontent="mkTooltip"
-        delay="0"
+        <!--interactive="true"-->
+        <!--tooltips="true"-->
+        <!--tooltipcontent="mkTooltip"-->
+        <!--delay="0"-->
 
-        showlegend="true"
-        legendcolor="getColour"
-        xaxislabel="Advantage"
-        yaxislabel="% win/loss"
-        yaxisrotateylabel="true"
-        yaxistickformat="formatYTick"
-        xaxistickformat="formatXTick"
-        xaxisstaggerlabels="true"
+        <!--showlegend="true"-->
+        <!--legendcolor="getColour"-->
+        <!--xaxislabel="Advantage"-->
+        <!--yaxislabel="% win/loss"-->
+        <!--yaxisrotateylabel="true"-->
+        <!--yaxistickformat="formatYTick"-->
+        <!--xaxistickformat="formatXTick"-->
+        <!--xaxisstaggerlabels="true"-->
 
-        showxaxis="true"
-        showyaxis="true"
+        <!--showxaxis="true"-->
+        <!--showyaxis="true"-->
 
-        height="500">
+        <!--height="500">-->
 
-      <svg></svg>
-    </nvd3-multi-bar-chart>
+      <!--<svg></svg>-->
+    <!--</nvd3-multi-bar-chart>-->
   </div>
 </div>

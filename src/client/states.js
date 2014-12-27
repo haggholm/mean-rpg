@@ -34,6 +34,24 @@ app.config(function($stateProvider) {
     controller: 'AttributeValueCtrl'//require('./controllers/AttributeValueCtrl')
   });
 
+  $stateProvider.state('rules', {
+    url: '/rules',
+    abstract: true,
+    template: '<div ui-view></div>'
+  })
+    .state('rules.combat', {
+      url: '/combat',
+      templateUrl: 'rules/combat.html'
+    })
+    .state('rules.creation', {
+      url: '/creation',
+      templateUrl: 'rules/creation.html'
+    })
+    .state('rules.skills', {
+      url: '/skills',
+      templateUrl: 'rules/skills.html'
+    });
+
 
 //  $locationProvider.otherwise(function() {
 //    console.error('!!!');

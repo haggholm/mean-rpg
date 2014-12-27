@@ -2,6 +2,7 @@
 
 var $ = require('jquery')
   , app = require('./_module');
+require('bootstrap');
 
 
 module.exports = app.directive('bsmenu', function(){

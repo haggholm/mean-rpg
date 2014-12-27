@@ -11,13 +11,13 @@ var die = 10
 
 var BUF_SIZE = 2 << 11;
 var urandom = function() {
-  urandom.offset += 4;  
+  urandom.offset += 4;
   if (urandom.offset >= BUF_SIZE) {
     urandom.buffer = crypto.pseudoRandomBytes(BUF_SIZE);
     urandom.offset = 0;
   }
   return urandom.buffer.readInt32BE(urandom.offset);
-}
+};
 urandom.offset = BUF_SIZE;
 
 var engine;
@@ -35,7 +35,7 @@ var singleRoll = function(rolls, die) {
     sum += Random.integer(1, die)(engine);
   }
   return sum;
-}
+};
 
 /**
  * @returns {number}
@@ -54,14 +54,13 @@ function roll(rolls, die) {
  * @returns {{wins: number, losses: number, draws: number}}
  */
 function simulateAtDiff(advantage, iterations) {
-  var wins = 0, draws = 0, losses = 0, total = 0
-    , diff, times;
+  var wins = 0, draws = 0, losses = 0, diff;
 
   for (var i = iterations; i > 0; i--) {
     diff = roll(rolls, die) + advantage - roll(rolls, die);
-    if      (diff > 0)     wins++;
-    else if (diff < 0)     losses++;
-    else                   draws++;
+    if      (diff > 0) wins++;
+    else if (diff < 0) losses++;
+    else               draws++;
   }
 
   var divisor = iterations / 100;
@@ -78,8 +77,7 @@ function simulateAtDiff(advantage, iterations) {
 function run(nMillionIterations) {
   var iterations = nMillionIterations * 1000000
     , res = {}
-    , keys = []
-    , diffs = {};
+    , keys = [];
   var range = 2 * (maxRoll+1);
   var overallT0 = process.hrtime();
   for (var advantage = 0; advantage < range; advantage++) {
@@ -89,10 +87,10 @@ function run(nMillionIterations) {
     var t0 = process.hrtime();
 
     res[advantage] = simulateAtDiff(advantage, iterations);
-    
+
     var dt = process.hrtime(t0);
     process.stdout.write(
-      chalk.green('done ') + 
+      chalk.green('done ') +
       chalk.yellow('[' + (dt[0]+dt[1]/1e9).toFixed(2)+'s]') +
       '\n'
     );
@@ -111,12 +109,12 @@ function run(nMillionIterations) {
 run.meanRoll = function(rolls, die, bonus) {
   var i
     , rollSum = 0
-    , bonus = bonus === undefined ? 0 : bonus
     , iterations = 1000000;
+  bonus = bonus === undefined ? 0 : bonus;
   for (i = iterations; i > 0; i--) {
     rollSum += roll(rolls, die) + bonus;
   }
   return rollSum / iterations;
-}
+};
 
 module.exports = run;

@@ -14,7 +14,5 @@
     "test",
     "tests"
   ],
-  "devDependencies": {
-    "angular-nvd3": "~0.0.9"
-  }
+  "devDependencies": {}
 }

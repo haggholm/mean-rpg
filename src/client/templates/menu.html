@@ -21,7 +21,6 @@
         <ul class="dropdown-menu">
           <li><a ui-sref="attribute.edit">
             Edit attributes
-
           </a></li>
           <li><a ui-sref="attribute-values.edit">
             Edit attribute values
@@ -29,14 +28,22 @@
         </ul>
       </li>
 
-      <li class="dropdown" ng-show="currentSubject">
+      <li class="dropdown">
         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
           <span class="fa fa-flask"></span>
           Rules
           <b class="caret"></b>
         </a>
         <ul class="dropdown-menu">
-
+          <li><a ui-sref="rules.creation">
+            Character creation
+          </a></li>
+          <li><a ui-sref="rules.skills">
+            Skills
+          </a></li>
+          <li><a ui-sref="rules.combat">
+            Combat
+          </a></li>
         </ul>
       </li>
     </ul>

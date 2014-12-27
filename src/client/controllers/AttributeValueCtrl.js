@@ -4,9 +4,8 @@ var _ = require('lodash')
   , app = require('../app')
   , tree = require('../../lib/calculation/tree')
   , simdata = require('../../data/rolls.processed.json')
-  , util = require('../util');
-var d3 = require('d3-browserify');
-
+  , util = require('../util')
+  , d3 = require('d3-browserify');
 require('../services/models');
 
 

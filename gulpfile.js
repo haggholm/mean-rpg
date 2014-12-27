@@ -115,12 +115,12 @@ gulp.task('scripts', function() {
       .on('error', gutil.log.bind(gutil, 'Browserify error'))
       .pipe(plumber())
       .pipe(sourceStream(getBundleName()+'.js'))
-      .pipe(buffer())
-      .pipe(gulpif(config.sourcemaps, sourcemaps.init({loadMaps: true})))
+      //.pipe(buffer())
+      //.pipe(gulpif(config.sourcemaps, sourcemaps.init({loadMaps: true})))
       // Add transformation tasks to the pipeline here.
       //.pipe(uglify())
 
-      .pipe(gulpif(config.sourcemaps, sourcemaps.write('.')))
+      //.pipe(gulpif(config.sourcemaps, sourcemaps.write('.')))
       .pipe(gulp.dest('./build'));
   }
   return rebundle();

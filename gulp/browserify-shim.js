@@ -15,22 +15,12 @@ module.exports = {
     exports: null,
     depends: {angular: 'angular'}
   },
-  'angularjs-nvd3-directives': {
-    exports: null,
-    depends: {
-      angular: 'angular',
-      nvd3: 'nv',
-      'd3-browserify': 'd3'
-    }
-  },
   bootstrap: {
     depends: {jquery: 'jQuery'},
     exports: null
   },
   nvd3: {
     exports: 'nv',
-    depends: {
-      'd3-browserify': 'd3'
-    }
+    depends: {'d3-browserify': 'd3'}
   }
 };
