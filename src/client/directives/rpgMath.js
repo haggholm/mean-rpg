@@ -8,10 +8,7 @@
 var katex = require('katex')
   , ngModule = require('../RPG.Directives')
   , mathjax = require('mathjax');
-//require('../../../git_modules/MathJax/config/TeX-AMS-MML_HTMLorMML');
-require('../../../git_modules/MathJax/config/TeX-AMS_HTML');
-
-
+require('mathjaxInit');
 
 function render(text, element) {
   var domNode = element[0];
@@ -30,27 +27,6 @@ function render(text, element) {
 module.exports = {
   rpgMath: ngModule.directive('rpgMath',
     function() {
-      mathjax.Hub.Config({
-        'HTML-CSS': {
-          mtextFontInherit: true,
-          webFont: 'STIX',
-          availableFonts: []
-        }//,
-        //MMLorHTML: {
-        //  preferredFont: 'STIX',
-        //  availableFonts: []
-        //}
-        //MatchWebFonts: {
-        //  matchFor: {
-        //    'HTML-CSS': true,
-        //    NativeMML: false,
-        //    SVG: false
-        //  },
-        //  fontCheckDelay: 2000,
-        //  fontCheckTimeout: 30 * 1000
-        //}
-      });
-
       return {
         restrict: 'AE',
         link: function(scope, element) {
