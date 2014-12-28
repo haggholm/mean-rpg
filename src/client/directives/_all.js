@@ -1,9 +1,11 @@
 'use strict';
 
 var bsmenu = require('./bsmenu')
-  , roll = require('roll');
+  , roll = require('./roll')
+  , rpgMath = require('./rpgMath');
 
 module.exports = {
   bsmenu: bsmenu,
-  roll: roll
+  roll: roll,
+  rpgMath: rpgMath
 };

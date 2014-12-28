@@ -29,6 +29,7 @@
     "helmet": "^0.5.4",
     "hogan-express": "^0.5.2",
     "lodash": "^2.4.1",
+    "mathjax": "git://github.com/mathjax/MathJax#2.4.0",
     "mathjs": "^1.2.0",
     "method-override": "^2.3.0",
     "minimist": "^1.1.0",
@@ -58,6 +59,7 @@
     "clean-css": "^3.0.1",
     "d3-browserify": "^3.4.12",
     "es5-shim": "^4.0.5",
+    "externalize": "^0.1.1",
     "gulp": "^3.8.10",
     "gulp-angular-templatecache": "^1.5.0",
     "gulp-concat": "^2.4.2",
@@ -100,7 +102,8 @@
     "angular-nvd3": "./node_modules/angular-nvd3/dist/angular-nvd3.min.js",
     "angular-resource": "./node_modules/angular-resource/angular-resource.min.js",
     "bootstrap": "./node_modules/bootstrap/dist/js/bootstrap.min.js",
-    "nvd3": "./node_modules/nvd3/build/nv.d3.min.js"
+    "nvd3": "./node_modules/nvd3/build/nv.d3.min.js",
+    "mathjax": "./git_modules/MathJax/MathJax.js"
   },
   "browserify-shim": "./gulp/browserify-shim.js"
 }

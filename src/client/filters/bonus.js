@@ -1,9 +1,12 @@
 'use strict';
 
-var ngModule = require('../RPG.Filters');
+var _ = require('lodash')
+  , ngModule = require('../RPG.Filters');
+
+
 module.exports = ngModule.filter('bonus',
   function() {
-    return function(value) {
+    return _.memoize(function(value) {
       if (isNaN(value)) {
         return '?';
       } else {
@@ -16,5 +19,5 @@ module.exports = ngModule.filter('bonus',
           return '±0';
         }
       }
-    };
+    });
   });

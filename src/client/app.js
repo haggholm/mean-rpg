@@ -34,8 +34,9 @@ var app = ng.module('meanrpgclient', [
 ]);
 module.exports = app;
 
-app.config(function($httpProvider, $locationProvider, $resourceProvider/*,
-                    $stateProvider*/) {
+app.config(function(
+  $httpProvider, $locationProvider, $resourceProvider/*,
+   $stateProvider*/) {
   $locationProvider.hashPrefix('!');
 
   $httpProvider.defaults.useXDomain = true;
@@ -48,6 +49,7 @@ app.run(function($rootScope) {
     '$stateChangeSuccess',
     //function(event, toState, toParams, fromState, fromParams){
     function(event, toState) {
-        console.debug('Transitioned to state: '+toState.name);
-  });
+      console.debug('Transitioned to state: ' + toState.name);
+      console.log(toState);
+    });
 });

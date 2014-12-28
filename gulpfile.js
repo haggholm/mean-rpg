@@ -29,7 +29,10 @@ require('clean-css');
 var paths = {
   images: 'src/client/{,**}.{jpg,jpeg,png,gif}',
   index: 'src/client/index.html',
-  fonts: 'node_modules/font-awesome/fonts/*.{otf,eot,svg,ttf,woff}',
+  fonts: [
+    'node_modules/font-awesome/fonts/*.{otf,eot,svg,ttf,woff}',
+    'git_modules/MathJax/fonts/**'
+  ],
   less: 'src/client/{,**}/*.{less,css}',
   scripts: ['src/client/{,**}/*.js', 'src/lib/{,**}/*.js'],
   templates: 'src/client/templates/{,**}/*.html'
@@ -89,6 +92,13 @@ var getBundleName = function () {
 //    .pipe(gulpif(config.sourcemaps, sourcemaps.write()))
 //    .pipe(gulp.dest('./build'));
 //});
+
+gulp.task('mathjax', function() {
+  return gulp.src('git_modules/MathJax/{extensions,jax}/**')
+    .pipe(uglify())
+    .pipe(gulp.dest('./build/'));
+});
+
 
 gulp.task('scripts', function() {
   var bundler = watchify(browserify(_.extend({
@@ -193,7 +203,7 @@ gulp.task('connect', function() {
 gulp.task('build', function() {
   return runSequence(
     'clean',
-    ['scripts', 'fonts', 'images', 'templates', 'less', 'html']
+    ['mathjax', 'scripts', 'fonts', 'images', 'templates', 'less', 'html']
 //    'postprocess',
 //    'cdnize'
   );

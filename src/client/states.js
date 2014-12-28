@@ -14,7 +14,10 @@ app.config(function($stateProvider) {
   $stateProvider.state('attribute', {
     url: '/attributes',
     templateUrl: 'attributes.html',
-    controller: 'AttributeCtrl'
+    controller: 'AttributeCtrl',
+    data: {
+      title: 'Attributes'
+    }
   });
 
   $stateProvider.state('attribute.edit', {
@@ -28,28 +31,40 @@ app.config(function($stateProvider) {
 //    abstract: true,
     template: '<div ui-view></div>'
   })
-  .state('attribute-values.edit', {
-    url: '/',
-    templateUrl: 'attribute-values.html',
-    controller: 'AttributeValueCtrl'//require('./controllers/AttributeValueCtrl')
-  });
+    .state('attribute-values.edit', {
+      url: '/',
+      templateUrl: 'attribute-values.html',
+      controller: 'AttributeValueCtrl'//require('./controllers/AttributeValueCtrl')
+    });
 
   $stateProvider.state('rules', {
     url: '/rules',
     abstract: true,
-    template: '<div ui-view></div>'
+    template: '<div ui-view></div>',
+    data: {
+      title: 'Rules'
+    }
   })
     .state('rules.combat', {
       url: '/combat',
-      templateUrl: 'rules/combat.html'
+      templateUrl: 'rules/combat.html',
+      data: {
+        title: 'Combat'
+      }
     })
     .state('rules.creation', {
       url: '/creation',
-      templateUrl: 'rules/creation.html'
+      templateUrl: 'rules/creation.html',
+      data: {
+        title: 'Character creation'
+      }
     })
     .state('rules.skills', {
       url: '/skills',
-      templateUrl: 'rules/skills.html'
+      templateUrl: 'rules/skills.html',
+      data: {
+        title: 'Skills'
+      }
     });
 
 

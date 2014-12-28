@@ -372,10 +372,11 @@
         <p>
             To perform the check, compute your <dfn>check value</dfn>
         </p>
-        {% mathblock %}
-            <mi>check value</mi><mo>=</mo>
-            <mi>1d10*</mi><mo>±</mo><mi>attribute</mi>
-        {% endmathblock %}
+        <div rpg-math>
+            \begin{align}
+            \text{ check value } = \text{ 1d10* } \pm \text{ attribute }
+            \end{align}
+        </div>
         <p>
             If your check value is higher than the resistance, you succeed;
             if it is lower, you fail. If it’s equal, it’s a “draw”, the meaning
@@ -415,22 +416,24 @@
                 {{ 8|bonus }}, while Mandor’s add up to {{ 13|bonus }}—a considerable
                 advantage. Terrick rolls
             </p>
-            {% mathblock %}
-                2<mo>+</mo><mn>7</mn><mo>-</mo>1<mo>+</mo>
-                <mo>[</mo><mi>1d10*</mi><mo>&RightArrow;</mo><mn>9</mn><mo>]</mo>
-                <mo>=</mo>17
-            {% endmathblock %}
+            <div rpg-math>
+            \begin{align}
+                2 + 7 - 1 +
+                [ \text{1d10* } \rightarrow 9 ]
+                = 17
+            \end{align}
+            </div>
             <p>
                 while his opponent rolls
             </p>
-            {% mathblock %}
-                3<mo>+</mo>12<mo>-</mo>2<mo>+</mo>
-                <mo>[</mo>1d10*<mo>&RightArrow;</mo>2<mo>]</mo>
-                <mo>=</mo>15
-            {% endmathblock %}
+            <div rpg-math>
+                3+12-2+
+                [ \text{1d10*} \rightarrow 2 ]
+                = 15
+            </div>
             <p>
                 Terrick, with great luck, wins the exchange by a margin of
-                {% math %}17<mo>-</mo>15<mo>=</mo>2{% endmath %}.
+                <span rpg-math>17-15=2</span>.
             </p>
         </aside>
 
@@ -446,13 +449,14 @@
             To perform a skill check, roll <span roll="1d10*"></span> and add
             your stats:
         </p>
-        {% mathblock %}
-            check value
-                <mo>=</mo>1d10*
-                <mo>+</mo>skill value
-                <mo>±</mo>attribute
-                <mo>±</mo>modifiers
-        {% endmathblock %}
+        <div rpg-math>
+            \begin{align*}
+            \text{ check value } & = \text{ 1d10* } \\
+                                 & \pm \text{ skill value } \\
+                                 & \pm \text{ attribute } \\
+                                 & \pm \text{ modifiers }
+            \end{align*}
+        </div>
         <p>
             Compare this to the difficulty or resistance value. If you are
             contending with an active opponent, this will be a similar roll.
@@ -467,21 +471,23 @@
             attribute, so rather than have to add them up every time you roll,
             you’ll note the sum on your card and just roll
         </p>
-        {% mathblock %}
-            check value
-            <mo>=</mo>1d10*
-            <mo>+</mo><mo>[</mo>skill &amp; attribute<mo>]</mo>
-            <mo>±</mo>modifiers
-        {% endmathblock %}
+        <div rpg-math>
+            \begin{align*}
+            \text{ check value } & = \text{ 1d10* } \\
+                                 & \pm \text{ skill and attribute value } \\
+                                 & \pm \text{ modifiers }
+            \end{align*}
+        </div>
         <p>
             And since there often are no modifiers, it boils down to
         </p>
-        {% mathblock %}
-            check value
-            <mo>=</mo>1d10*
-            <mo>+</mo><mo>[</mo>skill &amp; attribute<mo>]</mo>
-        {% endmathblock %}
-
+        <div rpg-math>
+            \begin{align*}
+            \text{ check value } & = \text{ 1d10* } \\
+                                 & \pm \text{ skill value } \\
+                                 & \pm \text{ skill attribute } \\
+            \end{align*}
+        </div>
         <aside class="stats">
             <h5>Notes</h5>
 

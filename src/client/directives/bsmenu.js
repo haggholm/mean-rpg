@@ -1,7 +1,7 @@
 'use strict';
 
 var $ = require('jquery')
-  , ngModule = require('./RPG.Directives');
+  , ngModule = require('../RPG.Directives');
 require('bootstrap');
 
 
