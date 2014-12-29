@@ -17,43 +17,61 @@ for (i = 0; i < data_.length; i++) {
   }
 }
 
-
 module.exports = ngModule.controller('AttributeValueCtrl',
-  function($scope, ModelService) {
+  function($scope, $timeout, ModelService) {
+    var getRoot = _.memoize(function (node) {
+      while (node.parent !== undefined && node.parent !== null) {
+        node = node.parent;
+      }
+      return node;
+    }, function(node) { return node._id; });
+
+    var getAllChildren = _.memoize(function(node) {
+      var i, ch, children = [];
+      if (node.children) {
+        for (i = node.children.length-1; i >= 0; i--) {
+          ch = node.children[i];
+          children = children.concat([ch], getAllChildren(ch));
+        }
+      }
+      return children;
+    }, function(node) { return node._id; });
+
+    var simDataKeys = _.map(data, function(v) {
+        return v[0];
+      })
+      , simDataMin = _.min(simDataKeys)
+      , simDataMax = _.max(simDataKeys)
+      , assocData = {};
+    for (var i = 0; i < data.length; i++) {
+      assocData[data[i][0]] = data[i][1];
+    }
+    var getValue = _.memoize(function(v) {
+      return v < 0 ?
+        assocData[Math.max(simDataMin, v)] :
+        assocData[Math.min(simDataMax, v)];
+    });
+
+    var saturation = 2 / 3, lightness = 0.5, minHue = 2, maxHue = 110;
+    var mGetColour = _.memoize(function(pct) {
+      var hue = minHue + (maxHue - minHue) * (pct / 100);
+      return d3.hsl(hue, saturation, lightness);
+    });
+    var levels = {
+      0: 'Neophyte',
+      4: 'Novice',
+      8: 'Apprentice',
+      12: 'Journeyman',
+      16: 'Master'
+    };
+
     ModelService.Attribute.query(function(attrs) {
       attrs.forEach(function(a) {
         a.points = 0;
       });
       $scope.attributes = attrs;
+      tree.treeify(attrs);
 
-      var levels = {
-        0: 'Neophyte',
-        4: 'Novice',
-        8: 'Apprentice',
-        12: 'Journeyman',
-        16: 'Master'
-      };
-
-      var simDataKeys = _.map(data, function(v) {
-          return v[0];
-        })
-        , simDataMin = _.min(simDataKeys)
-        , simDataMax = _.max(simDataKeys)
-        , assocData = {};
-      for (var i = 0; i < data.length; i++) {
-        assocData[data[i][0]] = data[i][1];
-      }
-      var getValue = _.memoize(function(v) {
-        return v < 0 ?
-          assocData[Math.max(simDataMin, v)] :
-          assocData[Math.min(simDataMax, v)];
-      });
-
-      var saturation = 2 / 3, lightness = 0.5, minHue = 2, maxHue = 110;
-      var mGetColour = _.memoize(function(pct) {
-        var hue = minHue + (maxHue - minHue) * (pct / 100);
-        return d3.hsl(hue, saturation, lightness);
-      });
 
       $scope.nvd3config = {
         refreshDataOnly: true,
@@ -64,6 +82,7 @@ module.exports = ngModule.controller('AttributeValueCtrl',
         type: 'multiBarHorizontalChart',
         showControls: false,
         height: 50,
+        width: 100,
         margin: {top: 0, right: 0, bottom: 0, left: 0},
         tooltips: true,
         tooltipContent: function(key, x, y/*, e, graph*/) {
@@ -88,7 +107,7 @@ module.exports = ngModule.controller('AttributeValueCtrl',
         xDomain: [0, 4, 8, 12, 16],
         yDomain: [0, 100],
         showLegend: false,
-        showValues: true,
+        showValues: false,
         x: function(v) {
           return v.vs;
         },
@@ -102,15 +121,34 @@ module.exports = ngModule.controller('AttributeValueCtrl',
 
       var idGen = 0;
       var recalculate = function() {
-        tree.recalculateValues($scope.attributes);
-        _.each($scope.attributes, function(attr) {
-          var nVals = 0, sum = 0;
+        var changedNodes = [];
+        _.forEach($scope.attributes, function(attr) {
+          if (attr.points === attr._oldPoints) {
+            // No need to recalculate if points didn't change.
+            return;
+          }
+          attr._oldPoints = attr.points;
+
+          var root = getRoot(attr);
+          if (changedNodes.indexOf(root) === -1) {
+            changedNodes = changedNodes
+              .concat([root], getAllChildren(root));
+          }
+        });
+
+        tree.recalculateValues(changedNodes);
+
+        _.forEach($scope.attributes, function(attr) {
+          if (attr.value === attr._oldValue) {
+            // No need to redraw the chart if the value didn't change.
+            return;
+          }
+          attr._oldValue = attr.value;
+
           var nvd3values = _.map(levels, function(l, idx) {
             var opponentLevel = Number(idx)
               , advantage = attr.value - opponentLevel
               , pct = getValue(advantage);
-            nVals++;
-            sum += pct;
             return {vs: opponentLevel, pct: pct};
           });
 
@@ -120,8 +158,8 @@ module.exports = ngModule.controller('AttributeValueCtrl',
               chart: _.extend({id: 'nvd3-' + (++idGen)}, chartOptions)
             };
           } else {
-            var aValues = attr.nvd3data[0].values;
-            for (var i = nvd3values.length - 1; i >= 0; i--) {
+            var i, aValues = attr.nvd3data[0].values;
+            for (i = nvd3values.length - 1; i >= 0; i--) {
               if (aValues[i] !== nvd3values[i]) {
                 aValues[i] = nvd3values[i];
               }
@@ -134,7 +172,8 @@ module.exports = ngModule.controller('AttributeValueCtrl',
         function() {
           return _.pluck($scope.attributes, 'points');
         },
-        recalculate, true
+        recalculate,
+        true
       );
     });
   });

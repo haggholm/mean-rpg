@@ -79,6 +79,8 @@ module.exports = {
   pointsToValue: pointsToValue,
   valueToPoints: valueToPoints,
 
+  treeify: treeify,
+
   /**
    * @param {Tree[]} trees
    */
@@ -114,7 +116,9 @@ module.exports = {
 
     treeify(nodes);
     _.map(nodes, function(node){
-      node.value = pointsToValue(getEffectivePoints(node));
+      node.value = node.children ?
+        pointsToValue(node.accumulatedPoints / EXP_SHARE_FACTOR) :
+        pointsToValue(getEffectivePoints(node));
     });
   }
 };

@@ -132,7 +132,7 @@
         </p>
       </section>
 
-      <section id="skill_levels">
+      <section id="skill_levels" ng-if="show.statistics">
         <h4>Skill levels</h4>
 
         <p>
@@ -375,14 +375,17 @@
     <section id="dice_rolls">
       <h3>Rolling the dice</h3>
 
-      <aside class="notes">
-        <h5>Note</h5>
-
-        <p>
-          The average value of <span roll="1d10*"></span> is 6<br/>
-          (6.1 if you want to be more precise).
-        </p>
-      </aside>
+      <div class="panel panel-sidenotes">
+        <div class="panel-heading">
+          <h3 class="panel-title">Note</h3>
+        </div>
+        <div class="panel-body">
+          <p>
+            The average value of <span roll="1d10*"></span> is 6
+            (6.1 if you want to be more precise).
+          </p>
+        </div>
+      </div>
       <p>
         Most of the rolls in the game are performed using the ten-sided die,
         the <strong>d10</strong>. Moreover, they are typically
@@ -437,56 +440,6 @@
     <section id="skill_checks">
       <h3>Skill checks</h3>
 
-      <div class="panel panel-example" ng-if="show.examples">
-        <div class="panel-heading">
-          <h3 class="panel-title">Example</h3>
-        </div>
-        <div class="panel-body">
-          <p>
-            Terrick is fighting a duel with Mandor. Terrick has the following
-            cards:
-          </p>
-          <ul>
-            <li>Talent: Precision {{ 2|bonus }}</li>
-            <li>Skill: Sidesword {{ 7|bonus }}</li>
-            <li>Modifiers: Injured {{ -1|bonus }}</li>
-          </ul>
-          <p>Meanwhile Mandor plays the following:</p>
-          <ul>
-            <li>Talent: Precision {{ 3|bonus }}</li>
-            <li>Skill: Sidesword {{ 12|bonus }}</li>
-            <li>Modifiers: Injured {{ -2|bonus }}</li>
-          </ul>
-          <p>
-            We can see that Terrick’s properties add up to a value of
-            {{ 8|bonus }}, while Mandor’s add up to {{ 13|bonus }}—a
-            considerable
-            advantage. Terrick rolls
-          </p>
-
-          <div rpg-math>
-            \begin{align}
-            2 + 7 - 1 +
-            [ \text{1d10* } \rightarrow 9 ]
-            = 17
-            \end{align}
-          </div>
-          <p>
-            while his opponent rolls
-          </p>
-
-          <div rpg-math>
-            3+12-2+
-            [ \text{1d10*} \rightarrow 2 ]
-            = 15
-          </div>
-          <p>
-            Terrick, with great luck, wins the exchange by a margin of
-            <span rpg-math>17-15=2</span>.
-          </p>
-        </div>
-      </div>
-
       <p>
         Most checks are <dfn>skill checks</dfn>, where you are comparing
         a <em>skill</em> against a resistance. However, skills are
@@ -509,7 +462,7 @@
         \end{align*}
       </div>
 
-      <div class="panel panel-sidenotes" ng-if="show.advanced">
+      <div class="panel panel-sidenotes" ng-if="show.statistics">
         <div class="panel-heading">
           <h3 class="panel-title">Notes</h3>
         </div>
@@ -555,7 +508,45 @@
         \end{align*}
       </div>
 
+      <div class="panel panel-example" ng-if="show.examples">
+        <div class="panel-heading">
+          <h3 class="panel-title">Example</h3>
+        </div>
+        <div class="panel-body">
+          <p>
+            Terrick is fighting a duel with Mandor. Terrick has the following
+            cards:
+          </p>
+          <ul>
+            <li>Talent: Precision {{ 2|bonus }}</li>
+            <li>Skill: Sidesword {{ 7|bonus }}</li>
+            <li>Modifiers: Injured {{ -1|bonus }}</li>
+          </ul>
+          <p>Meanwhile Mandor plays the following:</p>
+          <ul>
+            <li>Talent: Precision {{ 3|bonus }}</li>
+            <li>Skill: Sidesword {{ 12|bonus }}</li>
+            <li>Modifiers: Injured {{ -2|bonus }}</li>
+          </ul>
+          <p>
+            We can see that Terrick’s properties add up to a value of
+            {{ 8|bonus }}, while Mandor’s add up to {{ 13|bonus }}—a
+            considerable
+            advantage. Terrick rolls
+          </p>
 
+          <div rpg-math> 2 + 7 - 1 + [ \text{1d10* } \rightarrow 9 ] = 17</div>
+          <p>
+            while his opponent rolls
+          </p>
+
+          <div rpg-math> 3+12-2+ [ \text{1d10*} \rightarrow 2 ] = 15</div>
+          <p>
+            Terrick, with great luck, wins the exchange by a margin of
+            <span rpg-math>17-15=2</span>.
+          </p>
+        </div>
+      </div>
     </section>
 
     <section id="substitutions">
@@ -615,10 +606,10 @@
       <div class="panel-body">
         <div rpg-math>
           \begin{align*}
-          {cost} = {points} &= \sum\limits_{n=1}^{value} n \\
-          &= \frac{ value * (value+1) }{2} \\
-          \therefore {value} &=
-          \left\lfloor \frac{\sqrt{8 * points + 1} - 1}{2} \right\rfloor
+          \text{cost} = \text{points} &= \sum\limits_{n=1}^\text{value} n \\
+          &= \frac{ \text{value} * (\text{value}+1) }{2} \\
+          \therefore \text{value} &=
+          \left\lfloor \frac{\sqrt{8 * \text{points} + 1} - 1}{2} \right\rfloor
 
           \end{align*}
         </div>
@@ -630,49 +621,54 @@
       representing how much you have “put into” it in terms of training,
       experience, and so on, and its <dfn>value</dfn>, representing how
       good you are at it.
+      <span ng-if="!show.advanced">
+        The better you are at a skill, the harder it is to improve it further,
+        so it’s much cheaper in terms of points to, say, raise two skills to
+        10 than it is to raise a single skill to 20.
+      </span>
     </p>
-
-    <p>
-      Every value starts at 0, and it costs 1 point to improve it to 1,
-      another 2 points to improve it to 2, and so on. Summarised, the
-      costs work out as follows:
-    </p>
-    <div class="clearfix"></div>
-    <div class="row">
-      <div class="col-sm-3 col-sm-offset-3">
-        <table>
-          <thead>
-          <tr>
-            <th>Value</th>
-            <th style="padding-left:0.5em;">Point cost</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr ng-repeat="sv in [0,1,2,3,4,5,6,7]">
-            <td class="number" ng-bind="sv"></td>
-            <td class="number" ng-bind="cost(sv)"></td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="col-sm-3">
-        <table>
-          <thead>
-          <tr>
-            <th>Value</th>
-            <th style="padding-left:0.5em;">Point cost</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr ng-repeat="sv in [9,10,11,12,13,14,15,16]">
-            <td class="number" ng-bind="sv"></td>
-            <td class="number" ng-bind="cost(sv)"></td>
-          </tr>
-          </tbody>
-        </table>
+    <div ng-if="show.advanced">
+      <p>
+        Every value starts at 0, and it costs 1 point to improve it to 1,
+        another 2 points to improve it to 2, and so on. Summarised, the
+        costs work out as follows:
+      </p>
+      <div class="clearfix"></div>
+      <div class="row">
+        <div class="col-sm-3 col-sm-offset-3">
+          <table class="table table-condensed table-striped">
+            <thead>
+            <tr>
+              <th style="text-align: center;">Value</th>
+              <th style="text-align: center;">Point cost</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="sv in [0,1,2,3,4,5,6,7]">
+              <td class="number" ng-bind="sv"></td>
+              <td class="number" ng-bind="cost(sv)"></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-sm-3">
+          <table class="table table-condensed table-striped">
+            <thead>
+            <tr>
+              <th style="text-align: center;">Value</th>
+              <th style="text-align: center;">Point cost</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="sv in [9,10,11,12,13,14,15,16]">
+              <td class="number" ng-bind="sv"></td>
+              <td class="number" ng-bind="cost(sv)"></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-
 
     <p>
       This is typically represented by <em>cards</em>. Every time you
@@ -697,9 +693,9 @@
 
           <div rpg-math>
             \begin{align*}
-            {value} = \left\lfloor \frac{\sqrt{8 * points + 1}-1}{2}
+            \text{value} = \left\lfloor \frac{\sqrt{8 * \text{points} + 1}-1}{2}
             \right\rfloor
-            - {difficulty}
+            - \text{difficulty}
             \end{align*}
           </div>
         </div>
@@ -752,9 +748,6 @@
         You cannot specifically train or learn the “parent” skills—the
         groups and categories. Instead, they correspond to the general knowledge
         you gain of a broader subject as you study its specifics.
-      </p>
-
-      <p>
         As an example, the <em>skill category</em> Unarmed Combat contains
         <em>skill groups</em> such as Sword and Polearm. Meanwhile, the
         Sword group contains specific <em>skills</em> like Longsword and
@@ -793,29 +786,31 @@
           </div>
         </div>
       </div>
-      <p>
-        In the rules, this is reflected as follows:
-      </p>
-      <ul>
-        <li>
-          When placing points in a specific skill, every third point goes
-          to the skill group instead.
-        </li>
-        <li>
-          When thus placing points in a skill group, every third point goes
-          to the category instead.
-        </li>
-        <li>
-          You <em>don’t</em> get to count the same point twice. Thas is, if
-          you place 3 points in a skill, you get 1 point in its skill group,
-          but you then effectively subtract it from the skill itself.
-        </li>
-      </ul>
-      <p>
-        If you only have one skill under a category (for example, you are
-        trained in the use of only one kind of weapon), you can mostly ignore
-        this, since the value ends up being precisely the same anyway.
-      </p>
+      <div ng-if="show.advanced">
+        <p>
+          In the rules, this is reflected as follows:
+        </p>
+        <ul>
+          <li>
+            When placing points in a specific skill, every third point goes
+            to the skill group instead.
+          </li>
+          <li>
+            When thus placing points in a skill group, every third point goes
+            to the category instead.
+          </li>
+          <li>
+            You <em>don’t</em> get to count the same point twice. Thas is, if
+            you place 3 points in a skill, you get 1 point in its skill group,
+            but you then effectively subtract it from the skill itself.
+          </li>
+        </ul>
+        <p>
+          If you only have one skill under a category (for example, you are
+          trained in the use of only one kind of weapon), you can mostly ignore
+          this, since the value ends up being precisely the same anyway.
+        </p>
+      </div>
 
       <p>
         This means that a character who entirely lacks training in a given
@@ -858,6 +853,24 @@
           also doesn’t apply to all attributes—you may get stronger from
           using skills that rely on strength, but you will not grow larger
           from using skills that exploit size.
+        </li>
+        <li>
+          <strong>Challenge matters.</strong> A master improves by challenging
+          other masters, not by beating up novices. Therefore,
+          <ul>
+            <li>
+              If the difficulty is <em>less than</em> {{-4|bonus}}
+              (i.e. {{-5|bonus}} or lower), a double
+              10 doesn’t count at all, and a triple 10 counts only as a normal
+              double 10.
+            </li>
+            <li>
+              If the difficulty is <em>more than</em> {{4|bonus}}
+              (i.e. {{5|bonus}} or higher), a double
+              10 gives 2 points instead of 1, and a triple 10 gives 3 points
+              (but still only {{1|bonus}} to the attribute).
+            </li>
+          </ul>
         </li>
       </ul>
     </section>

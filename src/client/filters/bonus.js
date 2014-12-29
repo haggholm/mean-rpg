@@ -12,7 +12,7 @@ module.exports = ngModule.filter('bonus',
       } else {
         var v = Number(value);
         if (v > 0) {
-          return value;
+          return '+' + value;
         } else if (v < 0) {
           return '−' + (-v);
         } else {

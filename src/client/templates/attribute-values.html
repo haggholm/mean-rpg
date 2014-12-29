@@ -1,15 +1,14 @@
-<div class="row">
-<form class="form-horizontal" role="form">
-  <div class="form-group row">
-    <div class="col-md-3 text-center"><strong>Skill</strong></div>
-    <div class="col-lg-2 col-sm-4 text-center"><strong>Points</strong></div>
-    <div class="col-lg-1 col-sm-2 text-center"><strong>Value</strong></div>
-    <div class="col-lg-1 col-sm-2 text-center"><strong>—</strong></div>
-  </div>
-  <div class="form-group row"
-       ng-repeat="a in ::attributes|orderBy:'name'">
-    <div ng-if="!a.children">
-      <div class="col-lg-3">
+<div class="single-col">
+  <div class="row">
+  <form class="form-horizontal" role="form">
+    <div class="form-group row">
+      <div class="col-md-3 text-center"><strong>Skill</strong></div>
+      <div class="col-md-2 col-sm-4 text-center"><strong>Points</strong></div>
+      <div class="col-md-2 col-sm-4 text-center"><strong>Value</strong></div>
+    </div>
+    <div class="form-group row"
+         ng-repeat="a in ::attributes|orderBy:'name'">
+      <div class="col-md-3">
         <p class="form-control-static">
           {{::a.name}}
           <span class="text-muted" ng-if="::a.parent">
@@ -17,40 +16,39 @@
           </span>
         </p>
       </div>
-      <div class="col-lg-2 col-sm-4">
-        <label for="attr-points-{{::a._id}}" class="sr-only" ng-bind="::a.name"></label>
-        <input class="form-control"
-            id="attr-points-{{::a._id}}" type="number" ng-model="a.points"/>
+      <div class="col-md-2 col-sm-4">
+        <div ng-if=":: !a.children">
+          <label for="attr-points-{{::a._id}}" class="sr-only" ng-bind="::a.name"></label>
+          <input class="form-control number"
+              id="attr-points-{{::a._id}}" type="number" ng-model="a.points"/>
+        </div>
       </div>
-      <div class="col-lg-1 col-sm-2 text-right">
-        <p class="form-control-static">{{a.value|number:0}}</p>
-      </div>
-      <div class="col-lg-1 col-sm-2 text-right">
-        <p class="form-control-static text-muted">
-          {{a.accumulatedPoints|number:0}}|{{a.effectivePoints|number:0}}
+      <div class="col-md-1 col-sm-2 text-right">
+        <p class="form-control-static">
+          <!--<span class="pull-left" ng-if=":: !a.children">&Rightarrow;</span>-->
+          <big class="text-primary" ng-bind="a.value|number:0"></big>
         </p>
       </div>
-      <div class="col-lg-2 col-sm-4" ng-if="::a.nvd3data.length">
+      <div class="col-md-2 col-sm-4" ng-if="::a.nvd3data.length">
         <nvd3 config="nvd3config"
+              class="stat-vs-summary"
               options="a.nvd3options"
               api="a.nvd3api"
-              data="a.nvd3data" id="sv-{{a._id}}-vs"></nvd3>
+              data="a.nvd3data" id="sv-{{::a._id}}-vs"></nvd3>
       </div>
     </div>
+  </form>
   </div>
-</form>
-</div>
-<div class="row">
-  <div class="single-col">
-    <h3>Notes</h3>
-    <ul>
-      <li>Neophyte (0): 0pts</li>
-      <li>Novice (4): 4pts</li>
-      <li>Apprentice (8): 13pts</li>
-      <li>Journeyman (12): 29pts</li>
-      <li>Master (16): 52pts</li>
-    </ul>
+  <div class="row">
+    <div class="single-col">
+      <h3>Notes</h3>
+      <ul>
+        <li>Neophyte (0): 0pts</li>
+        <li>Novice (4): 4pts</li>
+        <li>Apprentice (8): 13pts</li>
+        <li>Journeyman (12): 29pts</li>
+        <li>Master (16): 52pts</li>
+      </ul>
+    </div>
   </div>
 </div>
-
-

@@ -18,4 +18,9 @@ module.exports = ngModule.controller('RulesCtrl',
     $scope.$watch('show.examples', function(examples){
       storage.local.setItem('RulesCtrl.showExamples', examples);
     });
+
+    $scope.show.statistics = storage.local.getItem('RulesCtrl.showStatistics', true);
+    $scope.$watch('show.statistics', function(statistics){
+      storage.local.setItem('RulesCtrl.showStatistics', statistics);
+    });
   });
