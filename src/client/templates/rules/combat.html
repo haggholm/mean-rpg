@@ -155,208 +155,214 @@
       Repeat until the combat is concluded.
     </p>
 
-    <aside id="basic_combat_example" class="example">
-      <h5>Example</h5>
-
-      <p>
-        Let’s return to the duel between Terrick and Mandor we looked at
-        in a previous example. The values we’re interested in are:
-      </p>
-
-      <div style="clear:both;">
-        <table style="display:inline-block;">
-          <caption>Terrick</caption>
-          <tr>
-            <th>Attribute</th>
-            <td>Strength</td>
-            <td class="number">{{ 1|bonus }}</td>
-          </tr>
-          <tr>
-            <th>Attribute</th>
-            <td>Co-ordination</td>
-            <td class="number">{{ 2|bonus }}</td>
-          </tr>
-          <tr>
-            <th>Attribute</th>
-            <td>Toughness</td>
-            <td class="number">{{ 2|bonus }}</td>
-          </tr>
-          <tr>
-            <th>Skill</th>
-            <td>Sidesword</td>
-            <td class="number">{{ 10|bonus }}</td>
-          </tr>
-          <tr>
-            <th>Protection</th>
-            <td>None</td>
-            <td class="number">{{ 0|bonus }}</td>
-          </tr>
-        </table>
-        <table style="display:inline-block;">
-          <caption>Mandor</caption>
-          <tr>
-            <th>Attribute</th>
-            <td>Strength</td>
-            <td class="number">{{ 3|bonus }}</td>
-          </tr>
-          <tr>
-            <th>Attribute</th>
-            <td>Co-ordination</td>
-            <td class="number">{{ 3|bonus }}</td>
-          </tr>
-          <tr>
-            <th>Attribute</th>
-            <td>Toughness</td>
-            <td class="number">{{ 5|bonus }}</td>
-          </tr>
-          <tr>
-            <th>Skill</th>
-            <td>Sidesword</td>
-            <td class="number">{{ 15|bonus }}</td>
-          </tr>
-          <tr>
-            <th>Protection</th>
-            <td>Maille</td>
-            <td class="number">{{ 25|bonus }}</td>
-          </tr>
-        </table>
+    <div id="basic_combat_example"
+         class="panel panel-example"
+         ng-if="show.examples">
+      <div class="panel-heading">
+        <h3 class="panel-title">Example</h3>
       </div>
-      <ol>
-        <li>
-          <strong>Preparing the hands</strong>:
-                                              Because Terrick knows that
-                                              Mandor’s treacherous allies are
-                                              on their way and will surely cut
-                                              him down unless he wins the
-                                              fight <em>fast</em>, he chooses to
-                                              fight recklessly and plays
-                                              the Reckless card, in addition to
-                                              his Sidesword skill and its
-                                              governing talent, Precision.
-                                              Mandor fights “normally”, playing
-                                              Sidesword and Precision. (If he
-                                              had known ahead of time that
-                                              Terrick would fight recklessly, he
-                                              might have chosen to play
-                                              the Cautious card to offset the
-                                              danger—but hands are hidden
-                                              until played!)
-        </li>
-        <li>
-          <strong>The combat roll</strong>:
-                                          Both players roll
-          <span roll="1d10*"></span>.
-          <ul>
-            <li>
-              Terrick rolls 16. Terrick’s Reckless card gives him
-              {{ -2|bonus }} to his skill check, so he has a total of
-              <div rpg-math>
-                \begin{align*}
-                &\text{1d20} + \text{Coordination} + \text{Sidesword} -
-                \text{Reckless} \\
-                &= 16 + 2 + 10 - 2 \\
-                &= 26
-                \end{align*}
-              </div>
-            </li>
-            <li>
-              Mandor rolls a mere 2. His result is
-              <div rpg-math>
-                \begin{align*}
-                &\text{1d20} + \text{Precision} + \text{Sidesword} \\
-                &= 2 + 3 + 15 \\
-                &= 20
-                \end{align*}
-              </div>
-            </li>
-          </ul>
-                                          Terrick wins by a margin of
-          <span rpg-math>26-20=6</span>.
-        </li>
-        <li>
-          <strong>Damage</strong>: Terrick successfully struck Mandor, for
-          <div rpg-math>
-            \begin{align*}
-            \text{damage} = \text{difference}
-            + \text{weapon damage}
-            + \text{Strength}
-            - \text{protection}
-            \end{align*}
+      <div class="panel-body">
+
+        <p>
+          Let’s return to the duel between Terrick and Mandor we looked at
+          in a previous example. The values we’re interested in are:
+        </p>
+
+        <div style="clear:both;" class="row">
+          <div class="col-md-3 col-md-offset-3 col-sm-6">
+            <table class="table table-condensed" style="display:inline-block;">
+              <caption>Terrick</caption>
+              <tr>
+                <th>Attribute</th>
+                <td>Strength</td>
+                <td class="number">{{ 1|bonus }}</td>
+              </tr>
+              <tr>
+                <th>Attribute</th>
+                <td>Co-ordination</td>
+                <td class="number">{{ 2|bonus }}</td>
+              </tr>
+              <tr>
+                <th>Attribute</th>
+                <td>Toughness</td>
+                <td class="number">{{ 2|bonus }}</td>
+              </tr>
+              <tr>
+                <th>Skill</th>
+                <td>Sidesword</td>
+                <td class="number">{{ 10|bonus }}</td>
+              </tr>
+              <tr>
+                <th>Protection</th>
+                <td>None</td>
+                <td class="number">{{ 0|bonus }}</td>
+              </tr>
+            </table>
           </div>
-                                 His sidesword adds 5 damage, but Mandor is
-                                 wearing maille for a
-                                 {{ -5|bonus }} damage
-                                 reduction:
-          <div rpg-math>
-            \begin{align*}
-            \text{damage} &= \text{difference}
-            + \text{weapon damage}
-            + \text{Strength}
-            - \text{protection} \\
-            &= \text{1}
-            + \text{5}
-            + \text{1}
-            - \text{5} \\
-            &= 2
-            \end{align*}
+          <div class="col-md-3 col-sm-6">
+            <table class="table table-condensed" style="display:inline-block;">
+              <caption>Mandor</caption>
+              <tr>
+                <th>Attribute</th>
+                <td>Strength</td>
+                <td class="number">{{ 3|bonus }}</td>
+              </tr>
+              <tr>
+                <th>Attribute</th>
+                <td>Co-ordination</td>
+                <td class="number">{{ 3|bonus }}</td>
+              </tr>
+              <tr>
+                <th>Attribute</th>
+                <td>Toughness</td>
+                <td class="number">{{ 5|bonus }}</td>
+              </tr>
+              <tr>
+                <th>Skill</th>
+                <td>Sidesword</td>
+                <td class="number">{{ 15|bonus }}</td>
+              </tr>
+              <tr>
+                <th>Protection</th>
+                <td>Maille</td>
+                <td class="number">{{ 25|bonus }}</td>
+              </tr>
+            </table>
           </div>
-                                 Mandor has to perform a Toughness check against
-                                 his total damage
-                                 (now 2), which is successful.
-        </li>
-        <li>
-          <strong>Continuation</strong>: Since neither fighter is out
-                                       of the fight, they move on to the next
-                                       exchange: Back to
-                                       step 1. Since Mandor is now injured,
-                                       however, he will suffer
-                                       a penalty modifier of Injured {{
-                                       -16|bonus }}.
-        </li>
-      </ol>
-    </aside>
+        </div>
+        <ol>
+          <li>
+            <strong>Preparing the hands</strong>:
+            Because Terrick knows that Mandor’s treacherous allies are
+            on their way and will surely cut him down unless he wins the
+            fight <em>fast</em>, he chooses to fight recklessly and plays
+            the Reckless card, in addition to his Sidesword skill and its
+            governing talent, Precision. Mandor fights “normally”, playing
+            Sidesword and Precision. (If he had known ahead of time that
+            Terrick would fight recklessly, he might have chosen to play
+            the Cautious card to offset the danger—but hands are hidden
+            until played!)
+          </li>
+          <li>
+            <strong>The combat roll</strong>:
+                                            Both players roll
+            <span roll="1d10*"></span>.
+            <ul>
+              <li>
+                Terrick rolls 16. Terrick’s Reckless card gives him
+                {{ -2|bonus }} to his skill check, so he has a total of
+                <div rpg-math>
+                  \begin{align*}
+                  &\text{1d20} + \text{Coordination} + \text{Sidesword} -
+                  \text{Reckless} \\
+                  &= 16 + 2 + 10 - 2 \\
+                  &= 26
+                  \end{align*}
+                </div>
+              </li>
+              <li>
+                Mandor rolls a mere 2. His result is
+                <div rpg-math>
+                  \begin{align*}
+                  &\text{1d20} + \text{Precision} + \text{Sidesword} \\
+                  &= 2 + 3 + 15 \\
+                  &= 20
+                  \end{align*}
+                </div>
+              </li>
+            </ul>
+                                            Terrick wins by a margin of
+            <span rpg-math>26-20=6</span>.
+          </li>
+          <li>
+            <strong>Damage</strong>: Terrick successfully struck Mandor, for
+            <div rpg-math>
+              \begin{align*}
+              \text{damage} = \text{difference}
+              + \text{weapon damage}
+              + \text{Strength}
+              - \text{protection}
+              \end{align*}
+            </div>
+                                   His sidesword adds 5 damage, but Mandor is
+                                   wearing maille for a
+                                   {{ -5|bonus }} damage
+                                   reduction:
+            <div rpg-math>
+              \begin{align*}
+              \text{damage} &= \text{difference}
+              + \text{weapon damage}
+              + \text{Strength}
+              - \text{protection} \\
+              &= \text{1}
+              + \text{5}
+              + \text{1}
+              - \text{5} \\
+              &= 2
+              \end{align*}
+            </div>
+                                   Mandor has to perform a Toughness check
+                                   against
+                                   his total damage
+                                   (now 2), which is successful.
+          </li>
+          <li>
+            <strong>Continuation</strong>: Since neither fighter is out
+                                         of the fight, they move on to the next
+                                         exchange: Back to
+                                         step 1. Since Mandor is now injured,
+                                         however, he will suffer
+                                         a penalty modifier of Injured {{
+                                         -16|bonus }}.
+          </li>
+        </ol>
+      </div>
+    </div>
   </section>
 
-  <aside id="simplifications">
-    <h3>Simplifications</h3>
-
-    <p>
-      Keep in mind that although there are a lot of numbers mentioned,
-      some of them don’t really vary. As was mentioned in the chapter
-      on skills, each skill is almost always used with the same
-      attribute (co-ordination for combat skills), so we end up with
-      three numbers rather than four:
-    </p>
-
-    <div rpg-math>
-      \begin{align*}
-      &\text{1d20}
-      + \text{skill}
-      + \text{attribute}
-      \pm \text{modifiers} \\
-      &=\text{1d20}
-      + \left[ \text{skill &amp; attribute} \right]
-      \pm \text{modifiers}
-      \end{align*}
+  <div class="panel panel-info" id="simplifications">
+    <div class="panel-heading">
+      <h3 class="panel-title">Simplifications</h3>
     </div>
-    <p>
-      When it comes to damage rolls, since your character’s power
-      is constant, this can be included on your weapon skill card,
-      so again, for the most part we deal with three numbers, not four:
-    </p>
+    <div class="panel-body">
+      <p>
+        Keep in mind that although there are a lot of numbers mentioned,
+        some of them don’t really vary. As was mentioned in the chapter
+        on skills, each skill is almost always used with the same
+        attribute (co-ordination for combat skills), so we end up with
+        three numbers rather than four:
+      </p>
 
-    <div rpg-math>
-      \begin{align*}
-      \text{damage} &= \text{hit difference}
-      + \text{weapon damage}
-      + \text{power}
-      - \text{protection} \\
-      &= \text{hit difference}
-      + \left[ \text{weapon &amp; power} \right]
-      - \text{protection}
-      \end{align*}
+      <div rpg-math>
+        \begin{align*}
+           &\text{1d20}
+            + \text{skill}
+            + \text{attribute}
+            \pm \text{modifiers} \\
+          =&\text{1d20}
+            + \left[ \text{skill &amp; attribute} \right]
+            \pm \text{modifiers}
+        \end{align*}
+      </div>
+      <p>
+        When it comes to damage rolls, since your character’s power
+        is constant, this can be included on your weapon skill card,
+        so again, for the most part we deal with three numbers, not four:
+      </p>
+
+      <div rpg-math>
+        \begin{align*}
+        \text{damage} &= \text{hit difference}
+        + \text{weapon damage}
+        + \text{power}
+        - \text{protection} \\
+        &= \text{hit difference}
+        + \left[ \text{weapon &amp; power} \right]
+        - \text{protection}
+        \end{align*}
+      </div>
     </div>
-  </aside>
+  </div>
 
   <section id="damage">
     <h3>Damage and injuries</h3>
@@ -413,7 +419,7 @@
       If the Toughness check succeeds, nothing special happens. On
       <em>failure</em>, check your difference:
     </p>
-    <table>
+    <table class="table table-condensed table-striped">
       <thead>
       <tr>
         <th>
@@ -430,7 +436,7 @@
         <td>&gt;10</td>
         <td>&gt;0</td>
         <td>Injured</td>
-        <td>
+        <td hyphenate>
           From now until you have chance to rest, virtually all
           your checks will suffer a negative modifier corresponding to
           your total damage. (All skill checks, all Brawn, Endurance, and
@@ -443,7 +449,7 @@
         <td>&gt;15</td>
         <td>&gt;5</td>
         <td>Wounded</td>
-        <td>
+        <td hyphenate>
           In addition to of the effect of being Injured,
           Every round you fight while Wounded until you have a
           chance to rest, you will receive an additional &minus;1
@@ -454,7 +460,7 @@
         <td>&gt;20</td>
         <td>&gt;10</td>
         <td>Severely Wounded</td>
-        <td>
+        <td hyphenate>
           You count as both Injured and Wounded, and in addition,
           every round you attempt to keep fighting, or engage in any
           physical activity more demanding than staggering or crawling
@@ -467,7 +473,7 @@
         <td>&gt;25</td>
         <td>&gt;15</td>
         <td>Incapacitated</td>
-        <td>
+        <td hyphenate>
           You count as both Injured and Wounded, and in addition,
           every round you attempt to keep fighting, or engage in any
           physical activity more demanding than staggering or crawling
@@ -480,7 +486,7 @@
         <td>&gt;30</td>
         <td>&gt;20</td>
         <td>Fatally Wounded</td>
-        <td>
+        <td hyphenate>
           You are dying. You cannot move at more than an inching
           crawl, and each minute you
           <ul>
@@ -492,6 +498,58 @@
       </tr>
       </tbody>
     </table>
+
+    <div class="panel panel-sidenotes">
+      <div class="panel-heading">
+        <h3 class="panel-title">Statistics</h3>
+      </div>
+      <div class="panel-body">
+        <p>
+          For the average person, with a Toughness of {{ 0|bonus }},
+        </p>
+        <ul>
+          <li>
+            &lt;6 damage is never worse than an Injury.
+          </li>
+          <li>
+            By the time you sustain 15 damage, your risk of
+            Incapacitation is 50%.
+          </li>
+          <li>
+            Once you take more than 20 damage, you begin to risk death.
+          </li>
+        </ul>
+        <p>
+          If two combatants are evenly matched, then in the first
+          exchange,
+        </p>
+        <ul>
+          <li>
+            50% of the time, neither will be hit, but one or the other
+            will merely gain an advantage. (That is, 50% of the time,
+            the difference will be within the hit margin.)
+          </li>
+          <li>
+            If one or the other is hit, then
+            <ul>
+              <li>
+                50% of the time (75% of all exchanges),
+                <rpg-math>\text{hit difference} \lt 5</rpg-math>.
+                .
+              </li>
+              <li>
+                80% of the time (90% of all exchanges),
+                <rpg-math>\text{hit difference} \lt 13</rpg-math>.
+              </li>
+              <li>
+                The maximum hit difference is 19.
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+
     <p>
       Note that each status <em>includes</em> the less serious states;
       for example, if you are considered Wounded, you are also considered
@@ -513,58 +571,10 @@
     <p>
       On a fumble, consider the next <em>more</em> severe result.
     </p>
-
-    <aside class="stats">
-      <h5>Statistics</h5>
-
-      <p>
-        For the average person, with a Toughness of {{ 0|bonus }},
-      </p>
-      <ul>
-        <li>
-          &lt;6 damage is never worse than an Injury.
-        </li>
-        <li>
-          By the time you sustain 15 damage, your risk of
-          Incapacitation is 50%.
-        </li>
-        <li>
-          Once you take more than 20 damage, you begin to risk death.
-        </li>
-      </ul>
-      <p>
-        If two combatants are evenly matched, then in the first
-        exchange,
-      </p>
-      <ul>
-        <li>
-          50% of the time, neither will be hit, but one or the other
-          will merely gain an advantage. (That is, 50% of the time,
-          the difference will be within the hit margin.)
-        </li>
-        <li>
-          If one or the other is hit, then
-          <ul>
-            <li>
-              50% of the time (75% of all exchanges),
-              <rpg-math>\text{hit difference} \lt 5</rpg-math>
-              .
-            </li>
-            <li>
-              80% of the time (90% of all exchanges),
-              <rpg-math>\text{hit difference} \lt 13</rpg-math>
-              .
-            </li>
-            <li>
-              The maximum hit difference is 19.
-            </li>
-          </ul>
-          .
-        </li>
-      </ul>
-    </aside>
   </section>
+
   <section>
+    <div class="clearfix"></div>
     <h2>Special cases</h2>
     <section>
       <h3>Unarmed defence against weapons</h3>
@@ -573,9 +583,8 @@
         If an unarmed person attempts to avoid being struck by a weapon,
         they will use their Quickness attribute and Dodge skill. If they’re
         hit by a blow with
-        <rpg-math>\text{hit margin} \lt 25</rpg-math>
-        , it’s assumed that
-        they were struck on the hand or arm, warding the blow.
+        <rpg-math>\text{hit margin} \lt 25</rpg-math>,
+        it’s assumed that they were struck on the hand or arm, warding the blow.
       </p>
     </section>
     <section>
@@ -640,7 +649,7 @@
     </ul>
     <section>
       <h3>Detail levels</h3>
-      <table>
+      <table class="table table-condensed table-striped">
         <thead>
         <tr>
           <th style="width: 18%;">Rules</th>

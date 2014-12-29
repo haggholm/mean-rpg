@@ -1,8 +1,15 @@
 <div class="single-col">
-  <div class="checkbox pull-right" style="margin-bottom: 0">
+  <div class="pull-right">
+    <div class="checkbox pull-right" style="margin-bottom: 0">
       <label title="Show extra nerdy details such as equations and calculations">
-        <input type="checkbox" ng-model="advanced"> Extra nerdy details
+        <input type="checkbox" ng-model="show.advanced"> Extra nerdy details
       </label>
+    </div>
+    <div class="checkbox" style="margin-bottom: 0">
+      <label>
+        <input type="checkbox" ng-model="show.examples"> Examples
+      </label>
+    </div>
   </div>
 </div>
 <div ui-view></div>

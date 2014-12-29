@@ -18,10 +18,13 @@ module.exports = {
         if (rounded >= 100) {
           return '100%';
         } else if (rounded >= 10) {
+          console.log(a);
           return numeral(rounded).format(a) + '%';
         } else if (rounded >= 1) {
+          console.log(b);
           return numeral(rounded).format(b) + '%';
         } else {
+          console.log(c);
           return numeral(rounded).format(c) + '%';
         }
       } catch(e) {

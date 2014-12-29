@@ -8,8 +8,14 @@ module.exports = ngModule.controller('RulesCtrl',
   function($scope){
     $scope.cost = tree.valueToPoints;
 
-    $scope.advanced = storage.local.getItem('RulesCtrl.showAdvanced', false);
-    $scope.$watch('advanced', function(advanced){
+    $scope.show = {};
+    $scope.show.advanced = storage.local.getItem('RulesCtrl.showAdvanced', false);
+    $scope.$watch('show.advanced', function(advanced){
       storage.local.setItem('RulesCtrl.showAdvanced', advanced);
+    });
+
+    $scope.show.examples = storage.local.getItem('RulesCtrl.showExamples', true);
+    $scope.$watch('show.examples', function(examples){
+      storage.local.setItem('RulesCtrl.showExamples', examples);
     });
   });

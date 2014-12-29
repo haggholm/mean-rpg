@@ -30,13 +30,39 @@ td.number, input.number {
 }
 
 @panel-advanced-info-border: #b1e09c;
+@panel-advanced-info-text: #69865d;
 @panel-advanced-info-heading-bg: #c0f3a9;
-//@panel-advanced-info-text: @panel-info-text;
-
 .panel-advanced-info {
-  .panel-variant(@panel-advanced-info-border; @panel-default-text; @panel-advanced-info-heading-bg; @panel-advanced-info-border);
+  .panel-variant(@panel-advanced-info-border; @panel-advanced-info-text; @panel-advanced-info-heading-bg; @panel-advanced-info-border);
+  float: right;
+  margin: 1ex -10% 1ex 1em;
+  width: 50%;
+  * {
+    color: @panel-advanced-info-text;
+  }
+}
+
+
+@panel-example-border: #8eb9ec;
+@panel-example-heading-bg: #bcdaff;
+@panel-example-text: #4a6380;
+.panel-example {
+  .panel-variant(@panel-example-border; @panel-example-text; @panel-example-heading-bg; @panel-example-border);
   margin-right: 3em;
   margin-left: 3em;
+  * {
+    color: @panel-example-text;
+  }
+}
+
+.panel-sidenotes {
+  .panel-info;
+  float: right;
+  margin: 1ex -10% 1ex 1em;
+  width: 40%;
+  * {
+    color: @panel-info-text;
+  }
 }
 
 /*
@@ -70,7 +96,7 @@ th.rotate > div > span {
 
 #skillVsTable {
 th.rotate {
-    height: 7em;
+    height: 9em;
     text-align: left;
     padding: 0;
   }

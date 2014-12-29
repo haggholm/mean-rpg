@@ -1,7 +1,9 @@
 'use strict';
 
-var bonus = require('./bonus');
+var bonus = require('./bonus')
+  , percent = require('./percent');
 
 module.exports = {
-  bonus: bonus
+  bonus: bonus,
+  percent: percent
 };
