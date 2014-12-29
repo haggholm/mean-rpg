@@ -73,8 +73,8 @@ td.number, input.number {
 
 .stat-vs-summary > svg {
   border-width: 1px;
-  border-left-width: 3px;
-  border-right-width: 3px;
+  border-left-width: 1px;
+  border-right-width: 1px;
   border-style: solid;
   border-color: #d4d4d4;
 //  border-left-color: #D5302A;
@@ -143,5 +143,26 @@ th.rotate > div > span {
     -moz-transform-origin: 0% 0%;
     -o-transform-origin: 0% 0%;
     -webkit-transform-origin: 0% 0%;
+  }
+}
+
+.table.valign-middle {
+  th, td {
+    vertical-align: middle;
+  }
+}
+
+.form-control.number {
+  width: 8em;
+}
+
+.attrval-table {
+  width: auto;
+  min-width: 66.67%;
+  margin-left: auto;
+  margin-right: auto;
+  .form-control-static {
+    padding-top: 0;
+    padding-bottom: 0;
   }
 }

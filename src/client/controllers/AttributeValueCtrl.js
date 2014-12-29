@@ -19,6 +19,8 @@ for (i = 0; i < data_.length; i++) {
 
 module.exports = ngModule.controller('AttributeValueCtrl',
   function($scope, $timeout, ModelService) {
+    $scope._ = _;
+
     var getRoot = _.memoize(function (node) {
       while (node.parent !== undefined && node.parent !== null) {
         node = node.parent;

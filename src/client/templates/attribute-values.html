@@ -1,42 +1,47 @@
 <div class="single-col">
   <div class="row">
-  <form class="form-horizontal" role="form">
-    <div class="form-group row">
-      <div class="col-md-3 text-center"><strong>Skill</strong></div>
-      <div class="col-md-2 col-sm-4 text-center"><strong>Points</strong></div>
-      <div class="col-md-2 col-sm-4 text-center"><strong>Value</strong></div>
-    </div>
-    <div class="form-group row"
-         ng-repeat="a in ::attributes">
-      <div class="col-md-3">
-        <div style="padding-left:{{:: 2 * a.depth}}em;">
-          <p class="form-control-static" ng-bind="::a.name"></p>
-        </div>
-      </div>
-      <div class="col-md-2 col-sm-4">
-        <div ng-if=":: !a.children">
-          <label for="attr-points-{{::a._id}}" class="sr-only" ng-bind="::a.name"></label>
-          <input class="form-control number"
-              id="attr-points-{{::a._id}}" type="number" ng-model="a.points"/>
-        </div>
-      </div>
-      <div class="col-md-1 col-sm-2 text-right">
-        <p class="form-control-static text-center">
-          <!--<span class="pull-left" ng-if=":: !a.children">&Rightarrow;</span>-->
-          <span class="text-large text-primary" ng-bind="a.value|number:0"></span>
-          <br />
-          <span class="text-muted small" ng-bind="a.level"></span>
-        </p>
-      </div>
-      <div class="col-md-2 col-sm-4" ng-if="::a.nvd3data.length">
-        <nvd3 config="nvd3config"
-              class="stat-vs-summary"
-              options="a.nvd3options"
-              api="a.nvd3api"
-              data="a.nvd3data" id="sv-{{::a._id}}-vs"></nvd3>
-      </div>
-    </div>
-  </form>
+  <table class="table table-condensed table-hover valign-middle attrval-table">
+    <thead>
+      <tr>
+        <th>Skill</th>
+        <th>Points</th>
+        <th colspan="2" class="text-center">Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="a in ::attributes">
+        <td>
+          <!--<div style="padding-left:{{:: 2 * a.depth}}em;">-->
+          <p class="form-control-static">
+            <span class="text-muted">{{:: '....'.repeat(a.depth) }}&nbsp;</span>{{::a.name}}
+          <!--</div>-->
+        </td>
+        <td>
+          <div ng-if=":: !a.children">
+            <label for="attr-points-{{::a._id}}" class="sr-only" ng-bind="::a.name"></label>
+            <input class="form-control number"
+                id="attr-points-{{::a._id}}" type="number" ng-model="a.points"/>
+          </div>
+        </td>
+        <td class="text-right">
+          <p class="form-control-static text-center">
+            <span class="text-large text-primary" ng-bind="a.value|number:0"></span>
+            <br />
+            <span class="text-muted small" ng-bind="a.level"></span>
+          </p>
+        </td>
+        <td>
+          <div ng-if="::a.nvd3data.length">
+            <nvd3 config="nvd3config"
+                  class="stat-vs-summary"
+                  options="a.nvd3options"
+                  api="a.nvd3api"
+                  data="a.nvd3data" id="sv-{{::a._id}}-vs"></nvd3>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
   </div>
   <div class="row">
     <div class="single-col">
