@@ -8,7 +8,7 @@ module.exports = ngModule.filter('bonus',
   function() {
     return _.memoize(function(value) {
       if (isNaN(value)) {
-        return '?';
+        return value;
       } else {
         var v = Number(value);
         if (v > 0) {

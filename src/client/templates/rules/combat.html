@@ -1,739 +1,825 @@
 <div class="single-col">
-    <h2>Basic combat</h2>
-    <p>
-        To simulate combat, we’ll make use of a few new concepts:
-    </p>
-    <section id="definitions">
+  <h2>Basic combat</h2>
+
+  <p>
+    To simulate combat, we’ll make use of a few new concepts:
+  </p>
+  <section id="definitions">
     <h3>Definitions</h3>
     <dl>
-        <dt>Combat rounds</dt>
-        <dd>
-            <p>
-            A <dfn>round of combat</dfn> is a very loosely defined “unit” of
-            time during which a single <dfn>exchange</dfn> happens. It is vague
-            because an exchange is not precisely defined, but a ballpark figure
-            might be a second or two.
-            </p>
-        </dd>
-
-        <dt>Exchange</dt>
-        <dd>
-            <p>
-            An <dfn>exchange</dfn> during combat is a “unit of things
-            happening”. This is deliberately vague because combat is highly
-            dynamic and cannot be captured by too-static concepts such as
-            “an exchange of one blow for a parry”. Thus an exchange, depending
-            on context, might represent a flurry of punches and a defensive
-            cover-up; or a quick feint and a lunge of a sword and a desperate
-            parry in return; or it might represent a tackle stopped by a sprawl
-            and a punishing knee-strike.
-            </p>
-        </dd>
-
-        <dt>Difference</dt>
-        <dd>
-            <p>
-            The <dfn>difference</dfn> of a skill check is, as described in the
-            chapter on skills, the difference between your value and the
-            opponent’s.
-            </p>
-        </dd>
-
-        <dt>Hit Margin (HM)</dt>
-        <dd>
-            <p>
-            You may win an exchange without hitting your opponent. Combat is a
-            game of feeling out your opponent and gaining an advantage. Thus,
-            the <dfn>hit margin</dfn> (HM) is a number representing
-            <em>by how much</em> you need to win—how great the difference must
-            be—to actually score a hit. (If you win an exchange but fall
-            within the hit margin, you gain an <dfn>advantage</dfn>.)
-            </p>
-            <p>
-            Normally the hit margin is <strong>5</strong>.
-            This can change: For instance, if you fight very cautiously you
-            make it harder for your opponent to hit you, at the cost of giving
-            up opportunities, increasing the hit margin of both parties. On
-            the other hand, if you fight very recklessly, both fighters’
-            hit margins will be reduced. The hit margin can never be less
-            than 0.
-            </p>
-        </dd>
-
-        <dt>Hit Difference (HD)</dt>
-        <dd>
-            <p>
-                The <dfn>hit difference</dfn> (HD) describes how effective a
-                hit is.
-            </p>
-            <div rpg-math>
-                \text{hit difference} = \text{difference} - \text{hit margin}
-            </div>
-            <p>
-                A hit is effective only if
-                <rpg-math>\text{hit difference} &gt; 0</rpg-math>.
-            </p>
-        </dd>
-
-        <dt>Protection</dt>
-        <dd>
-            <p>
-                Probably self-explanatory, <dfn>protection</dfn> simply
-                denotes how well protected and insulated from damage a character
-                is by armour—or how protected a monster by its hide, a
-                beast by its fur, and so on.
-            </p>
-        </dd>
-    </dl>
-    </section>
-
-    <section id="combat_flow">
-        <h3>The flow of combat</h3>
+      <dt>Combat rounds</dt>
+      <dd>
         <p>
-            With these concepts in mind, combat between two combatants basically
-            consists of the following action flow:
+          A <dfn>round of combat</dfn> is a very loosely defined “unit” of
+          time during which a single <dfn>exchange</dfn> happens. It is vague
+          because an exchange is not precisely defined, but a ballpark figure
+          might be a second or two.
+        </p>
+      </dd>
+
+      <dt>Exchange</dt>
+      <dd>
+        <p>
+          An <dfn>exchange</dfn> during combat is a “unit of things
+          happening”. This is deliberately vague because combat is highly
+          dynamic and cannot be captured by too-static concepts such as
+          “an exchange of one blow for a parry”. Thus an exchange, depending
+          on context, might represent a flurry of punches and a defensive
+          cover-up; or a quick feint and a lunge of a sword and a desperate
+          parry in return; or it might represent a tackle stopped by a sprawl
+          and a punishing knee-strike.
+        </p>
+      </dd>
+
+      <dt>Difference</dt>
+      <dd>
+        <p>
+          The <dfn>difference</dfn> of a skill check is, as described in the
+          chapter on skills, the difference between your value and the
+          opponent’s.
+        </p>
+      </dd>
+
+      <dt>Hit Margin (HM)</dt>
+      <dd>
+        <p>
+          You may win an exchange without hitting your opponent. Combat is a
+          game of feeling out your opponent and gaining an advantage. Thus,
+          the <dfn>hit margin</dfn> (HM) is a number representing
+          <em>by how much</em> you need to win—how great the difference must
+          be—to actually score a hit. (If you win an exchange but fall
+          within the hit margin, you gain an <dfn>advantage</dfn>.)
         </p>
 
-        <ol>
-            <li>
-                Each player selects their cards.
-            </li>
-            <li>
-                Both players a regular skill check. (That is,
-                both players play their cards and roll <span roll="1d10*"></span>.
-                Each player adds their stats to the result of their roll; the
-                higher value wins.)
-                <ul>
-                    <li>Note the difference in the check roll.</li>
-                    <li>
-                        The <dfn>hit difference</dfn> is
-                        <rpg-math>\(
-                            \text{hit difference} = \text{difference}
-                                             - \text{hit margin}
-                        \)</rpg-math>
-                        where the <dfn>hit margin</dfn> is usually 5.
-                    </li>
-                </ul>
-            </li>
-            <li>
-                The winner of the exchange will either score a hit on their
-                opponent (if
-                <rpg-math>\( \text{hit difference} \gt 0 \)</rpg-math>,
-                <em>or</em> gain an advantage for the next exchange (not both:
-                and the advantage only applies to the next exchange).
-                <ol>
-                    <li>
-                        If either combatant was hit, roll for damage:
-                        <div rpg-math>\(
-                            \text{damage} = \text{hit difference}
-                                          + \left[ \text{Power » Strength} \right]
-                                          + \text{weapon damage}
-                                          - \text{protection}
-                        \)</div>
-                        Every time a character is hit, they must perform a
-                        Toughness check against the total damage they’ve
-                        sustained so far. See later
-                        in this chapter for details on damage and injuries.
-                    </li>
-                    <li>
-                        If neither combatant was hit, the winner gained an
-                        <dfn>advantage</dfn>: In the next exchange, he receives
-                        a bonus equal to the difference.
-                    </li>
-                </ol>
-            </li>
-        </ol>
+        <p>
+          Normally the hit margin is <strong>5</strong>.
+          This can change: For instance, if you fight very cautiously you
+          make it harder for your opponent to hit you, at the cost of giving
+          up opportunities, increasing the hit margin of both parties. On
+          the other hand, if you fight very recklessly, both fighters’
+          hit margins will be reduced. The hit margin can never be less
+          than 0.
+        </p>
+      </dd>
+
+      <dt>Hit Difference (HD)</dt>
+      <dd>
+        <p>
+          The <dfn>hit difference</dfn> (HD) describes how effective a
+          hit is.
+        </p>
+
+        <div rpg-math>
+          \text{hit difference} = \text{difference} - \text{hit margin}
+        </div>
+        <p>
+          A hit is effective only if
+          <rpg-math>\text{hit difference} &gt; 0</rpg-math>
+          .
+        </p>
+      </dd>
+
+      <dt>Protection</dt>
+      <dd>
+        <p>
+          Probably self-explanatory, <dfn>protection</dfn> simply
+          denotes how well protected and insulated from damage a character
+          is by armour—or how protected a monster by its hide, a
+          beast by its fur, and so on.
+        </p>
+      </dd>
+    </dl>
+  </section>
+
+  <section id="combat_flow">
+    <h3>The flow of combat</h3>
+
     <p>
-        Repeat until the combat is concluded.
+      With these concepts in mind, combat between two combatants basically
+      consists of the following action flow:
+    </p>
+
+    <ol>
+      <li>
+        Each player selects their cards.
+      </li>
+      <li>
+        Both players a regular skill check. (That is,
+        both players play their cards and roll <span roll="1d10*"></span>.
+        Each player adds their stats to the result of their roll; the
+        higher value wins.)
+        <ul>
+          <li>Note the difference in the check roll.</li>
+          <li>
+            The <dfn>hit difference</dfn> is
+            <rpg-math>\(
+                      \text{hit difference} = \text{difference}
+                      - \text{hit margin}
+                      \)
+            </rpg-math>
+            where the <dfn>hit margin</dfn> is usually 5.
+          </li>
+        </ul>
+      </li>
+      <li>
+        The winner of the exchange will either score a hit on their
+        opponent (if
+        <rpg-math>\( \text{hit difference} \gt 0 \)</rpg-math>
+        ,
+        <em>or</em> gain an advantage for the next exchange (not both:
+        and the advantage only applies to the next exchange).
+        <ol>
+          <li>
+            If either combatant was hit, roll for damage:
+            <div rpg-math>\(
+                          \text{damage} = \text{hit difference}
+                          + \left[ \text{Power » Strength} \right]
+                          + \text{weapon damage}
+                          - \text{protection}
+                          \)
+            </div>
+            Every time a character is hit, they must perform a
+            Toughness check against the total damage they’ve
+            sustained so far. See later
+            in this chapter for details on damage and injuries.
+          </li>
+          <li>
+            If neither combatant was hit, the winner gained an
+            <dfn>advantage</dfn>: In the next exchange, he receives
+            a bonus equal to the difference.
+          </li>
+        </ol>
+      </li>
+    </ol>
+    <p>
+      Repeat until the combat is concluded.
     </p>
 
     <aside id="basic_combat_example" class="example">
-        <h5>Example</h5>
-        <p>
-            Let’s return to the duel between Terrick and Mandor we looked at
-            in a previous example. The values we’re interested in are:
-        </p>
-        <div style="clear:both;">
-            <table style="display:inline-block;">
-                <caption>Terrick</caption>
-                <tr><th>Attribute</th><td>Strength</td><td class="number">{{ 1|bonus }}</td></tr>
-                <tr><th>Attribute</th><td>Co-ordination</td><td class="number">{{ 2|bonus }}</td></tr>
-                <tr><th>Attribute</th><td>Toughness</td><td class="number">{{ 2|bonus }}</td></tr>
-                <tr><th>Skill</th><td>Sidesword</td><td class="number">{{ 10|bonus }}</td></tr>
-                <tr><th>Protection</th><td>None</td><td class="number">{{ 0|bonus }}</td></tr>
-            </table>
-            <table style="display:inline-block;">
-                <caption>Mandor</caption>
-                <tr><th>Attribute</th><td>Strength</td><td class="number">{{ 3|bonus }}</td></tr>
-                <tr><th>Attribute</th><td>Co-ordination</td><td class="number">{{ 3|bonus }}</td></tr>
-                <tr><th>Attribute</th><td>Toughness</td><td class="number">{{ 5|bonus }}</td></tr>
-                <tr><th>Skill</th><td>Sidesword</td><td class="number">{{ 15|bonus }}</td></tr>
-                <tr><th>Protection</th><td>Maille</td><td class="number">{{ 25|bonus }}</td></tr>
-            </table>
-        </div>
-        <ol>
-            <li>
-                <strong>Preparing the hands</strong>:
-                Because Terrick knows that Mandor’s treacherous allies are
-                on their way and will surely cut him down unless he wins the
-                fight <em>fast</em>, he chooses to fight recklessly and plays
-                the Reckless card, in addition to his Sidesword skill and its
-                governing talent, Precision. Mandor fights “normally”, playing
-                Sidesword and Precision. (If he had known ahead of time that
-                Terrick would fight recklessly, he might have chosen to play
-                the Cautious card to offset the danger—but hands are hidden
-                until played!)
-            </li>
-            <li>
-                <strong>The combat roll</strong>:
-                Both players roll <span roll="1d10*"></span>.
-                <ul>
-                    <li>
-                    Terrick rolls 16. Terrick’s Reckless card gives him
-                    {{ -2|bonus }} to his skill check, so he has a total of
-                    <div rpg-math>
-                    \begin{align*}
-                        &\text{1d20} + \text{Coordination} + \text{Sidesword} - \text{Reckless} \\
-                        &= 16 + 2 + 10 - 2 \\
-                        &= 26
-                    \end{align*}
-                    </div>
-                    </li>
-                    <li>
-                    Mandor rolls a mere 2. His result is
-                    <div rpg-math>
-                    \begin{align*}
-                        &\text{1d20} + \text{Precision} + \text{Sidesword} \\
-                        &= 2 + 3 + 15 \\
-                        &= 20
-                    \end{align*}
-                    </div>
-                    </li>
-                </ul>
-                Terrick wins by a margin of
-                <span rpg-math>26-20=6</span>.
-            </li>
-            <li>
-                <strong>Damage</strong>: Terrick successfully struck Mandor, for
-                <div rpg-math>
-                \begin{align*}
-                    \text{damage} = \text{difference}
-                                  + \text{weapon damage}
-                                  + \text{Strength}
-                                  - \text{protection}
-                \end{align*}
-                </div>
-                His sidesword adds 5 damage, but Mandor is wearing maille for a
-                {{ -5|bonus }} damage
-                reduction:
-                <div rpg-math>
-                \begin{align*}
-                    \text{damage} &= \text{difference}
-                                   + \text{weapon damage}
-                                   + \text{Strength}
-                                   - \text{protection} \\
-                                  &= \text{1}
-                                   + \text{5}
-                                   + \text{1}
-                                   - \text{5} \\
-                                  &= 2
-                \end{align*}
-                </div>
-                Mandor has to perform a Toughness check against his total damage
-                (now 2), which is successful.
-            </li>
-            <li>
-                <strong>Continuation</strong>: Since neither fighter is out
-                of the fight, they move on to the next exchange: Back to
-                step 1. Since Mandor is now injured, however, he will suffer
-                a penalty modifier of Injured {{ -16|bonus }}.
-            </li>
-        </ol>
-    </aside>
-    </section>
+      <h5>Example</h5>
 
-    <aside id="simplifications">
-        <h3>Simplifications</h3>
-        <p>
-            Keep in mind that although there are a lot of numbers mentioned,
-            some of them don’t really vary. As was mentioned in the chapter
-            on skills, each skill is almost always used with the same
-            attribute (co-ordination for combat skills), so we end up with
-            three numbers rather than four:
-        </p>
-        <div rpg-math>
-        \begin{align*}
-            &\text{1d20}
-                + \text{skill}
-                + \text{attribute}
-                \pm \text{modifiers} \\
-            &=\text{1d20}
-                + \left[ \text{skill &amp; attribute} \right]
-                \pm \text{modifiers}
-        \end{align*}
-        </div>
-        <p>
-            When it comes to damage rolls, since your character’s power
-            is constant, this can be included on your weapon skill card,
-            so again, for the most part we deal with three numbers, not four:
-        </p>
-        <div rpg-math>
-        \begin{align*}
-            \text{damage} &= \text{hit difference}
-                           + \text{weapon damage}
-                           + \text{power}
-                           - \text{protection} \\
-                          &= \text{hit difference}
-                           + \left[ \text{weapon &amp; power} \right]
-                           - \text{protection}
-        \end{align*}
-        </div>
-    </aside>
+      <p>
+        Let’s return to the duel between Terrick and Mandor we looked at
+        in a previous example. The values we’re interested in are:
+      </p>
 
-    <section id="damage">
-        <h3>Damage and injuries</h3>
-        <p>
-            Let’s recall that damage depends on four factors:
-        </p>
-        <div rpg-math>
-        \begin{align*}
-            \text{damage} &= \text{hit difference}
-                           + \left[ \text{weapon &amp; power} \right]
-                           - \text{protection}
-        \end{align*}
-        </div>
-        <p>
-            That is, how badly you are hurt when hit depends on
-        </p>
-        <ol>
-            <li>how good the hit was (the check difference);</li>
-            <li>how dangerous the weapon is;</li>
-            <li>how strong the person who hit you is; and</li>
-            <li>how well armoured you are.</li>
-        </ol>
-        <p>
-            Some weapons may have a <em>negative</em> damage modifier; for
-            instance, it’s possible to hit someone with your fists and have the
-            blow be entirely ineffective. If it’s an edged weapon on bare skin,
-            it will still at least cause a scratch.
-        </p>
-        <p>
-            For thrown projectile weapons, like throwing knives and javelins,
-            the Brawn or Strength bonus is halved; for bows and crossbows,
-            it is not used at all. Strength determines how heavy a bow you
-            can draw, but provided you can draw it properly, it will always
-            impart the same force to the arrow.
-        </p>
-
-        <p>
-            Every time your character sustains damage, you must do two things:
-        </p>
-        <ol>
-            <li>
-                Take note of the damage and add it to the total damage you’ve
-                sustained thus far.
-            </li>
-            <li>
-                Perform a Toughness attribute check against this updated total.
-            </li>
-        </ol>
-
-        <p>
-            If the Toughness check succeeds, nothing special happens. On
-            <em>failure</em>, check your difference:
-        </p>
-        <table>
-            <thead>
-            <tr>
-                <th>
-                    Quick/normal:
-                    <rpg-math>\text{damage} - \text{Toughness}</rpg-math>
-                </th>
-                <th>Advanced: Difference</th>
-                <th>Status</th>
-                <th>Effects</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>&gt;10</td>
-                <td>&gt;0</td>
-                <td>Injured</td>
-                <td>
-                    From now until you have chance to rest, virtually all
-                    your checks will suffer a negative modifier corresponding to
-                    your total damage. (All skill checks, all Brawn, Endurance, and
-                    Intelligence checks, and any other checks where the GM deems
-                    it appropriate.) This does not apply to further Toughness
-                    checks against damage.
-                </td>
-            </tr>
-            <tr>
-                <td>&gt;15</td>
-                <td>&gt;5</td>
-                <td>Wounded</td>
-                <td>
-                      In addition to of the effect of being Injured,
-                      Every round you fight while Wounded until you have a
-                      chance to rest, you will receive an additional &minus;1
-                      to all your checks.
-                </td>
-            </tr>
-            <tr>
-                <td>&gt;20</td>
-                <td>&gt;10</td>
-                <td>Severely Wounded</td>
-                <td>
-                    You count as both Injured and Wounded, and in addition,
-                    every round you attempt to keep fighting, or engage in any
-                    physical activity more demanding than staggering or crawling
-                    away from the battle, you will sustain an
-                    additional +1 damage (and have to make another Toughness check
-                    whether anyone hits you or not).
-                </td>
-            </tr>
-            <tr>
-                <td>&gt;25</td>
-                <td>&gt;15</td>
-                <td>Incapacitated</td>
-                <td>
-                    You count as both Injured and Wounded, and in addition,
-                    every round you attempt to keep fighting, or engage in any
-                    physical activity more demanding than staggering or crawling
-                    away from the battle, you will sustain an additional +1
-                    damage (and have to make another Toughness check
-                    whether anyone hits you or not).
-                </td>
-            </tr>
-            <tr>
-                <td>&gt;30</td>
-                <td>&gt;20</td>
-                <td>Fatally Wounded</td>
-                <td>
-                    You are dying. You cannot move at more than an inching
-                    crawl, and each minute you
-                    <ul>
-                        <li>sustain another +1 damage from bleeding, and</li>
-                        <li>must perform another Toughness check</li>
-                    </ul>
-                    A critical failure means death.
-                </td>
-            </tr>
-            </tbody>
+      <div style="clear:both;">
+        <table style="display:inline-block;">
+          <caption>Terrick</caption>
+          <tr>
+            <th>Attribute</th>
+            <td>Strength</td>
+            <td class="number">{{ 1|bonus }}</td>
+          </tr>
+          <tr>
+            <th>Attribute</th>
+            <td>Co-ordination</td>
+            <td class="number">{{ 2|bonus }}</td>
+          </tr>
+          <tr>
+            <th>Attribute</th>
+            <td>Toughness</td>
+            <td class="number">{{ 2|bonus }}</td>
+          </tr>
+          <tr>
+            <th>Skill</th>
+            <td>Sidesword</td>
+            <td class="number">{{ 10|bonus }}</td>
+          </tr>
+          <tr>
+            <th>Protection</th>
+            <td>None</td>
+            <td class="number">{{ 0|bonus }}</td>
+          </tr>
         </table>
-        <p>
-            Note that each status <em>includes</em> the less serious states;
-            for example, if you are considered Wounded, you are also considered
-            Injured. On the other hand, you can’t accrue the same status more
-            than once (while you already have it); if you are already
-            Injured, a result of Injured on your next check makes no difference.
-        </p>
-        <p>
-            A perfect check does not mean that you get to ignore the damage,
-            but you manage to steel yourself enough that you may consider the
-            next less severe result. You don’t miraculously recover—if you
-            are already Wounded and roll a perfect check, but still get the
-            Wounded result, you don’t recover to being merely Injured; but
-            if you were merely Injured and got Wounded on a perfect check, you
-            would remain merely Wounded.
-        </p>
-        <p>
-            On a fumble, consider the next <em>more</em> severe result.
-        </p>
+        <table style="display:inline-block;">
+          <caption>Mandor</caption>
+          <tr>
+            <th>Attribute</th>
+            <td>Strength</td>
+            <td class="number">{{ 3|bonus }}</td>
+          </tr>
+          <tr>
+            <th>Attribute</th>
+            <td>Co-ordination</td>
+            <td class="number">{{ 3|bonus }}</td>
+          </tr>
+          <tr>
+            <th>Attribute</th>
+            <td>Toughness</td>
+            <td class="number">{{ 5|bonus }}</td>
+          </tr>
+          <tr>
+            <th>Skill</th>
+            <td>Sidesword</td>
+            <td class="number">{{ 15|bonus }}</td>
+          </tr>
+          <tr>
+            <th>Protection</th>
+            <td>Maille</td>
+            <td class="number">{{ 25|bonus }}</td>
+          </tr>
+        </table>
+      </div>
+      <ol>
+        <li>
+          <strong>Preparing the hands</strong>:
+                                              Because Terrick knows that
+                                              Mandor’s treacherous allies are
+                                              on their way and will surely cut
+                                              him down unless he wins the
+                                              fight <em>fast</em>, he chooses to
+                                              fight recklessly and plays
+                                              the Reckless card, in addition to
+                                              his Sidesword skill and its
+                                              governing talent, Precision.
+                                              Mandor fights “normally”, playing
+                                              Sidesword and Precision. (If he
+                                              had known ahead of time that
+                                              Terrick would fight recklessly, he
+                                              might have chosen to play
+                                              the Cautious card to offset the
+                                              danger—but hands are hidden
+                                              until played!)
+        </li>
+        <li>
+          <strong>The combat roll</strong>:
+                                          Both players roll
+          <span roll="1d10*"></span>.
+          <ul>
+            <li>
+              Terrick rolls 16. Terrick’s Reckless card gives him
+              {{ -2|bonus }} to his skill check, so he has a total of
+              <div rpg-math>
+                \begin{align*}
+                &\text{1d20} + \text{Coordination} + \text{Sidesword} -
+                \text{Reckless} \\
+                &= 16 + 2 + 10 - 2 \\
+                &= 26
+                \end{align*}
+              </div>
+            </li>
+            <li>
+              Mandor rolls a mere 2. His result is
+              <div rpg-math>
+                \begin{align*}
+                &\text{1d20} + \text{Precision} + \text{Sidesword} \\
+                &= 2 + 3 + 15 \\
+                &= 20
+                \end{align*}
+              </div>
+            </li>
+          </ul>
+                                          Terrick wins by a margin of
+          <span rpg-math>26-20=6</span>.
+        </li>
+        <li>
+          <strong>Damage</strong>: Terrick successfully struck Mandor, for
+          <div rpg-math>
+            \begin{align*}
+            \text{damage} = \text{difference}
+            + \text{weapon damage}
+            + \text{Strength}
+            - \text{protection}
+            \end{align*}
+          </div>
+                                 His sidesword adds 5 damage, but Mandor is
+                                 wearing maille for a
+                                 {{ -5|bonus }} damage
+                                 reduction:
+          <div rpg-math>
+            \begin{align*}
+            \text{damage} &= \text{difference}
+            + \text{weapon damage}
+            + \text{Strength}
+            - \text{protection} \\
+            &= \text{1}
+            + \text{5}
+            + \text{1}
+            - \text{5} \\
+            &= 2
+            \end{align*}
+          </div>
+                                 Mandor has to perform a Toughness check against
+                                 his total damage
+                                 (now 2), which is successful.
+        </li>
+        <li>
+          <strong>Continuation</strong>: Since neither fighter is out
+                                       of the fight, they move on to the next
+                                       exchange: Back to
+                                       step 1. Since Mandor is now injured,
+                                       however, he will suffer
+                                       a penalty modifier of Injured {{
+                                       -16|bonus }}.
+        </li>
+      </ol>
+    </aside>
+  </section>
 
-        <aside class="stats">
-            <h5>Statistics</h5>
-            <p>
-                For the average person, with a Toughness of {{ 0|bonus }},
-            </p>
-            <ul>
-                <li>
-                    &lt;6 damage is never worse than an Injury.
-                </li>
-                <li>
-                    By the time you sustain 15 damage, your risk of
-                    Incapacitation is 50%.
-                </li>
-                <li>
-                    Once you take more than 20 damage, you begin to risk death.
-                </li>
-            </ul>
-            <p>
-                If two combatants are evenly matched, then in the first
-                exchange,
-            </p>
-            <ul>
-                <li>
-                    50% of the time, neither will be hit, but one or the other
-                    will merely gain an advantage. (That is, 50% of the time,
-                    the difference will be within the hit margin.)
-                </li>
-                <li>
-                    If one or the other is hit, then
-                    <ul>
-                        <li>
-                            50% of the time (75% of all exchanges),
-                            <rpg-math>\text{hit difference} \lt 5</rpg-math>.
-                        </li>
-                        <li>
-                            80% of the time (90% of all exchanges),
-                            <rpg-math>\text{hit difference} \lt 13</rpg-math>.
-                        </li>
-                        <li>
-                            The maximum hit difference is 19.
-                        </li>
-                    </ul>.
-                </li>
-            </ul>
-        </aside>
-    </section>
-</section>
-<section>
+  <aside id="simplifications">
+    <h3>Simplifications</h3>
+
+    <p>
+      Keep in mind that although there are a lot of numbers mentioned,
+      some of them don’t really vary. As was mentioned in the chapter
+      on skills, each skill is almost always used with the same
+      attribute (co-ordination for combat skills), so we end up with
+      three numbers rather than four:
+    </p>
+
+    <div rpg-math>
+      \begin{align*}
+      &\text{1d20}
+      + \text{skill}
+      + \text{attribute}
+      \pm \text{modifiers} \\
+      &=\text{1d20}
+      + \left[ \text{skill &amp; attribute} \right]
+      \pm \text{modifiers}
+      \end{align*}
+    </div>
+    <p>
+      When it comes to damage rolls, since your character’s power
+      is constant, this can be included on your weapon skill card,
+      so again, for the most part we deal with three numbers, not four:
+    </p>
+
+    <div rpg-math>
+      \begin{align*}
+      \text{damage} &= \text{hit difference}
+      + \text{weapon damage}
+      + \text{power}
+      - \text{protection} \\
+      &= \text{hit difference}
+      + \left[ \text{weapon &amp; power} \right]
+      - \text{protection}
+      \end{align*}
+    </div>
+  </aside>
+
+  <section id="damage">
+    <h3>Damage and injuries</h3>
+
+    <p>
+      Let’s recall that damage depends on four factors:
+    </p>
+
+    <div rpg-math>
+      \begin{align*}
+      \text{damage} &= \text{hit difference}
+      + \left[ \text{weapon &amp; power} \right]
+      - \text{protection}
+      \end{align*}
+    </div>
+    <p>
+      That is, how badly you are hurt when hit depends on
+    </p>
+    <ol>
+      <li>how good the hit was (the check difference);</li>
+      <li>how dangerous the weapon is;</li>
+      <li>how strong the person who hit you is; and</li>
+      <li>how well armoured you are.</li>
+    </ol>
+    <p>
+      Some weapons may have a <em>negative</em> damage modifier; for
+      instance, it’s possible to hit someone with your fists and have the
+      blow be entirely ineffective. If it’s an edged weapon on bare skin,
+      it will still at least cause a scratch.
+    </p>
+
+    <p>
+      For thrown projectile weapons, like throwing knives and javelins,
+      the Brawn or Strength bonus is halved; for bows and crossbows,
+      it is not used at all. Strength determines how heavy a bow you
+      can draw, but provided you can draw it properly, it will always
+      impart the same force to the arrow.
+    </p>
+
+    <p>
+      Every time your character sustains damage, you must do two things:
+    </p>
+    <ol>
+      <li>
+        Take note of the damage and add it to the total damage you’ve
+        sustained thus far.
+      </li>
+      <li>
+        Perform a Toughness attribute check against this updated total.
+      </li>
+    </ol>
+
+    <p>
+      If the Toughness check succeeds, nothing special happens. On
+      <em>failure</em>, check your difference:
+    </p>
+    <table>
+      <thead>
+      <tr>
+        <th>
+          Quick/normal:
+          <rpg-math>\text{damage} - \text{Toughness}</rpg-math>
+        </th>
+        <th>Advanced: Difference</th>
+        <th>Status</th>
+        <th>Effects</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>&gt;10</td>
+        <td>&gt;0</td>
+        <td>Injured</td>
+        <td>
+          From now until you have chance to rest, virtually all
+          your checks will suffer a negative modifier corresponding to
+          your total damage. (All skill checks, all Brawn, Endurance, and
+          Intelligence checks, and any other checks where the GM deems
+          it appropriate.) This does not apply to further Toughness
+          checks against damage.
+        </td>
+      </tr>
+      <tr>
+        <td>&gt;15</td>
+        <td>&gt;5</td>
+        <td>Wounded</td>
+        <td>
+          In addition to of the effect of being Injured,
+          Every round you fight while Wounded until you have a
+          chance to rest, you will receive an additional &minus;1
+          to all your checks.
+        </td>
+      </tr>
+      <tr>
+        <td>&gt;20</td>
+        <td>&gt;10</td>
+        <td>Severely Wounded</td>
+        <td>
+          You count as both Injured and Wounded, and in addition,
+          every round you attempt to keep fighting, or engage in any
+          physical activity more demanding than staggering or crawling
+          away from the battle, you will sustain an
+          additional +1 damage (and have to make another Toughness check
+          whether anyone hits you or not).
+        </td>
+      </tr>
+      <tr>
+        <td>&gt;25</td>
+        <td>&gt;15</td>
+        <td>Incapacitated</td>
+        <td>
+          You count as both Injured and Wounded, and in addition,
+          every round you attempt to keep fighting, or engage in any
+          physical activity more demanding than staggering or crawling
+          away from the battle, you will sustain an additional +1
+          damage (and have to make another Toughness check
+          whether anyone hits you or not).
+        </td>
+      </tr>
+      <tr>
+        <td>&gt;30</td>
+        <td>&gt;20</td>
+        <td>Fatally Wounded</td>
+        <td>
+          You are dying. You cannot move at more than an inching
+          crawl, and each minute you
+          <ul>
+            <li>sustain another +1 damage from bleeding, and</li>
+            <li>must perform another Toughness check</li>
+          </ul>
+          A critical failure means death.
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <p>
+      Note that each status <em>includes</em> the less serious states;
+      for example, if you are considered Wounded, you are also considered
+      Injured. On the other hand, you can’t accrue the same status more
+      than once (while you already have it); if you are already
+      Injured, a result of Injured on your next check makes no difference.
+    </p>
+
+    <p>
+      A perfect check does not mean that you get to ignore the damage,
+      but you manage to steel yourself enough that you may consider the
+      next less severe result. You don’t miraculously recover—if you
+      are already Wounded and roll a perfect check, but still get the
+      Wounded result, you don’t recover to being merely Injured; but
+      if you were merely Injured and got Wounded on a perfect check, you
+      would remain merely Wounded.
+    </p>
+
+    <p>
+      On a fumble, consider the next <em>more</em> severe result.
+    </p>
+
+    <aside class="stats">
+      <h5>Statistics</h5>
+
+      <p>
+        For the average person, with a Toughness of {{ 0|bonus }},
+      </p>
+      <ul>
+        <li>
+          &lt;6 damage is never worse than an Injury.
+        </li>
+        <li>
+          By the time you sustain 15 damage, your risk of
+          Incapacitation is 50%.
+        </li>
+        <li>
+          Once you take more than 20 damage, you begin to risk death.
+        </li>
+      </ul>
+      <p>
+        If two combatants are evenly matched, then in the first
+        exchange,
+      </p>
+      <ul>
+        <li>
+          50% of the time, neither will be hit, but one or the other
+          will merely gain an advantage. (That is, 50% of the time,
+          the difference will be within the hit margin.)
+        </li>
+        <li>
+          If one or the other is hit, then
+          <ul>
+            <li>
+              50% of the time (75% of all exchanges),
+              <rpg-math>\text{hit difference} \lt 5</rpg-math>
+              .
+            </li>
+            <li>
+              80% of the time (90% of all exchanges),
+              <rpg-math>\text{hit difference} \lt 13</rpg-math>
+              .
+            </li>
+            <li>
+              The maximum hit difference is 19.
+            </li>
+          </ul>
+          .
+        </li>
+      </ul>
+    </aside>
+  </section>
+  <section>
     <h2>Special cases</h2>
     <section>
-        <h3>Unarmed defence against weapons</h3>
-        <p>
-            If an unarmed person attempts to avoid being struck by a weapon,
-            they will use their Quickness attribute and Dodge skill. If they’re
-            hit by a blow with
-            <rpg-math>\text{hit margin} \lt 25</rpg-math>, it’s assumed that
-            they were struck on the hand or arm, warding the blow.
-        </p>
+      <h3>Unarmed defence against weapons</h3>
+
+      <p>
+        If an unarmed person attempts to avoid being struck by a weapon,
+        they will use their Quickness attribute and Dodge skill. If they’re
+        hit by a blow with
+        <rpg-math>\text{hit margin} \lt 25</rpg-math>
+        , it’s assumed that
+        they were struck on the hand or arm, warding the blow.
+      </p>
     </section>
     <section>
-        <h3>Undefended attacks</h3>
-        <p>
-            The normal rules regarding damage are written with the tacit
-            assumption that two people are <em>fighting</em>, each
-            doing their best to defend themselves. Thus the amount of damage
-            a weapon can inflict is limited not so much by the potential of
-            the weapon to cause harm as by the fact that most hits in a fight
-            will not be dead-on, murderous blows, but glancing blows partially
-            parried or avoided.
-        </p>
-        <p>
-            If attacking someone who is <em>not</em> defending themselves, the
-            difficulty of the check is a constant <strong>0</strong>. Any
-            weapon can be lethal when striking an unaware opponent.
-        </p>
+      <h3>Undefended attacks</h3>
+
+      <p>
+        The normal rules regarding damage are written with the tacit
+        assumption that two people are <em>fighting</em>, each
+        doing their best to defend themselves. Thus the amount of damage
+        a weapon can inflict is limited not so much by the potential of
+        the weapon to cause harm as by the fact that most hits in a fight
+        will not be dead-on, murderous blows, but glancing blows partially
+        parried or avoided.
+      </p>
+
+      <p>
+        If attacking someone who is <em>not</em> defending themselves, the
+        difficulty of the check is a constant <strong>0</strong>. Any
+        weapon can be lethal when striking an unaware opponent.
+      </p>
     </section>
-</section>
-<section>
+  </section>
+  <section>
     <h2>Detailed combat</h2>
+
     <p>
-        Combat in role playing games is a complicated subject. Too much detail,
-        and it can become slow and boring. Too little detail, and it can become
-        too sudden or give the players too little control. In order to give
-        flexibility, I’m presenting three variations on the combat rules:
-        <em>Quick</em> rules to make combat run fast and furiously;
-        <em>normal</em> rules for most fights; and <em>advanced</em> rules
-        when you want to take your time and go into detail.
+      Combat in role playing games is a complicated subject. Too much detail,
+      and it can become slow and boring. Too little detail, and it can become
+      too sudden or give the players too little control. In order to give
+      flexibility, I’m presenting three variations on the combat rules:
+      <em>Quick</em> rules to make combat run fast and furiously;
+      <em>normal</em> rules for most fights; and <em>advanced</em> rules
+      when you want to take your time and go into detail.
     </p>
+
     <p>
-        As a rule of thumb,
+      As a rule of thumb,
     </p>
     <ul>
-        <li>
-            Use the <em>normal</em> combat rules unless you have specific
-            reason to do otherwise.
-        </li>
-        <li>
-            Use the <em>quick</em> combat rules in situations of
-            urgency—when making a daring escape or attacking an enemy camp,
-            for example. Keep in mind that the quick rules are more dangerous,
-            so don’t force your players to use them too often.
-        </li>
-        <li>
-            Use the <em>advanced</em> combat rules if
-            <ul>
-                <li>
-                    there is an important fight, such as a duel with a dangerous
-                    enemy, a fight between characters, or similar; or
-                </li>
-                <li>
-                    the players request it.
-                </li>
-            </ul>
-        </li>
+      <li>
+        Use the <em>normal</em> combat rules unless you have specific
+        reason to do otherwise.
+      </li>
+      <li>
+        Use the <em>quick</em> combat rules in situations of
+        urgency—when making a daring escape or attacking an enemy camp,
+        for example. Keep in mind that the quick rules are more dangerous,
+        so don’t force your players to use them too often.
+      </li>
+      <li>
+        Use the <em>advanced</em> combat rules if
+        <ul>
+          <li>
+            there is an important fight, such as a duel with a dangerous
+            enemy, a fight between characters, or similar; or
+          </li>
+          <li>
+            the players request it.
+          </li>
+        </ul>
+      </li>
     </ul>
     <section>
-        <h3>Detail levels</h3>
-        <table>
-            <thead>
-            <tr>
-                <th style="width: 18%;">Rules</th>
-                <th style="width: 27%;">Quick</th>
-                <th style="width: 27%;">Normal</th>
-                <th style="width: 27%;">Advanced</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td><abbr title="Player character">PC</abbr> skill check</td>
-                <td rpg-math>
-                \begin{align*}
-                    \text{1d20}
-                    &+ \text{skill value} \\
-                    &\pm \text{attribute} \\
-                    &\pm \text{modifiers}
-                \end{align*}
-                </td>
-                <td rpg-math>
-                \begin{align*}
-                    \text{1d20}
-                    &+ \text{skill value} \\
-                    &\pm \text{attribute} \\
-                    &\pm \text{modifiers}
-                \end{align*}
-                </td>
-                <td rpg-math>
-                \begin{align*}
-                    \text{1d20}
-                    &+ \text{skill value} \\
-                    &\pm \text{attribute} \\
-                    &\pm \text{modifiers}
-                \end{align*}
-                </td>
-            </tr>
-            <tr>
-                <td><abbr title="Non-player character">NPC</abbr> skill check</td>
-                <td rpg-math>
-                \begin{align*}
-                    \text{10}
-                    &+ \text{skill value} \\
-                    &\pm \text{attribute} \\
-                    &\pm \text{modifiers}
-                \end{align*}
-                </td>
-                <td rpg-math>
-                \begin{align*}
-                    \text{1d20}
-                    &+ \text{skill value} \\
-                    &\pm \text{attribute} \\
-                    &\pm \text{modifiers}
-                \end{align*}
-                </td>
-                <td rpg-math>
-                \begin{align*}
-                    \text{1d20}
-                    &+ \text{skill value} \\
-                    &\pm \text{attribute} \\
-                    &\pm \text{modifiers}
-                \end{align*}
-                </td>
-            </tr>
-            <tr>
-                <td>Chosen modifiers</td>
-                <td>0</td>
-                <td>1</td>
-                <td>Multiple</td>
-            </tr>
-            <tr>
-                <td>Advantages</td>
-                <td>Use if fight lasts &gt;3 rounds</td>
-                <td>Always use</td>
-                <td>Always use</td>
-            </tr>
-            <tr>
-                <td>Injury modifiers</td>
-                <td>
-                    Use if fight lasts &gt;3 rounds.
-                </td>
-                <td>
-                    Always use.
-                </td>
-                <td>
-                    Always use.
-                </td>
-            </tr>
-            <tr>
-                <td>Fatigue modifiers</td>
-                <td>
-                    Use if fight lasts &gt;5 rounds.
-                </td>
-                <td>
-                    Use if fight lasts &gt;10 rounds.
-                </td>
-                <td>
-                    Always use.
-                </td>
-            </tr>
-            <tr>
-                <td>Hit calculation</td>
-                <td>
-                    The winner always hits.
-                </td>
-                <td>
-                    Hit if
-                    <rpg-math>\text{difference} \gt \text{hit margin}</rpg-math>
-                </td>
-                <td>
-                    Hit if
-                    <rpg-math>\text{difference} \gt \text{hit margin}</rpg-math>
-                </td>
-            </tr>
-            <tr>
-                <td>Damage</td>
-                <td rpg-math>
-                \begin{align*}
-                    &  \text{hit difference} \\
-                    &+ \left[ \text{Physical » Brawn » Strength} \right] \\
-                    &+ \text{weapon damage} \\
-                    &- \text{protection} \\
-                    &- \text{hit margin}
-                \end{align*}
-                </td>
-                <td rpg-math>
-                \begin{align*}
-                    &  \text{hit difference} \\
-                    &+ \left[ \text{Physical » Brawn » Strength} \right] \\
-                    &+ \text{weapon damage} \\
-                    &- \text{protection}
-                \end{align*}
-                </td>
-                <td rpg-math>
-                \begin{align*}
-                    &  \text{hit difference} \\
-                    &+ \left[ \text{Physical » Brawn » Strength} \right] \\
-                    &+ \text{weapon damage} \\
-                    &- \text{protection}
-                \end{align*}
-                </td>
-            </tr>
-            <tr>
-                <td>Toughness check</td>
-                <td rpg-math>
-                    10 \pm \text{Toughness}
-                </td>
-                <td rpg-math>
-                    10 \pm \text{Toughness}
-                </td>
-                <td rpg-math>
-                    \text{1d20} \pm \text{Toughness}
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <section>
-            <h3>Quick combat</h3>
-            <p>
-                In quick combat, we reduce the number of rolls of the
-                dice—don’t bother rolling for NPC skills (just assume an
-                average roll value of 10), don’t allow players (or the GM
-                in the role of player-for-NPCs) to select skill modifiers,
-                and don’t use more complicated rules for damage and fatigue.
-            </p>
-            <p>
-                If the fight drags out because the opponents are evenly matched
-                and the dice so fall, start adding rules that will increase
-                the danger and thus the chance of ending the fight. Therefore,
-                although we try to finish the fight in the first three rounds
-                without using damage modifiers, if it <em>does</em> run more
-                than three rounds, start penalising characters for injuries.
-            </p>
-            <p>
+      <h3>Detail levels</h3>
+      <table>
+        <thead>
+        <tr>
+          <th style="width: 18%;">Rules</th>
+          <th style="width: 27%;">Quick</th>
+          <th style="width: 27%;">Normal</th>
+          <th style="width: 27%;">Advanced</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><abbr title="Player character">PC</abbr> skill check</td>
+          <td rpg-math>
+            \begin{align*}
+            \text{1d20}
+            &+ \text{skill value} \\
+            &\pm \text{attribute} \\
+            &\pm \text{modifiers}
+            \end{align*}
+          </td>
+          <td rpg-math>
+            \begin{align*}
+            \text{1d20}
+            &+ \text{skill value} \\
+            &\pm \text{attribute} \\
+            &\pm \text{modifiers}
+            \end{align*}
+          </td>
+          <td rpg-math>
+            \begin{align*}
+            \text{1d20}
+            &+ \text{skill value} \\
+            &\pm \text{attribute} \\
+            &\pm \text{modifiers}
+            \end{align*}
+          </td>
+        </tr>
+        <tr>
+          <td><abbr title="Non-player character">NPC</abbr> skill check</td>
+          <td rpg-math>
+            \begin{align*}
+            \text{10}
+            &+ \text{skill value} \\
+            &\pm \text{attribute} \\
+            &\pm \text{modifiers}
+            \end{align*}
+          </td>
+          <td rpg-math>
+            \begin{align*}
+            \text{1d20}
+            &+ \text{skill value} \\
+            &\pm \text{attribute} \\
+            &\pm \text{modifiers}
+            \end{align*}
+          </td>
+          <td rpg-math>
+            \begin{align*}
+            \text{1d20}
+            &+ \text{skill value} \\
+            &\pm \text{attribute} \\
+            &\pm \text{modifiers}
+            \end{align*}
+          </td>
+        </tr>
+        <tr>
+          <td>Chosen modifiers</td>
+          <td>0</td>
+          <td>1</td>
+          <td>Multiple</td>
+        </tr>
+        <tr>
+          <td>Advantages</td>
+          <td>Use if fight lasts &gt;3 rounds</td>
+          <td>Always use</td>
+          <td>Always use</td>
+        </tr>
+        <tr>
+          <td>Injury modifiers</td>
+          <td>
+            Use if fight lasts &gt;3 rounds.
+          </td>
+          <td>
+            Always use.
+          </td>
+          <td>
+            Always use.
+          </td>
+        </tr>
+        <tr>
+          <td>Fatigue modifiers</td>
+          <td>
+            Use if fight lasts &gt;5 rounds.
+          </td>
+          <td>
+            Use if fight lasts &gt;10 rounds.
+          </td>
+          <td>
+            Always use.
+          </td>
+        </tr>
+        <tr>
+          <td>Hit calculation</td>
+          <td>
+            The winner always hits.
+          </td>
+          <td>
+            Hit if
+            <rpg-math>\text{difference} \gt \text{hit margin}</rpg-math>
+          </td>
+          <td>
+            Hit if
+            <rpg-math>\text{difference} \gt \text{hit margin}</rpg-math>
+          </td>
+        </tr>
+        <tr>
+          <td>Damage</td>
+          <td rpg-math>
+            \begin{align*}
+            & \text{hit difference} \\
+            &+ \left[ \text{Physical » Brawn » Strength} \right] \\
+            &+ \text{weapon damage} \\
+            &- \text{protection} \\
+            &- \text{hit margin}
+            \end{align*}
+          </td>
+          <td rpg-math>
+            \begin{align*}
+            & \text{hit difference} \\
+            &+ \left[ \text{Physical » Brawn » Strength} \right] \\
+            &+ \text{weapon damage} \\
+            &- \text{protection}
+            \end{align*}
+          </td>
+          <td rpg-math>
+            \begin{align*}
+            & \text{hit difference} \\
+            &+ \left[ \text{Physical » Brawn » Strength} \right] \\
+            &+ \text{weapon damage} \\
+            &- \text{protection}
+            \end{align*}
+          </td>
+        </tr>
+        <tr>
+          <td>Toughness check</td>
+          <td rpg-math>
+            10 \pm \text{Toughness}
+          </td>
+          <td rpg-math>
+            10 \pm \text{Toughness}
+          </td>
+          <td rpg-math>
+            \text{1d20} \pm \text{Toughness}
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <section>
+        <h3>Quick combat</h3>
 
-            </p>
-        </section>
+        <p>
+          In quick combat, we reduce the number of rolls of the
+          dice—don’t bother rolling for NPC skills (just assume an
+          average roll value of 10), don’t allow players (or the GM
+          in the role of player-for-NPCs) to select skill modifiers,
+          and don’t use more complicated rules for damage and fatigue.
+        </p>
+
+        <p>
+          If the fight drags out because the opponents are evenly matched
+          and the dice so fall, start adding rules that will increase
+          the danger and thus the chance of ending the fight. Therefore,
+          although we try to finish the fight in the first three rounds
+          without using damage modifiers, if it <em>does</em> run more
+          than three rounds, start penalising characters for injuries.
+        </p>
+
+        <p>
+
+        </p>
+      </section>
     </section>
+  </section>
 </div>

@@ -12,20 +12,7 @@ module.exports = {
     var a = '0[.]' + bracketify('0'.repeat(sigFigs-2))
       , b = '0[.]' + bracketify('0'.repeat(sigFigs-1))
       , c = '0[.]' + bracketify('0'.repeat(sigFigs));
-    return function(percent) {
-      //var exp = percent.toExponential(sigFigs-1);
-      //var pieces = /(\d+(?:\.\d+)?)e([+-])(\d+)/;
-      //var mantissa = pieces[1]
-      //  , sign = pieces[2]
-      //  , exponent = pieces[3];
-      //return percent.toFixed()
-      //
-      //if (sign === '+') {
-      //  var output = mantissa[0];
-      //  for (var i = 1; i < sigFigs; i++) {
-      //    output += mantissa[i+1];
-      //  }
-      //}
+    return _.memoize(function(percent) {
       try {
         var rounded = Number(percent.toPrecision(sigFigs));
         if (rounded >= 100) {
@@ -41,6 +28,6 @@ module.exports = {
         console.error(e);
         return '?';
       }
-    };
+    });
   })
 };

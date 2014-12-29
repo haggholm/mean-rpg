@@ -8,16 +8,15 @@ app.config(function($stateProvider) {
   $stateProvider.state('roll-stats', {
     url: '/roll-stats',
     templateUrl: 'roll-breakdown.html',
-    controller: 'RollBreakdownCtrl'
+    controller: 'RollBreakdownCtrl',
+    data: { title: 'Roll statistics' }
   });
 
   $stateProvider.state('attribute', {
     url: '/attributes',
     templateUrl: 'attributes.html',
     controller: 'AttributeCtrl',
-    data: {
-      title: 'Attributes'
-    }
+    data: { title: 'Attributes' }
   });
 
   $stateProvider.state('attribute.edit', {
@@ -40,10 +39,8 @@ app.config(function($stateProvider) {
   $stateProvider.state('rules', {
     url: '/rules',
     abstract: true,
-    template: '<div ui-view></div>',
-    data: {
-      title: 'Rules'
-    },
+    templateUrl: 'rules/rules.html',
+    data: { title: 'Rules' },
     controller: 'RulesCtrl'
   })
     .state('rules.combat', {

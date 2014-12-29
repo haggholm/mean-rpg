@@ -132,27 +132,29 @@
         <p>
             Very roughly, we can describe some skill levels as
         </p>
-        <table>
+        <table id="skillVsTable" class="table table-condensed table-striped">
             <thead>
             <tr>
                 <th rowspan="2" colspan="2">Skill level</th>
                 <th rowspan="2">Description</th>
-                <th colspan="6" style="text-align:center;">Win% against<sup>&dagger;</sup></th>
+                <th colspan="6" class="pct-chance">
+                    % chance of winning against<sup ng-if="advanced">&dagger;</sup>
+                </th>
             </tr>
             <tr>
-                <th class="rotated"><span>Neo&shy;phyte</span></th>
-                <th class="rotated"><span>Novice</span></th>
-                <th class="rotated"><span>Appren&shy;tice</span></th>
-                <th class="rotated"><span>Journey&shy;man</span></th>
-                <th class="rotated"><span>Master</span></th>
-                <th class="rotated"><span>Grand&shy;master</span></th>
+                <th class="rotate"><div><span>Neophyte</span></div></th>
+                <th class="rotate"><div><span>Novice</span></div></th>
+                <th class="rotate"><div><span>Apprentice</span></div></th>
+                <th class="rotate"><div><span>Journeyman</span></div></th>
+                <th class="rotate"><div><span>Master</span></div></th>
+                <th class="rotate"><div><span>Grandmaster</span></div></th>
             </tr>
             </thead>
             <tbody>
             <tr>
                 <td class="number">0</td>
                 <td>Neo&shy;phyte</td>
-                <td>Totally unskilled; no training.</td>
+                <td>Totally un&shy;skilled; no training.</td>
                 <td class="number">46</td>
                 <td class="number">19</td>
                 <td class="number">6.3</td>
@@ -165,11 +167,11 @@
                 <td>Novice</td>
                 <td>
                     Some training or experience. This reflects a passing
-                    familiarity with the skill or subject, but no depth of
-                    knowledge. People who are exposed to skills but do not
-                    particularly use them might be around this value: The
+                    famili&shy;arity with the skill or subject, but no depth of
+                    know&shy;ledge. People who are ex&shy;pos&shy;ed to skills but do not
+                    parti&shy;cularly use them might be around this value: The
                     average person’s ability to climb, a commoner’s
-                    knowledge of geography, and so on.
+                    know&shy;ledge of geo&shy;graphy, and so on.
                 </td>
                 <td class="number">76</td>
                 <td class="number">46</td>
@@ -182,11 +184,12 @@
                 <td class="number">8</td>
                 <td>Appren&shy;tice</td>
                 <td>
-                    Moderate training and experience. This is roughly how
-                    skilled you might expect someone to be at things that
-                    they regularly do, but do not emphasise: A farmer’s
-                    skill at horseback riding, a soldier’s grasp of repair
-                    skills such as leatherwork, &amp;c.
+                    Moder&shy;ate training and experi&shy;ence. This is roughly how
+                    skilled you might ex&shy;pect some&shy;one to be at things that
+                    they regu&shy;lar&shy;ly do, but do not em&shy;pha&shy;sise:
+                    A far&shy;mer’s
+                    skill at horse&shy;back riding, a soldier’s grasp of repair
+                    skills such as leather&shy;work, &amp;c.
                 </td>
                 <td class="number">92</td>
                 <td class="number">76</td>
@@ -199,12 +202,12 @@
                 <td class="number">12</td>
                 <td>Journey&shy;man</td>
                 <td>
-                    A skilled practitioner, but not a master. Literally,
-                    <em>journeyman</em> refers to a craftsman who has
-                    completed his apprenticeship and may charge for his
-                    work, but works under the supervision of a master.
+                    A skilled prac&shy;tition&shy;er, but not a master. Liter&shy;ally,
+                    <em>journey&shy;man</em> refers to a crafts&shy;man who has
+                    comple&shy;ted his app&shy;ren&shy;tice&shy;ship and may charge for his
+                    work, but works under the super&shy;vision of a master.
                     Most people are only this good at a few things: An
-                    artisan at his craft, a guardsman with his cudgel or
+                    arti&shy;san at his craft, a guards&shy;man with his cud&shy;gel or
                     truncheon.
                 </td>
                 <td class="number">96</td>
@@ -218,11 +221,11 @@
                 <td class="number">16</td>
                 <td>Master</td>
                 <td>
-                    Few people ever get quite this good at anything; most
-                    people will end up somewhere between journeyman and
+                    Few people ever get quite this good at any&shy;thing; most
+                    people will end up some&shy;where between journey&shy;man and
                     master levels at their trade skills by the end of their
-                    careers. Someone at this level might be a guildmaster
-                    artisan, a master-at-arms, or a deeply learned teacher.
+                    careers. Some&shy;one at this level might be a guild&shy;mas&shy;ter
+                    arti&shy;san, a master-at-arms, or a deeply learned teacher.
                 </td>
                 <td class="number">99</td>
                 <td class="number">96</td>
@@ -246,8 +249,11 @@
             </tr>
             </tbody>
         </table>
-            <aside class="comment">
-                <h5>Math nerds only</h5>
+        <div class="panel panel-advanced-info" ng-if="advanced">
+            <div class="panel-heading">
+                <h3 class="panel-title">Math nerds only</h3>
+            </div>
+            <div class="panel-body">
                 <p>
                 <sup>&dagger;</sup> Note that this is the percentage chance of
                 <em>winning</em> a skill check, not the chance of <em>not
@@ -260,7 +266,8 @@
                 avoid getting hung up on a few percentage points hear and there
                 and just regard this as a table of rules of thumb.
                 </p>
-            </aside>
+            </div>
+        </div>
         </section>
     </section>
 
@@ -335,7 +342,7 @@
     <section id="dice_rolls">
         <h3>Rolling the dice</h3>
 
-        <aside class="float">
+        <aside class="notes">
             <h5>Note</h5>
             <p>
             The average value of <span roll="1d10*"></span> is 6<br/>
@@ -395,7 +402,7 @@
     <section id="skill_checks">
         <h3>Skill checks</h3>
 
-        <aside class="example float">
+        <aside class="example">
             <h5>Example</h5>
             <p>
                 Terrick is fighting a duel with Mandor. Terrick has the following cards:
@@ -551,7 +558,7 @@
         experience, and so on, and its <dfn>value</dfn>, representing how
         good you are at it.
     </p>
-    <aside class="float">
+    <aside class="notes" ng-if="advanced">
         <h5>Math nerds only</h5>
         <div rpg-math>
         \begin{align*}
@@ -612,7 +619,7 @@
 
     <section id="skill_difficulty">
         <h3>Difficulty</h3>
-        <aside class="float">
+        <aside class="notes" ng-if="advanced">
             <h5>Math nerds only</h5>
             <p>
                 If <span rpg-math>\text{difficulty } &gt; 0</span>, then we need
@@ -676,32 +683,36 @@
             Sword group contains specific <em>skills</em> like Longsword and
             Sidesword.
         </p>
-        <aside class="float">
-            <h5>Math nerds only</h5>
-            <p>
-                In other words, the parent points are
-            </p>
-            <div rpg-math>
-                \begin{align*}
-                \text{group points}
-                    = \left\lfloor
-                        \frac{\text{skill points}}{3}
-                      \right\rfloor
-                \end{align*}
+        <div class="panel panel-advanced-info" ng-if="advanced">
+            <div class="panel-heading">
+                <h3 class="panel-title">Math nerds only</h3>
             </div>
-            <p>The same relationship holds for group-to-category, so</p>
-            <div rpg-math>
-                \begin{align*}
-                \text{category points}
-                    &= \left\lfloor
-                        \frac{\text{group points}}{3}
-                      \right\rfloor \\
-                     &= \left\lfloor
-                        \frac{\text{skill points}}{9}
-                      \right\rfloor
-                \end{align*}
+            <div class="panel-body">
+                <p>
+                    In other words, the parent points are
+                </p>
+                <div rpg-math>
+                    \begin{align*}
+                    \text{group points}
+                        = \left\lfloor
+                            \frac{\text{skill points}}{3}
+                          \right\rfloor
+                    \end{align*}
+                </div>
+                <p>The same relationship holds for group-to-category, so</p>
+                <div rpg-math>
+                    \begin{align*}
+                    \text{category points}
+                        &= \left\lfloor
+                            \frac{\text{group points}}{3}
+                          \right\rfloor \\
+                         &= \left\lfloor
+                            \frac{\text{skill points}}{9}
+                          \right\rfloor
+                    \end{align*}
+                </div>
             </div>
-        </aside>
+        </div>
         <p>
             In the rules, this is reflected as follows:
         </p>

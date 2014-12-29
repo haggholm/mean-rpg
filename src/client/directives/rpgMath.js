@@ -5,9 +5,8 @@
 
 'use strict';
 
-var $ = require('jquery')
-  , katex = require('katex')
-  , ngModule = require('../RPG.Directives')
+var  ngModule = require('../RPG.Directives')
+  //, katex = require('katex')
   , mathjax = require('mathjax')
   , mathjaxHub = mathjax.Hub;
 require('../mathjaxInit');

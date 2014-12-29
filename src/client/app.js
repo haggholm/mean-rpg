@@ -1,7 +1,8 @@
 'use strict';
 
+var $ = require('jquery')
+  , ng = require('angular');
 // Load Angular modules needed for app initialization
-var ng = require('angular');
 require('angular-resource');
 require('angular-ui-router');
 
@@ -46,12 +47,22 @@ app.config(function(
 
 });
 
-app.run(function($rootScope) {
+app.run(function($rootScope, $state) {
+  var titleNode = $('head').find('title');
   $rootScope.$on(
     '$stateChangeSuccess',
     //function(event, toState, toParams, fromState, fromParams){
     function(event, toState) {
       console.debug('Transitioned to state: ' + toState.name);
-      console.log(toState);
+
+      var s = $state.$current, titles = [];
+      while (s) {
+        if (s.data && s.data.title) {
+          titles.push(s.data.title);
+        }
+        s = s.parent;
+      }
+
+      titleNode.text('RPG | ' + titles.reverse().join(' » '));
     });
 });

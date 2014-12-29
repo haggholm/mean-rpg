@@ -3,26 +3,103 @@
 @import (inline) "../../node_modules/nvd3/build/nv.d3.min.css";
 
 .single-col {
-    .make-md-column(8);
-    .make-md-column-offset(2);
-    .make-sm-column(10);
-    .make-sm-column-offset(1);
+  .make-md-column(8);
+  .make-md-column-offset(2);
+  .make-sm-column(10);
+  .make-sm-column-offset(1);
 
-    text-align: justify;
+  text-align: justify;
 }
 
 @import "./less/bsmenu";
 
 #main {
-    padding-top: 60px;
+  padding-top: 60px;
 }
+
 #sidebar-menu {
-    margin-top: 60px;
+  margin-top: 60px;
 }
 
 .katex {
-    font-family: STIXGeneral, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: STIXGeneral, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
 td.number, input.number {
-    text-align: right;
+  text-align: right;
+}
+
+@panel-advanced-info-border: #b1e09c;
+@panel-advanced-info-heading-bg: #c0f3a9;
+//@panel-advanced-info-text: @panel-info-text;
+
+.panel-advanced-info {
+  .panel-variant(@panel-advanced-info-border; @panel-default-text; @panel-advanced-info-heading-bg; @panel-advanced-info-border);
+  margin-right: 3em;
+  margin-left: 3em;
+}
+
+/*
+
+th.rotate {
+  */
+/* Something you can count on *//*
+
+  height: 140px;
+  white-space: nowrap;
+}
+
+th.rotate > div {
+  transform:
+    */
+/* Magic Numbers *//*
+
+    translate(25px, 51px)
+    */
+/* 45 is really 360 - 45 *//*
+
+    rotate(315deg);
+  width: 30px;
+}
+th.rotate > div > span {
+  border-bottom: 1px solid #ccc;
+  padding: 5px 10px;
+}
+*/
+
+
+#skillVsTable {
+th.rotate {
+    height: 7em;
+    text-align: left;
+    padding: 0;
+  }
+
+thead > tr > th.pct-chance {
+    font-size: 87.5%;
+    text-align: center;
+  }
+
+thead > tr > th.rotate > div {
+    vertical-align: middle;
+    transform-origin: center;
+  }
+
+  @rotate-angle: -90deg;
+  @skew-amt: 0deg;
+th.rotate > div > span {
+    font-size: 87.5%;
+    position: absolute;
+    padding: 9px;
+    height: 23px; /* 1.3 em = 23px in Opera and 23.4 in FFox (1em = 18px) */
+    width: 10em;
+    text-align: left;
+    white-space: nowrap;
+    -moz-transform: rotate(@rotate-angle) skewX(@skew-amt);
+    -o-transform: rotate(@rotate-angle) skewX(@skew-amt);
+    -webkit-transform: rotate(@rotate-angle) skewX(@skew-amt);
+    -moz-transform-origin: 0% 0%;
+    -o-transform-origin: 0% 0%;
+    -webkit-transform-origin: 0% 0%;
+  }
 }
