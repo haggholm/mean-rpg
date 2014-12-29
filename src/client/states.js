@@ -43,7 +43,8 @@ app.config(function($stateProvider) {
     template: '<div ui-view></div>',
     data: {
       title: 'Rules'
-    }
+    },
+    controller: 'RulesCtrl'
   })
     .state('rules.combat', {
       url: '/combat',

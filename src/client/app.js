@@ -22,6 +22,8 @@ require('./RPG.Services');
 require('./directives/_all');
 require('./filters/_all');
 
+require('./mathjaxInit');
+
 
 var app = ng.module('meanrpgclient', [
   'ui.router',

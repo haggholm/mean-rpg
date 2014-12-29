@@ -21,14 +21,21 @@ function sum(values) {
   return _.reduce(values, add, 0);
 }
 
-function valueFromPoints(points) {
+function pointsToValue(points) {
   if (points < 0) {
-    return -valueFromPoints(-points);
+    return -pointsToValue(-points);
   }
-  return Math.floor(Math.sqrt(5.0 * points));
-  //return Math.floor(
-  //  (Math.sqrt(8.0 * points + 1.0) - 1.0) / 2.0
-  //);
+  //return Math.floor(Math.sqrt(5.0 * points));
+  return Math.floor(
+    (Math.sqrt(8.0 * points + 1.0) - 1.0) / 2.0
+  );
+}
+
+function valueToPoints(value) {
+  if (value < 0) {
+    return -valueToPoints(-value);
+  }
+  return (value * (value+1)) / 2;
 }
 
 function ensureParent(parent, child) {
@@ -69,6 +76,9 @@ function treeify(nodes) {
 var EXP_SHARE_FACTOR = 3;
 
 module.exports = {
+  pointsToValue: pointsToValue,
+  valueToPoints: valueToPoints,
+
   /**
    * @param {Tree[]} trees
    */
@@ -104,7 +114,7 @@ module.exports = {
 
     treeify(nodes);
     _.map(nodes, function(node){
-      node.value = valueFromPoints(getEffectivePoints(node));
+      node.value = pointsToValue(getEffectivePoints(node));
     });
   }
 };

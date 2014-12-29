@@ -484,8 +484,7 @@
         <div rpg-math>
             \begin{align*}
             \text{ check value } & = \text{ 1d10* } \\
-                                 & \pm \text{ skill value } \\
-                                 & \pm \text{ skill attribute } \\
+                                 & \pm \text{ skill and attribute value } \\
             \end{align*}
         </div>
         <aside class="stats">
@@ -527,11 +526,7 @@
         a contest against an active opponent, it doesn’t make very much sense
         to require a roll of the dice. Under such circumstances, you may simply
         assume that you roll the average outcome,
-        <strong>
-            {% math %}
-                <mi>1d10</mi><mo>&RightArrow;</mo><mn>6</mn>
-            {% endmath %}
-        </strong>.
+        <strong rpg-math>\text{ 1d10* } \rightarrow 6</strong>.
     </p>
     <p>
         With some skills, it rarely if ever makes sense to roll. For example,
@@ -558,66 +553,15 @@
     </p>
     <aside class="float">
         <h5>Math nerds only</h5>
-        {% mathblock %}
-            <mtable columnalign="right left">
-            <mtr>
-                <mtd style="text-align: right;" columnalign="right">
-                    <mrow><mi>cost</mi></mrow>
-                </mtd>
-                <mtd style="text-align: left;" columnalign="left">
-                    <mrow>
-                        <mo>=</mo>
-                        <munderover>
-                            <mo>&Sum;</mo>
-                            <mrow>
-                                <mi>n</mi>
-                                <mo>=</mo>
-                                <mn>1</mn>
-                            </mrow>
-                            <mrow>
-                                <mn>value</mn>
-                            </mrow>
-                        </munderover>
-                        <mi>n</mi>
-                    </mrow>
-                </mtd>
-            </mtr>
-            <mtr>
-                <mtd columnalign="right"><mrow></mrow></mtd>
-                <mtd columnalign="left">
-                    <mo>=</mo>
-                    <mfrac>
-                        <mrow><mi>value</mi><mo>&#xD7;</mo><mo>(</mo><mi>value</mi><mo>+</mo><mn>1</mn><mo>)</mo></mrow>
-                        <mrow><mn>2</mn></mrow>
-                    </mfrac>
-                </mtd>
-            </mtr>
-            <mtr>
-                <mtd style="text-align: right;" columnalign="right">
-                    <mrow><mo>&there4;</mo><mi>value</mi></mrow>
-                </mtd>
-                <mtd columnalign="left">
-                    <mrow>
-                        <mo>=</mo>
-                        <mo>&LeftFloor;</mo>
-                        <mfrac>
-                            <mrow>
-                                <msqrt>
-                                    <mrow><mn>8</mn><mo>&#xD7;</mo><mi>points</mi><mo>+</mo><mn>1</mn></mrow>
-                                </msqrt>
-                                <mo>-</mo>
-                                <mn>1</mn>
-                            </mrow>
-                            <mrow>
-                                <mn>2</mn>
-                            </mrow>
-                        </mfrac>
-                        <mo>&RightFloor;</mo>
-                    </mrow>
-                </mtd>
-            </mtr>
-            </mtable>
-        {% endmathblock %}
+        <div rpg-math>
+        \begin{align*}
+            {cost} = {points}  &= \sum\limits_{n=1}^{value} n \\
+                               &= \frac{ value * (value+1) }{2} \\
+            \therefore {value} &=
+                \left\lfloor \frac{\sqrt{8 * points + 1} - 1}{2} \right\rfloor
+
+        \end{align*}
+        </div>
     </aside>
 
     <p>
@@ -626,20 +570,37 @@
         costs work out as follows:
     </p>
 
-    <table>
-        <thead><tr>
-            <th>Value</th>
-            <th style="padding-left:0.5em;">Point cost</th>
-        </tr></thead>
-        <tbody>
-        {% for sv, exp in sv_exp_list %}
-            <tr>
-            <td class="number">{{ sv }}</td>
-            <td class="number">{{ exp }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-sm-3 col-sm-offset-3">
+             <table>
+                <thead><tr>
+                    <th>Value</th>
+                    <th style="padding-left:0.5em;">Point cost</th>
+                </tr></thead>
+                <tbody>
+                <tr ng-repeat="sv in [0,1,2,3,4,5,6,7]">
+                    <td class="number" ng-bind="sv"></td>
+                    <td class="number" ng-bind="cost(sv)"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-3">
+             <table>
+                <thead><tr>
+                    <th>Value</th>
+                    <th style="padding-left:0.5em;">Point cost</th>
+                </tr></thead>
+                <tbody>
+                <tr ng-repeat="sv in [9,10,11,12,13,14,15,16]">
+                    <td class="number" ng-bind="sv"></td>
+                    <td class="number" ng-bind="cost(sv)"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 
     <p>
         This is typically represented by <em>cards</em>. Every time you
@@ -654,31 +615,15 @@
         <aside class="float">
             <h5>Math nerds only</h5>
             <p>
-                If {%math%}difficulty<mo>&gt;</mo>0{%endmath%}, then we need
+                If <span rpg-math>\text{difficulty } &gt; 0</span>, then we need
                 to use
             </p>
-            {% mathblock %}
-            <mrow>
-                <mi>value</mi>
-                <mo>=</mo>
-                <mo>&LeftFloor;</mo>
-                <mfrac>
-                    <mrow>
-                        <msqrt>
-                            <mrow><mn>8</mn><mo>&#xD7;</mo><mi>points</mi><mo>+</mo><mn>1</mn></mrow>
-                        </msqrt>
-                        <mo>-</mo>
-                        <mn>1</mn>
-                    </mrow>
-                    <mrow>
-                        <mn>2</mn>
-                    </mrow>
-                </mfrac>
-                <mo>&RightFloor;</mo>
-                <mo>-</mo>
-                <mi>difficulty</mi>
-            </mrow>
-            {% endmathblock %}
+            <div rpg-math>
+                \begin{align*}
+                {value} = \left\lfloor \frac{\sqrt{8 * points + 1}-1}{2} \right\rfloor
+                    - {difficulty}
+                \end{align*}
+            </div>
         </aside>
         <p>
             Some skills can be attempted by pretty much anyone, though odds are
@@ -736,50 +681,26 @@
             <p>
                 In other words, the parent points are
             </p>
-            {% mathblock %}
-                <mrow>
-                    <mi>group points</mi>
-                    <mo>=</mo>
-                    <mo>&LeftFloor;</mo>
-                    <mfrac>
-                        <mrow>
-                            <mi>skill points</mi>
-                        </mrow>
-                        <mrow>
-                            <mn>3</mn>
-                        </mrow>
-                    </mfrac>
-                    <mo>&RightFloor;</mo>
-                </mrow>
-            {% endmathblock %}
+            <div rpg-math>
+                \begin{align*}
+                \text{group points}
+                    = \left\lfloor
+                        \frac{\text{skill points}}{3}
+                      \right\rfloor
+                \end{align*}
+            </div>
             <p>The same relationship holds for group-to-category, so</p>
-            {% mathblock %}
-            <mrow>
-                <mi>category points</mi>
-                <mo>=</mo>
-                <mo>&LeftFloor;</mo>
-                <mfrac>
-                    <mrow>
-                        <mi>group points</mi>
-                    </mrow>
-                    <mrow>
-                        <mn>3</mn>
-                    </mrow>
-                </mfrac>
-                <mo>&RightFloor;</mo>
-                <mo>=</mo>
-                <mo>&LeftFloor;</mo>
-                <mfrac>
-                    <mrow>
-                        <mi>skill points</mi>
-                    </mrow>
-                    <mrow>
-                        <mn>9</mn>
-                    </mrow>
-                </mfrac>
-                <mo>&RightFloor;</mo>
-            </mrow>
-            {% endmathblock %}
+            <div rpg-math>
+                \begin{align*}
+                \text{category points}
+                    &= \left\lfloor
+                        \frac{\text{group points}}{3}
+                      \right\rfloor \\
+                     &= \left\lfloor
+                        \frac{\text{skill points}}{9}
+                      \right\rfloor
+                \end{align*}
+            </div>
         </aside>
         <p>
             In the rules, this is reflected as follows:
@@ -855,12 +776,12 @@
             Start with 250 skill points.
         </p>
         <p>
-            Human +4 to all attrs. 13pts/attr -> 6+4=10 in each attr. 13*9=117pts.
+            Human {{4|bonus}} to all attrs. 13pts/attr -> 6+4=10 in each attr. 13*9=117pts.
             150pts?
         </p>
         <p>
-            Men: +1 Power.
-            Women: +1 Social, +1 Agility, -1 Strength.
+            Men: {{1|bonus}} Power.
+            Women: {{1|bonus}} Social, {{1|bonus}} Agility, {{-1|bonus}} Strength.
         </p>
     </section>
 </section>

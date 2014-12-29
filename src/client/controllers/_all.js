@@ -5,7 +5,8 @@ var AttributeCtrl = require('./AttributeCtrl')
   , AttributeValueCtrl = require('./AttributeValueCtrl')
   , LoginCtrl = require('./LoginCtrl')
   , MainCtrl = require('./MainCtrl')
-  , RollBreakdownCtrl = require('./RollBreakdownCtrl');
+  , RollBreakdownCtrl = require('./RollBreakdownCtrl')
+  , RulesCtrl = require('./RulesCtrl');
 
 module.exports = {
   AttributeCtrl: AttributeCtrl,
@@ -13,5 +14,6 @@ module.exports = {
   AttributeValueCtrl: AttributeValueCtrl,
   LoginCtrl: LoginCtrl,
   MainCtrl: MainCtrl,
-  RollBreakdownCtrl: RollBreakdownCtrl
+  RollBreakdownCtrl: RollBreakdownCtrl,
+  RulesCtrl: RulesCtrl
 };

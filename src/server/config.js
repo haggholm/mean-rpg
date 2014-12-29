@@ -7,6 +7,7 @@ module.exports = {
   db: {
     host: 'localhost',
     database: 'mean-rpg',
+    port: 27017,
     options: {
       //user: 'petter',
       //pass: 'petter'

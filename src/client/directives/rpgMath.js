@@ -5,23 +5,32 @@
 
 'use strict';
 
-var katex = require('katex')
+var $ = require('jquery')
+  , katex = require('katex')
   , ngModule = require('../RPG.Directives')
-  , mathjax = require('mathjax');
-require('mathjaxInit');
+  , mathjax = require('mathjax')
+  , mathjaxHub = mathjax.Hub;
+require('../mathjaxInit');
 
 function render(text, element) {
   var domNode = element[0];
-  try {
-    katex.render(text, domNode);
-  } catch (err) {
+  text = text
+    .replace(/\\lt|&lt;/g, '<')
+    .replace(/\\gt|&gt;/g, '>');
+  //try {
+  //  throw "foo";
+  //  katex.render(text, domNode);
+  //} catch (err) {
     // MathJax fallback
     if (text.substring(0, 15) === '\\displaystyle {') {
       text = text.substring(15, text.length - 1);
     }
-    element.append(text);
-    mathjax.Hub.Queue(['Typeset', mathjax.Hub, domNode]);
-  }
+    if (!/^\s*\\(\(|begin)/.test(text)) {
+      text = '\\(' + text + '\\)';
+    }
+    element.html(text);
+    mathjaxHub.Queue(['Typeset', mathjaxHub, domNode]);
+  //}
 }
 
 module.exports = {

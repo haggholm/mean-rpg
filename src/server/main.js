@@ -6,7 +6,11 @@ var chalk = require('chalk')
 
 var config = require('./config');
 
-var db = mongoose.connect(config.db.host, config.db.database, config.db.options,
+var db = mongoose.connect(
+  config.db.host,
+  config.db.database,
+  config.db.port,
+  config.db.options,
   function(err) {
     if (err) {
       console.error(chalk.red('Could not connect to MongoDB!'));
