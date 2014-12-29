@@ -7,14 +7,11 @@
       <div class="col-md-2 col-sm-4 text-center"><strong>Value</strong></div>
     </div>
     <div class="form-group row"
-         ng-repeat="a in ::attributes|orderBy:'name'">
+         ng-repeat="a in ::attributes">
       <div class="col-md-3">
-        <p class="form-control-static">
-          {{::a.name}}
-          <span class="text-muted" ng-if="::a.parent">
-            ({{::a.parent.name}})
-          </span>
-        </p>
+        <div style="padding-left:{{:: 2 * a.depth}}em;">
+          <p class="form-control-static" ng-bind="::a.name"></p>
+        </div>
       </div>
       <div class="col-md-2 col-sm-4">
         <div ng-if=":: !a.children">
@@ -24,9 +21,11 @@
         </div>
       </div>
       <div class="col-md-1 col-sm-2 text-right">
-        <p class="form-control-static">
+        <p class="form-control-static text-center">
           <!--<span class="pull-left" ng-if=":: !a.children">&Rightarrow;</span>-->
-          <big class="text-primary" ng-bind="a.value|number:0"></big>
+          <span class="text-large text-primary" ng-bind="a.value|number:0"></span>
+          <br />
+          <span class="text-muted small" ng-bind="a.level"></span>
         </p>
       </div>
       <div class="col-md-2 col-sm-4" ng-if="::a.nvd3data.length">

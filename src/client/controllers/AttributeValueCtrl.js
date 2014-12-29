@@ -62,7 +62,8 @@ module.exports = ngModule.controller('AttributeValueCtrl',
       4: 'Novice',
       8: 'Apprentice',
       12: 'Journeyman',
-      16: 'Master'
+      16: 'Master',
+      20: 'Grandmaster'
     };
 
     ModelService.Attribute.query(function(attrs) {
@@ -70,8 +71,26 @@ module.exports = ngModule.controller('AttributeValueCtrl',
         a.points = 0;
       });
       $scope.attributes = attrs;
+
       tree.treeify(attrs);
 
+      var getFullName = /*_.memoize(*/function(node) {
+        var n = node, names = [node.name];
+        while (n.parent) {
+          names.push(n.parent.name);
+          n = n.parent;
+        }
+        names.reverse();
+        node.depth = names.length - 1;
+        node.fullName = names.join(' ');
+        return names.join(' ');
+      }/*, function(n) { return n._id; })*/;
+
+      attrs.sort(function(a, b) {
+        var aName = getFullName(a)
+          , bName = getFullName(b);
+        return aName < bName ? -1 : +1;
+      });
 
       $scope.nvd3config = {
         refreshDataOnly: true,
@@ -145,7 +164,21 @@ module.exports = ngModule.controller('AttributeValueCtrl',
           }
           attr._oldValue = attr.value;
 
-          var nvd3values = _.map(levels, function(l, idx) {
+          if (attr.value < 0) {
+            attr.level = levels[0];
+          } else {
+            for (i = attr.value; i >= 0; i--) {
+              if (levels.hasOwnProperty(i)) {
+                attr.level = levels[i];
+                break;
+              }
+            }
+          }
+
+          // @TODO: Add GM stats
+          var l2 = _.clone(levels);
+          delete l2[20];
+          var nvd3values = _.map(l2, function(l, idx) {
             var opponentLevel = Number(idx)
               , advantage = attr.value - opponentLevel
               , pct = getValue(advantage);
@@ -158,7 +191,7 @@ module.exports = ngModule.controller('AttributeValueCtrl',
               chart: _.extend({id: 'nvd3-' + (++idGen)}, chartOptions)
             };
           } else {
-            var i, aValues = attr.nvd3data[0].values;
+            var aValues = attr.nvd3data[0].values;
             for (i = nvd3values.length - 1; i >= 0; i--) {
               if (aValues[i] !== nvd3values[i]) {
                 aValues[i] = nvd3values[i];
