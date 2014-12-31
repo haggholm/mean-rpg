@@ -4,9 +4,10 @@
 var _ = require('lodash')
   , browserify = require('browserify')
   , buffer = require('vinyl-buffer')
-  //, concat = require('gulp-concat')
+//, concat = require('gulp-concat')
   , connect = require('gulp-connect')
   , del = require('del')
+  , fs = require('fs')
   , gulp = require('gulp')
   , gulpif = require('gulp-if')
   , gutil = require('gulp-util')
@@ -63,57 +64,64 @@ gulp.task('clean', function(cb) {
   del(['build', 'dist'], cb);
 });
 
-var getBundleName = function () {
+var getBundleName = function() {
   //var version = require('./package.json').version;
   var name = require('./package.json').name;
   return name + '.' /*+ version + '.'*/ + 'min';
 };
 
 
-
-//gulp.task('libs', function() {
-//  var bundler = browserify({
-//    entries: ['./src/client/lib.js'],
-//    debug: config.sourcemaps
-//  });
-//  //_.each(require('./gulp/browserify-shim.js'), function(def, alias){
-//  //  bundler.require(alias, {expose: alias});
-//  //});
-//  //bundler.require('./src/client/lib.js', {expose: 'lib'});
-//
-//  return bundler.bundle()
-//    .on('error', gutil.log.bind(gutil, 'Browserify error'))
-//    .pipe(plumber())
-//    .pipe(sourceStream('lib.js'))
-//    .pipe(buffer())
-//    .pipe(gulpif(config.sourcemaps, sourcemaps.init({loadMaps: true})))
-//    // Add transformation tasks to the pipeline here.
-//    .pipe(uglify())
-//    .pipe(gulpif(config.sourcemaps, sourcemaps.write()))
-//    .pipe(gulp.dest('./build'));
-//});
-
 gulp.task('mathjax', function() {
-  return gulp.src('git_modules/MathJax/{extensions,jax}/**')
-    .pipe(uglify())
+  return gulp.src([
+    'git_modules/MathJax/extensions/**',
+    'git_modules/MathJax/jax/element/**',
+    'git_modules/MathJax/jax/input/{MathML,TeX}/**',
+    'git_modules/MathJax/jax/output/{HTML-CSS,NativeMML}/**'
+  ]).pipe(uglify())
     .pipe(gulp.dest('./build/'));
+});
+
+var libs = {
+  angular: './node_modules/angular/angular.min.js',
+  'angular-ui-router':
+    './node_modules/angular-ui-router/release/angular-ui-router.min.js',
+  'bootstrap': './node_modules/bootstrap/dist/js/bootstrap.min.js',
+  'd3-browserify': './node_modules/d3-browserify/d3.js',
+  'es5-shim': './node_modules/es5-shim/es5-shim.min.js',
+  'jquery': './node_modules/jquery/dist/jquery.min.js',
+  'lodash': './node_modules/lodash/dist/lodash.min.js',
+  'mathjax': './git_modules/MathJax/MathJax.js',
+  'nvd3': './node_modules/nvd3/build/nv.d3.min.js'
+};
+_.forEach(require('./package.json').browser, function(path, alias){
+  libs[alias] = path;
+});
+
+gulp.task('libs', function() {
+  var bundler = browserify();
+  _.forEach(libs, function(path, alias) {
+    bundler = bundler.require(require.resolve(path), {expose: alias});
+  });
+  return bundler.bundle(function(err, libs) {
+    fs.writeFile('./build/libs.js', libs);
+  });
 });
 
 
 gulp.task('scripts', function() {
-  var bundler = watchify(browserify(_.extend({
+  var bundler = browserify({
     entries: ['./src/client/index.js'],
-    noParse: [
-      'jquery',
-      'angular-ui-router',
-      'angular-cookies',
-      'es5-shim',
-      'lodash',
-      'd3-browserify'
-    ],
-    debug: config.sourcemaps
-  }, watchify.args)));
-  //bundler.external(libs.concat(['./src/client/lib.js']));
+    debug: config.sourcemaps,
+    paths: ['./node_modules', './src/client']
+  });
+  if (false) {
+    bundler = watchify(bundler, watchify.args);
+  }
+
+  _.forEach(libs, function(path, alias){
+    bundler = bundler.external(alias);
+  });
+
   bundler.transform({
     global: true,
     ignore: '**/*.min.js'
@@ -124,7 +132,7 @@ gulp.task('scripts', function() {
     return bundler.bundle()
       .on('error', gutil.log.bind(gutil, 'Browserify error'))
       .pipe(plumber())
-      .pipe(sourceStream(getBundleName()+'.js'))
+      .pipe(sourceStream(getBundleName() + '.js'))
       //.pipe(buffer())
       //.pipe(gulpif(config.sourcemaps, sourcemaps.init({loadMaps: true})))
       // Add transformation tasks to the pipeline here.
@@ -133,6 +141,7 @@ gulp.task('scripts', function() {
       //.pipe(gulpif(config.sourcemaps, sourcemaps.write('.')))
       .pipe(gulp.dest('./build'));
   }
+
   return rebundle();
 });
 
@@ -203,7 +212,8 @@ gulp.task('connect', function() {
 gulp.task('build', function() {
   return runSequence(
     'clean',
-    ['mathjax', 'scripts', 'fonts', 'images', 'templates', 'less', 'html']
+    ['mathjax', 'libs', 'scripts', 'templates',
+     'fonts', 'images', 'less', 'html']
 //    'postprocess',
 //    'cdnize'
   );
