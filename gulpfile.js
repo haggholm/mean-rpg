@@ -70,7 +70,8 @@ gulp.task('mathjax', function() {
   return gulp.src([
     'git_modules/MathJax/extensions/**',
     'git_modules/MathJax/jax/element/**',
-    'git_modules/MathJax/jax/input/{MathML,TeX}/**',
+    //'git_modules/MathJax/jax/input/{MathML,TeX}/**',
+    'git_modules/MathJax/jax/input/TeX/**',
     'git_modules/MathJax/jax/output/NativeMML/**',
     'git_modules/MathJax/jax/output/HTML-CSS/*.js',
     'git_modules/MathJax/jax/output/HTML-CSS/autoload**',

@@ -1,8 +1,8 @@
 'use strict';
 
 var mathjax = require('mathjax');
-require('../../git_modules/MathJax/config/TeX-AMS_HTML');
-//require('../../git_modules/MathJax/config/TeX-AMS-MML_HTMLorMML');
+//require('../../git_modules/MathJax/config/TeX-AMS_HTML');
+require('../../git_modules/MathJax/config/TeX-AMS-MML_HTMLorMML');
 
 mathjax.Hub.Config({
   showProcessingMessages: false,
