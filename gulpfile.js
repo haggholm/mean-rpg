@@ -1,38 +1,33 @@
-// jshint node:true
 'use strict';
 
+var chalk = require('chalk');
+function logTimestamp() {
+  return chalk.white('[') +
+         chalk.grey(new Date().toTimeString().substr(0, 8)) +
+         chalk.white('] ');
+}
+
+console.log(logTimestamp() + chalk.cyan('Loading gulp modules'));
 var _ = require('lodash')
-  , browserify = require('browserify')
   , buffer = require('vinyl-buffer')
-//, concat = require('gulp-concat')
   , connect = require('gulp-connect')
   , del = require('del')
-  , fs = require('fs')
   , gulp = require('gulp')
   , gulpif = require('gulp-if')
-  , gutil = require('gulp-util')
-  , gzip = require('gulp-gzip')
-  , htmlmin = require('gulp-htmlmin')
-  , imagemin = require('gulp-imagemin')
-  , less = require('gulp-less')
-  , ngTemplates = require('gulp-angular-templatecache')
+  , path = require('path')
   , rename = require('gulp-rename')
-  , revall = require('gulp-rev-all')
-  , runSequence = require('run-sequence')
-  , sourcemaps = require('gulp-sourcemaps')
   , sourceStream = require('vinyl-source-stream')
-  , uglify = require('gulp-uglify')
   , plumber = require('gulp-plumber')
-  , watchify = require('watchify');
-require('uglifyify');
+  , uglify = require('gulp-uglify');
 require('clean-css');
+
 
 var paths = {
   images: 'src/client/{,**}.{jpg,jpeg,png,gif}',
   index: 'src/client/index.html',
   fonts: [
-    'node_modules/font-awesome/fonts/*.{otf,eot,svg,ttf,woff}',
-    'git_modules/MathJax/fonts/**'
+    'node_modules/font-awesome/fonts/*.{otf,eot,svg,ttf,woff}'
+    //'git_modules/MathJax/fonts/**'
   ],
   less: 'src/client/{,**}/*.{less,css}',
   scripts: ['src/client/{,**}/*.js', 'src/lib/{,**}/*.js'],
@@ -56,7 +51,8 @@ var config = {
   debug: true,
   port: 9000,
   sourcemaps: true,
-  uglify: !dev,
+  libmaps: false,
+  uglify: false,//!dev,
   watching: dev
 };
 
@@ -76,85 +72,119 @@ gulp.task('mathjax', function() {
     'git_modules/MathJax/extensions/**',
     'git_modules/MathJax/jax/element/**',
     'git_modules/MathJax/jax/input/{MathML,TeX}/**',
-    'git_modules/MathJax/jax/output/{HTML-CSS,NativeMML}/**'
-  ]).pipe(uglify())
+    'git_modules/MathJax/jax/output/NativeMML/**',
+    'git_modules/MathJax/jax/output/HTML-CSS/*.js',
+    'git_modules/MathJax/jax/output/HTML-CSS/autoload**',
+    'git_modules/MathJax/jax/output/HTML-CSS/fonts/STIX/**'
+    //'git_modules/MathJax/jax/output/HTML-CSS/fonts/{STIX,STIX-Web}/**'
+  ], {base: 'git_modules/MathJax'})
+    .pipe(gulpif(config.uglify, uglify()))
     .pipe(gulp.dest('./build/'));
 });
 
-var libs = {
-  angular: './node_modules/angular/angular.min.js',
-  'angular-ui-router':
-    './node_modules/angular-ui-router/release/angular-ui-router.min.js',
-  'bootstrap': './node_modules/bootstrap/dist/js/bootstrap.min.js',
-  'd3-browserify': './node_modules/d3-browserify/d3.js',
-  'es5-shim': './node_modules/es5-shim/es5-shim.min.js',
-  'jquery': './node_modules/jquery/dist/jquery.min.js',
-  'lodash': './node_modules/lodash/dist/lodash.min.js',
-  'mathjax': './git_modules/MathJax/MathJax.js',
-  'nvd3': './node_modules/nvd3/build/nv.d3.min.js'
-};
-_.forEach(require('./package.json').browser, function(path, alias){
-  libs[alias] = path;
-});
-
 gulp.task('libs', function() {
-  var bundler = browserify();
-  _.forEach(libs, function(path, alias) {
-    bundler = bundler.require(require.resolve(path), {expose: alias});
+  var browserify = require('browserify')
+    , sourcemaps = require('gulp-sourcemaps');
+  var bundler = browserify({
+    //entries: libs,
+    debug: config.libmaps//,
+    //basedir: 'src/client',
+    //commondir: 'src/client'
   });
-  return bundler.bundle(function(err, libs) {
-    fs.writeFile('./build/libs.js', libs);
+  bundler.require(require.resolve('jquery'), {expose: 'jquery'});
+  _.forEach(require('./package.json').browser, function(pth, lib) {
+    bundler.require(require.resolve(pth), {expose: lib});
   });
+
+  return bundler.bundle()
+    .pipe(sourceStream('lib.js'))
+    .pipe(buffer())
+    .pipe(gulpif(config.libmaps, sourcemaps.init({loadMaps: true})))
+    // Add transformation tasks to the pipeline here.
+    .pipe(gulpif(config.uglify, uglify()))
+
+    .pipe(gulpif(config.libmaps, sourcemaps.write('./')))
+    .pipe(gulp.dest('./build'));
 });
 
 
 gulp.task('scripts', function() {
-  var bundler = browserify({
-    entries: ['./src/client/index.js'],
+  var browserify = require('browserify')
+    , gutil = require('gulp-util')
+    , sourcemaps = require('gulp-sourcemaps')
+    , watchify = require('watchify');
+  var bundler = browserify(_.extend({
+    //entries: ['./index.js'],
     debug: config.sourcemaps,
-    paths: ['./node_modules', './src/client']
+    basedir: 'src/client',
+    commondir: 'src/client',
+    //dest: 'build',
+    paths: _.map([
+      //'node_modules',
+      //'git_modules',
+      'src/client'
+    ], function(pth) {
+      return path.join(__dirname, pth);
+    })
+  }, watchify.args));
+  bundler.require(require.resolve('./src/client/index.js'));
+  bundler.external('jquery')
+  _.forEach(require('./package.json').browser, function(pth, lib){
+    bundler.external(lib);
   });
-  if (false) {
-    bundler = watchify(bundler, watchify.args);
-  }
 
-  _.forEach(libs, function(path, alias){
-    bundler = bundler.external(alias);
-  });
+  if (dev) {
+    console.log(logTimestamp() + chalk.green('Watchifying scripts'));
+    bundler = watchify(bundler);
 
-  bundler.transform({
-    global: true,
-    ignore: '**/*.min.js'
-  }, 'uglifyify');
+    var rebundle = function () {
+      console.log(logTimestamp() + chalk.green('{Watch,Browser}ify rebundling scripts'));
 
-  bundler.on('update', rebundle);
-  function rebundle() {
+      return bundler.bundle()
+        .on('error', gutil.log.bind(gutil, 'Browserify error'))
+        .pipe(sourceStream(getBundleName() + '.js'))
+        .pipe(buffer())
+        .pipe(sourcemaps.init({loadMaps: true}))
+        // Add transformation tasks to the pipeline here.
+        .pipe(gulpif(config.uglify, uglify()))
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest('build/'));
+    };
+    bundler.on('update', rebundle);
+    return rebundle();
+  } else {
     return bundler.bundle()
-      .on('error', gutil.log.bind(gutil, 'Browserify error'))
-      .pipe(plumber())
-      .pipe(sourceStream(getBundleName() + '.js'))
-      //.pipe(buffer())
-      //.pipe(gulpif(config.sourcemaps, sourcemaps.init({loadMaps: true})))
+      .pipe(sourceStream('build/' + getBundleName() + '.js'))
+      .pipe(buffer())
+      .pipe(gulpif(config.sourcemaps, sourcemaps.init({loadMaps: true})))
       // Add transformation tasks to the pipeline here.
-      //.pipe(uglify())
-
-      //.pipe(gulpif(config.sourcemaps, sourcemaps.write('.')))
-      .pipe(gulp.dest('./build'));
+      .pipe(gulpif(config.uglify, uglify()))
+      .pipe(gulpif(config.sourcemaps, sourcemaps.write('./')))
+      .pipe(gulp.dest('./'));
   }
-
-  return rebundle();
 });
 
 gulp.task('templates', function() {
+  var htmlmin = require('gulp-htmlmin')
+    , ngTemplates = require('gulp-angular-templatecache')
+    , replace = require('gulp-replace');
   gulp.src(['src/client/templates/{,**}/*.html'])
     .pipe(plumber())
     .pipe(gulpif(config.uglify, htmlmin(opts.htmlmin)))
-    .pipe(ngTemplates({module: 'meanrpgclient'}))
+    // https://github.com/kangax/html-minifier/issues/316
+    .pipe(gulpif(config.uglify, replace('[{htmlmin-lb}]', '\n')))
+    .pipe(ngTemplates({
+      module: 'meanrpgclient',
+      templateHeader: 'var ng = require("angular");\n' +
+                      'ng.module("<%= module %>"<%= standalone %>)' +
+                      '.run(["$templateCache", function($templateCache) {'
+    }))
     .pipe(gulpif(config.uglify, uglify()))
     .pipe(gulp.dest('./build'));
 });
 
 gulp.task('images', function() {
+  var imagemin = require('gulp-imagemin');
   gulp.src(paths.images)
     .pipe(plumber())
     .pipe(imagemin({
@@ -174,6 +204,8 @@ gulp.task('fonts', function() {
 
 
 gulp.task('less', function() {
+  var less = require('gulp-less')
+    , sourcemaps = require('gulp-sourcemaps');
   gulp.src('src/client/index.less')
     .pipe(plumber())
     .pipe(gulpif(config.sourcemaps, sourcemaps.init()))
@@ -195,7 +227,8 @@ gulp.task('watch', function() {
 });
 
 gulp.task('html', function() {
-  gulp.src(paths.index)
+  var htmlmin = require('gulp-htmlmin');
+  gulp.src(paths.index, {base: 'src/client'})
     .pipe(plumber())
     .pipe(gulpif(config.uglify, htmlmin(opts.htmlmin)))
     .pipe(gulp.dest('./build'));
@@ -210,7 +243,7 @@ gulp.task('connect', function() {
 });
 
 gulp.task('build', function() {
-  return runSequence(
+  return require('run-sequence')(
     'clean',
     ['mathjax', 'libs', 'scripts', 'templates',
      'fonts', 'images', 'less', 'html']
@@ -221,6 +254,8 @@ gulp.task('build', function() {
 
 
 gulp.task('package', ['build'], function() {
+  var gzip = require('gulp-gzip')
+    , revall = require('gulp-rev-all');
   return gulp.src(['./build/**'])
     .pipe(revall())
     .pipe(rename(function(path) {
