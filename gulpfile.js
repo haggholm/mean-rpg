@@ -51,8 +51,8 @@ var config = {
   debug: true,
   port: 9000,
   sourcemaps: true,
-  libmaps: false,
-  uglify: false,//!dev,
+  libmaps: true,
+  uglify: true,//!dev,
   watching: dev
 };
 
@@ -61,7 +61,6 @@ gulp.task('clean', function(cb) {
 });
 
 var getBundleName = function() {
-  //var version = require('./package.json').version;
   var name = require('./package.json').name;
   return name + '.' /*+ version + '.'*/ + 'min';
 };
@@ -82,72 +81,73 @@ gulp.task('mathjax', function() {
     .pipe(gulp.dest('./build/'));
 });
 
+
+var libs = [
+  {name: 'es5-shim'},
+  {name: 'lodash'},
+  {name: 'jquery'},
+  {name: 'mathjax', src: './git_modules/MathJax/MathJax.js'},
+  {name: 'd3-browserify'}
+];
+
 gulp.task('libs', function() {
   var browserify = require('browserify')
-    , sourcemaps = require('gulp-sourcemaps');
-  var bundler = browserify({
-    //entries: libs,
-    debug: config.libmaps//,
-    //basedir: 'src/client',
-    //commondir: 'src/client'
-  });
-  bundler.require(require.resolve('jquery'), {expose: 'jquery'});
-  _.forEach(require('./package.json').browser, function(pth, lib) {
-    bundler.require(require.resolve(pth), {expose: lib});
+    , sourcemaps = require('gulp-sourcemaps')
+    , watchify = require('watchify');
+  var bundler = browserify(_.extend({
+    entries: ['lib.js'],
+    debug: config.libmaps,
+    commondir: 'src/client',
+    paths: ['src/client']
+  }, watchify.args));
+  _.forEach(libs, function(l){
+    bundler.require(l.src || l.name, {expose: l.name});
   });
 
   return bundler.bundle()
     .pipe(sourceStream('lib.js'))
     .pipe(buffer())
     .pipe(gulpif(config.libmaps, sourcemaps.init({loadMaps: true})))
-    // Add transformation tasks to the pipeline here.
     .pipe(gulpif(config.uglify, uglify()))
-
-    .pipe(gulpif(config.libmaps, sourcemaps.write('./')))
-    .pipe(gulp.dest('./build'));
+    .pipe(gulpif(config.libmaps, sourcemaps.write('./sourcemaps')))
+    .pipe(gulp.dest('build/'));
 });
 
 
-gulp.task('scripts', function() {
+gulp.task('scripts', ['templates'], function() {
   var browserify = require('browserify')
     , gutil = require('gulp-util')
     , sourcemaps = require('gulp-sourcemaps')
     , watchify = require('watchify');
   var bundler = browserify(_.extend({
-    //entries: ['./index.js'],
+    entries: ['./index.js'],
     debug: config.sourcemaps,
     basedir: 'src/client',
     commondir: 'src/client',
     //dest: 'build',
-    paths: _.map([
-      //'node_modules',
-      //'git_modules',
-      'src/client'
-    ], function(pth) {
+    paths: _.map(['src/client', '.tmp'], function(pth) {
       return path.join(__dirname, pth);
     })
   }, watchify.args));
-  bundler.require(require.resolve('./src/client/index.js'));
-  bundler.external('jquery')
-  _.forEach(require('./package.json').browser, function(pth, lib){
-    bundler.external(lib);
-  });
+  bundler.external('./lib');
+  _.forEach(libs, function(l){ bundler.external(l.name); });
 
   if (dev) {
     console.log(logTimestamp() + chalk.green('Watchifying scripts'));
     bundler = watchify(bundler);
 
     var rebundle = function () {
-      console.log(logTimestamp() + chalk.green('{Watch,Browser}ify rebundling scripts'));
+      console.log(logTimestamp() +
+                  chalk.green('{Watch,Browser}ify rebundling scripts'));
 
       return bundler.bundle()
         .on('error', gutil.log.bind(gutil, 'Browserify error'))
         .pipe(sourceStream(getBundleName() + '.js'))
         .pipe(buffer())
-        .pipe(sourcemaps.init({loadMaps: true}))
+        .pipe(gulpif(config.sourcemaps, sourcemaps.init({loadMaps: true})))
         // Add transformation tasks to the pipeline here.
         .pipe(gulpif(config.uglify, uglify()))
-        .pipe(sourcemaps.write('./'))
+        .pipe(sourcemaps.write('./sourcemaps'))
         .pipe(gulp.dest('build/'));
     };
     bundler.on('update', rebundle);
@@ -157,9 +157,8 @@ gulp.task('scripts', function() {
       .pipe(sourceStream('build/' + getBundleName() + '.js'))
       .pipe(buffer())
       .pipe(gulpif(config.sourcemaps, sourcemaps.init({loadMaps: true})))
-      // Add transformation tasks to the pipeline here.
       .pipe(gulpif(config.uglify, uglify()))
-      .pipe(gulpif(config.sourcemaps, sourcemaps.write('./')))
+      .pipe(gulpif(config.sourcemaps, sourcemaps.write('./sourcemaps')))
       .pipe(gulp.dest('./'));
   }
 });
@@ -168,24 +167,24 @@ gulp.task('templates', function() {
   var htmlmin = require('gulp-htmlmin')
     , ngTemplates = require('gulp-angular-templatecache')
     , replace = require('gulp-replace');
-  gulp.src(['src/client/templates/{,**}/*.html'])
+  return gulp.src(['src/client/templates/{,**}/*.html'])
     .pipe(plumber())
     .pipe(gulpif(config.uglify, htmlmin(opts.htmlmin)))
     // https://github.com/kangax/html-minifier/issues/316
     .pipe(gulpif(config.uglify, replace('[{htmlmin-lb}]', '\n')))
     .pipe(ngTemplates({
       module: 'meanrpgclient',
-      templateHeader: 'var ng = require("angular");\n' +
-                      'ng.module("<%= module %>"<%= standalone %>)' +
+      templateHeader: 'require("angular")' +
+                      '.module("<%= module %>"<%= standalone %>)' +
                       '.run(["$templateCache", function($templateCache) {'
     }))
     .pipe(gulpif(config.uglify, uglify()))
-    .pipe(gulp.dest('./build'));
+    .pipe(gulp.dest('./.tmp'));
 });
 
 gulp.task('images', function() {
   var imagemin = require('gulp-imagemin');
-  gulp.src(paths.images)
+  return gulp.src(paths.images)
     .pipe(plumber())
     .pipe(imagemin({
       optimizationLevel: 3,
@@ -206,7 +205,7 @@ gulp.task('fonts', function() {
 gulp.task('less', function() {
   var less = require('gulp-less')
     , sourcemaps = require('gulp-sourcemaps');
-  gulp.src('src/client/index.less')
+  return gulp.src('src/client/index.less')
     .pipe(plumber())
     .pipe(gulpif(config.sourcemaps, sourcemaps.init()))
     .pipe(less({
@@ -228,7 +227,7 @@ gulp.task('watch', function() {
 
 gulp.task('html', function() {
   var htmlmin = require('gulp-htmlmin');
-  gulp.src(paths.index, {base: 'src/client'})
+  return gulp.src(paths.index, {base: 'src/client'})
     .pipe(plumber())
     .pipe(gulpif(config.uglify, htmlmin(opts.htmlmin)))
     .pipe(gulp.dest('./build'));
