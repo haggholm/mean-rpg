@@ -1,38 +1,35 @@
 'use strict';
 
-var _ = require('lodash')
-  , Random = require('random-js')
-  , crypto = require('crypto')
-  , chalk = require('chalk');
+var _ = require('lodash');
 
 var die = 10
   , rolls = 1
   , maxRoll = die * rolls;
 
 var BUF_SIZE = 2 << 11;
-var urandom = function() {
-  urandom.offset += 4;
-  if (urandom.offset >= BUF_SIZE) {
-    urandom.buffer = crypto.pseudoRandomBytes(BUF_SIZE);
-    urandom.offset = 0;
-  }
-  return urandom.buffer.readInt32BE(urandom.offset);
-};
-urandom.offset = BUF_SIZE;
+//var urandom = function() {
+//  urandom.offset += 4;
+//  if (urandom.offset >= BUF_SIZE) {
+//    urandom.buffer = require('crypto').pseudoRandomBytes(BUF_SIZE);
+//    urandom.offset = 0;
+//  }
+//  return urandom.buffer.readInt32BE(urandom.offset);
+//};
+//urandom.offset = BUF_SIZE;
 
 var engine;
-if (typeof(crypto.pseudoRandomBytes) === 'function') {
-  engine = urandom;
-} else {
-  var mt = Random.engines.mt19937();
+//if (typeof(require('crypto').pseudoRandomBytes) === 'function') {
+//  engine = urandom;
+//} else {
+  var mt = require('random-js').engines.mt19937();
   mt.autoSeed();
   engine = mt;
-}
+//}
 
 var singleRoll = function(rolls, die) {
   var i, sum = 0;
   for (i = rolls; i > 0; i--) {
-    sum += Random.integer(1, die)(engine);
+    sum += require('random-js').integer(1, die)(engine);
   }
   return sum;
 };
@@ -90,14 +87,14 @@ function run(nMillionIterations) {
 
     var dt = process.hrtime(t0);
     process.stdout.write(
-      chalk.green('done ') +
-      chalk.yellow('[' + (dt[0]+dt[1]/1e9).toFixed(2)+'s]') +
+      require('chalk').green('done ') +
+      require('chalk').yellow('[' + (dt[0]+dt[1]/1e9).toFixed(2)+'s]') +
       '\n'
     );
   }
   var overallT1 = process.hrtime(overallT0);
   console.log(
-    chalk.yellow(
+    require('chalk').yellow(
       'Total '+(overallT1[0]+overallT1[1]/1e9).toFixed(2)+'s'
     )
   );

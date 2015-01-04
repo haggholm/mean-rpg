@@ -6,10 +6,7 @@
 'use strict';
 
 var  ngModule = require('../RPG.Directives')
-  //, katex = require('katex')
-  , mathjax = require('mathjax')
-  , mathjaxHub = mathjax.Hub;
-require('../mathjaxInit');
+  , mathjax = require('mathjaxInit');
 
 function render(text, element) {
   var domNode = element[0];
@@ -28,7 +25,7 @@ function render(text, element) {
       text = '\\(' + text + '\\)';
     }
     element.html(text);
-    mathjaxHub.Queue(['Typeset', mathjaxHub, domNode]);
+    mathjax.typeset(domNode);
   //}
 }
 

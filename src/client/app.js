@@ -23,8 +23,6 @@ require('./RPG.Services');
 require('./directives/_all');
 require('./filters/_all');
 
-require('./mathjaxInit');
-
 
 var app = ng.module('meanrpgclient', [
   'ui.router',
@@ -64,5 +62,6 @@ app.run(function($rootScope, $state) {
       }
 
       titleNode.text('RPG | ' + titles.reverse().join(' » '));
+      $('p:not(.hyphenated)').attr('lang', 'en');
     });
 });

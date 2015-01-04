@@ -19,9 +19,6 @@ module.exports = {
     depends: {jquery: 'jQuery'},
     exports: null
   },
-  mathjax: {
-    exports: 'MathJax'
-  },
   nvd3: {
     exports: 'nv',
     depends: {'d3-browserify': 'd3'}

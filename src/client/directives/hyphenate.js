@@ -11,7 +11,7 @@ module.exports = ngModule.directive('hyphenate',
     return {
       restrict: 'AE',
       link: function(scope, el/*, attrs*/) {
-        el.html(hyphenator.hyphenate(el.html()));
+        el.html(hyphenator.hyphenateText(el.html()));
         el.addClass('hyphenated');
       }
     };
