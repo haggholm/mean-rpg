@@ -5,7 +5,7 @@ var _ = require('lodash')
   , tree = require('../../lib/calculation/tree')
   , simdata = require('../../data/rolls.processed.json')
   , util = require('../util')
-  , d3 = require('d3-browserify');
+  , d3 = require('d3');
 require('../services/models');
 
 

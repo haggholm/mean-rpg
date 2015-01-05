@@ -417,11 +417,11 @@
         To perform the check, compute your <dfn>check value</dfn>
       </p>
 
-      <div rpg-math>
+      $$
         \begin{align}
         \text{ check value } = \text{ 1d10* } \pm \text{ attribute }
         \end{align}
-      </div>
+      $$
       <p>
         If your check value is higher than the resistance, you succeed;
         if it is lower, you fail. If it’s equal, it’s a “draw”, the meaning
@@ -453,14 +453,14 @@
         your stats:
       </p>
 
-      <div rpg-math>
+      $$
         \begin{align*}
         \text{ check value } & = \text{ 1d10* } \\
         & \pm \text{ skill value } \\
         & \pm \text{ attribute } \\
         & \pm \text{ modifiers }
         \end{align*}
-      </div>
+      $$
 
       <div class="panel panel-sidenotes" ng-if="show.statistics">
         <div class="panel-heading">
@@ -490,23 +490,23 @@
         you’ll note the sum on your card and just roll
       </p>
 
-      <div rpg-math>
+      $$
         \begin{align*}
         \text{ check value } & = \text{ 1d10* } \\
         & \pm \text{ skill and attribute value } \\
         & \pm \text{ modifiers }
         \end{align*}
-      </div>
+      $$
       <p>
         And since there often are no modifiers, it boils down to
       </p>
 
-      <div rpg-math>
+      $$
         \begin{align*}
         \text{ check value } & = \text{ 1d10* } \\
         & \pm \text{ skill and attribute value } \\
         \end{align*}
-      </div>
+      $$
 
       <div class="panel panel-example" ng-if="show.examples">
         <div class="panel-heading">
@@ -535,15 +535,15 @@
             advantage. Terrick rolls
           </p>
 
-          <div rpg-math> 2 + 7 - 1 + [ \text{1d10* } \rightarrow 9 ] = 17</div>
+          $$ 2 + 7 - 1 + [ \text{1d10* } \rightarrow 9 ] = 17 $$
           <p>
             while his opponent rolls
           </p>
 
-          <div rpg-math> 3+12-2+ [ \text{1d10*} \rightarrow 2 ] = 15</div>
+          $$ 3+12-2+ [ \text{1d10*} \rightarrow 2 ] = 15 $$
           <p>
             Terrick, with great luck, wins the exchange by a margin of
-            <span rpg-math>17-15=2</span>.
+            \( 17-15=2 \).
           </p>
         </div>
       </div>
@@ -579,7 +579,7 @@
       a contest against an active opponent, it doesn’t make very much sense
       to require a roll of the dice. Under such circumstances, you may simply
       assume that you roll the average outcome,
-      <strong rpg-math>\text{ 1d10* } \rightarrow 6</strong>.
+      \( \text{ 1d10* } \rightarrow 6 \).
     </p>
 
     <p>
@@ -604,7 +604,7 @@
         <h3 class="panel-title">Math nerds only</h3>
       </div>
       <div class="panel-body">
-        <div rpg-math>
+        $$
           \begin{align*}
           \text{cost} = \text{points} &= \sum\limits_{n=1}^\text{value} n \\
           &= \frac{ \text{value} * (\text{value}+1) }{2} \\
@@ -612,7 +612,7 @@
           \left\lfloor \frac{\sqrt{8 * \text{points} + 1} - 1}{2} \right\rfloor
 
           \end{align*}
-        </div>
+        $$
       </div>
     </div>
 
@@ -687,17 +687,17 @@
         </div>
         <div class="panel-body">
           <p>
-            If <span rpg-math>\text{difficulty } &gt; 0</span>, then we need
+            If \( \text{difficulty } < 0 \), then we need
             to use
           </p>
 
-          <div rpg-math>
+          $$
             \begin{align*}
             \text{value} = \left\lfloor \frac{\sqrt{8 * \text{points} + 1}-1}{2}
             \right\rfloor
             - \text{difficulty}
             \end{align*}
-          </div>
+          $$
         </div>
       </div>
       <p>
@@ -763,17 +763,17 @@
             In other words, the parent points are
           </p>
 
-          <div rpg-math>
+          $$
             \begin{align*}
             \text{group points}
             = \left\lfloor
             \frac{\text{skill points}}{3}
             \right\rfloor
             \end{align*}
-          </div>
+          $$
           <p>The same relationship holds for group-to-category, so</p>
 
-          <div rpg-math>
+          $$
             \begin{align*}
             \text{category points}
             &= \left\lfloor
@@ -783,7 +783,7 @@
             \frac{\text{skill points}}{9}
             \right\rfloor
             \end{align*}
-          </div>
+          $$
         </div>
       </div>
       <div ng-if="show.advanced">

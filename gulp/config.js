@@ -13,7 +13,6 @@ module.exports = {
     {name: 'es5-shim'},
     {name: 'lodash'},
     {name: 'jquery'},
-    {name: 'd3-browserify'},
     {name: 'hypher'},
     {name: 'hyphenation.en-us'},
     {name: 'numeral'}
@@ -31,7 +30,8 @@ module.exports = {
     images: 'src/client/{,**}.{jpg,jpeg,png,gif}',
     index: 'src/client/index.html',
     fonts: [
-      'node_modules/font-awesome/fonts/*.{otf,eot,svg,ttf,woff}'
+      'node_modules/font-awesome/fonts/*.{otf,eot,svg,ttf,woff}',
+      'src/client/mathjax-fonts/**'
       //'git_modules/MathJax/fonts/**'
     ],
     less: 'src/client/{,**}/*.{less,css}',

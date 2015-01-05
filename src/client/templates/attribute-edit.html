@@ -3,26 +3,27 @@
     <label for="attribute-parent">Parent</label>
     <select id="attribute-parent"
             class="form-control"
-            ng-model="attribute.parent"
-            ng-options="a._id as a.name for a in attributes"></select>
+            data-ng-model="attribute.parent"
+            data-ng-options="a._id as a.name for a in attributes"></select>
   </div>
   <div class="form-group">
     <label for="attribute-name">Name</label>
-    <input id="attribute-name" class="form-control" ng-model="attribute.name" placeholder="Name"/>
+    <input id="attribute-name" class="form-control"
+           data-ng-model="attribute.name" placeholder="Name"/>
   </div>
   <div class="form-group">
     <label for="attribute-description">Description</label>
     <textarea id="attribute-description"
               class="form-control"
-              ng-model="attribute.description"
-              placeholder="Description"/>
+              data-ng-model="attribute.description"
+              placeholder="Description"></textarea>
   </div>
   <div class="form-group">
-    <button class="btn btn-primary" ng-click="saveAttribute()">Save</button>
+    <button class="btn btn-primary" data-ng-click="saveAttribute()">Save</button>
   </div>
 </form>
 <div class="row">
   <ul>
-    <li ng-repeat="child in a.children" ng-bind="child.name"></li>
+    <li data-ng-repeat="child in a.children" data-ng-bind="child.name"></li>
   </ul>
 </div>

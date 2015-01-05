@@ -2,6 +2,8 @@
 @import "../../node_modules/font-awesome/less/font-awesome";
 @import (inline) "../../node_modules/nvd3/build/nv.d3.min.css";
 
+@import "./style/mathml.less";
+
 .single-col {
   .make-md-column(8);
   .make-md-column-offset(2);
@@ -167,12 +169,12 @@ th.rotate > div > span {
   }
 }
 
-p, div, td {
+body {
   hyphens: auto;
 }
 .hyphenated {
   hyphens: manual;
 }
-.unhyphenated, h1 *, h2 *, h3 *, h4 *, h5 * {
+.unhyphenated, h1, h2, h3, h4, h5, h6, h1 *, h2 *, h3 *, h4 *, h5 *, h6 * {
   hyphens: none;
 }

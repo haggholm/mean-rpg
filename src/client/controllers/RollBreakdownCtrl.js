@@ -3,7 +3,7 @@
 var $ = require('jquery')
   , _ = require('lodash')
   , ngModule = require('../RPG.Controllers')
-  , d3 = require('d3-browserify')
+  , d3 = require('d3')
   , simdata = require('../../data/rolls.processed.json')
   , util = require('../util');
 

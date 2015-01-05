@@ -7,21 +7,21 @@ require('./directives/roll');
 app.config(function($stateProvider) {
   $stateProvider.state('roll-stats', {
     url: '/roll-stats',
-    templateUrl: 'roll-breakdown.html',
+    templateUrl: '/templates/roll-breakdown.html',
     controller: 'RollBreakdownCtrl',
     data: { title: 'Roll statistics' }
   });
 
   $stateProvider.state('attribute', {
     url: '/attributes',
-    templateUrl: 'attributes.html',
+    templateUrl: '/templates/attributes.html',
     controller: 'AttributeCtrl',
     data: { title: 'Attributes' }
   });
 
   $stateProvider.state('attribute.edit', {
     url: '/{id}',
-    templateUrl: 'attribute-edit.html',
+    templateUrl: '/templates/attribute-edit.html',
     controller: 'AttributeEditCtrl'
   });
 
@@ -32,34 +32,34 @@ app.config(function($stateProvider) {
   })
     .state('attribute-values.edit', {
       url: '/',
-      templateUrl: 'attribute-values.html',
+      templateUrl: '/templates/attribute-values.html',
       controller: 'AttributeValueCtrl'//require('./controllers/AttributeValueCtrl')
     });
 
   $stateProvider.state('rules', {
     url: '/rules',
     abstract: true,
-    templateUrl: 'rules/rules.html',
+    templateUrl: '/templates/rules/rules.html',
     data: { title: 'Rules' },
     controller: 'RulesCtrl'
   })
     .state('rules.combat', {
       url: '/combat',
-      templateUrl: 'rules/combat.html',
+      templateUrl: '/templates/rules/combat.html',
       data: {
         title: 'Combat'
       }
     })
     .state('rules.creation', {
       url: '/creation',
-      templateUrl: 'rules/creation.html',
+      templateUrl: '/templates/rules/creation.html',
       data: {
         title: 'Character creation'
       }
     })
     .state('rules.skills', {
       url: '/skills',
-      templateUrl: 'rules/skills.html',
+      templateUrl: '/templates/rules/skills.html',
       data: {
         title: 'Skills'
       }

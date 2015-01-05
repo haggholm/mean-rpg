@@ -16,8 +16,8 @@ var getBundleName = function() {
   return name + '.' /*+ version + '.'*/ + 'min';
 };
 
-
-module.exports = gulp.task('scripts', ['templates'], function() {
+//process.env.BROWSERIFYSHIM_DIAGNOSTICS=1;
+module.exports = gulp.task('scripts', function() {
   var browserify = require('browserify')
     , gutil = require('gulp-util')
     , sourcemaps = require('gulp-sourcemaps')
@@ -37,6 +37,8 @@ module.exports = gulp.task('scripts', ['templates'], function() {
   }, watchify.args));
   bundler.external('./lib');
   _.forEach(config.libs, function(l){ bundler.external(l.name); });
+  bundler.external('d3');
+  bundler.external('nv');
 
   if (config.dev) {
     console.log(config.logTimestamp() + chalk.green('Watchifying scripts'));

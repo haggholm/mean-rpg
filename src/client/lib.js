@@ -4,7 +4,7 @@ require('jquery');
 require('hypher');
 require('hyphenation.en-us');
 require('numeral');
-require('d3-browserify');
+require('d3');
 
 
   //'angular': require('angular'),
@@ -14,5 +14,5 @@ require('d3-browserify');
   //'bootstrap': require('bootstrap'),
 
 
-  //'nvd3': require('nvd3'),
+  //'nvd3': require('nv'),
   //'angular-nvd3': require('angular-nvd3')

@@ -6,7 +6,7 @@ var config = require('../config');
 
 
 module.exports = gulp.task('connect', ['build'], function() {
-  connect.server({
+  return connect.server({
     root: ['./build'],
     port: config.port,
     livereload: true

@@ -11,7 +11,7 @@ module.exports = ngModule.directive('bsmenu',
       restrict: 'E',
       transclude: true,
       scope: {},
-      templateUrl: 'bsmenu.html',
+      templateUrl: '/templates/bsmenu.html',
       link: function(scope/*, el, attrs*/) {
         var update = function() {
           scope.headings = [];

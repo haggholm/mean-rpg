@@ -25,7 +25,7 @@ require('clean-css');
 gulp.task('build', function() {
   return require('run-sequence')(
     'clean',
-    ['mathjax', 'libs', 'scripts', 'fonts', 'images', 'less', 'html']
+    ['libs', 'scripts', 'fonts', 'images', 'less', 'html', 'templates']
 //    'postprocess',
 //    'cdnize'
   );

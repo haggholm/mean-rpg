@@ -1,7 +1,7 @@
 'use strict';
 
 var app = require('../app')
-  , d3 = require('d3-browserify');
+  , d3 = require('d3');
 var WIN_KEY = '% wins'
   , DRAW_KEY = '% draws'
   , LOSS_KEY = '% lost';

@@ -1,7 +1,6 @@
 'use strict';
 
-var $ = require('jquery')
-  , ng = require('angular');
+var ng = require('angular');
 // Load Angular modules needed for app initialization
 require('angular-resource');
 require('angular-ui-router');
@@ -9,7 +8,7 @@ require('angular-ui-router');
 require('bootstrap');
 
 // Directives module must be loaded; disable dev logging.
-require('nvd3').dev = false;
+require('nv').dev = false;
 require('angular-nvd3');
 
 // Submodules
@@ -46,7 +45,7 @@ app.config(function(
 });
 
 app.run(function($rootScope, $state) {
-  var titleNode = $('head').find('title');
+  var titleNode = document.getElementsByTagName('title')[0];
   $rootScope.$on(
     '$stateChangeSuccess',
     //function(event, toState, toParams, fromState, fromParams){
@@ -60,8 +59,6 @@ app.run(function($rootScope, $state) {
         }
         s = s.parent;
       }
-
-      titleNode.text('RPG | ' + titles.reverse().join(' » '));
-      $('p:not(.hyphenated)').attr('lang', 'en');
+      titleNode.innerHTML = 'RPG | ' + titles.reverse().join(' » ');
     });
 });
