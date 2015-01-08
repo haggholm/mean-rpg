@@ -1,13 +1,15 @@
 'use strict';
 
-var bsmenu = require('./bsmenu')
+var attrList = require('./attrList')
+  , bsmenu = require('./bsmenu')
   , hyphenate = require('./hyphenate')
   , roll = require('./roll')
-  , rpgMath = require('./rpgMath');
+  , math = require('./math');
 
 module.exports = {
+  attrList: attrList,
   bsmenu: bsmenu,
   hyphenate: hyphenate,
   roll: roll,
-  rpgMath: rpgMath
+  math: math
 };

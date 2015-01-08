@@ -17,6 +17,7 @@ mjAPI.config({
   }
 });
 mjAPI.start();
+var n = 0;
 
 /**
  * Process an HTML file:
@@ -36,6 +37,7 @@ function processHTML(html, callback) {
     console.log(chalk.red('Failed to infer xmlns'));
     throw e;
   }
+  //console.log('Typesetting '+ (++n));
   mjAPI.typeset({
     html: document.body.innerHTML,
     renderer: "NativeMML",
@@ -51,6 +53,7 @@ function processHTML(html, callback) {
     //width: 100, //argv.width,
     xmlns: xmlns
   }, function(result) {
+    //console.log('Done typesetting '+(--n));
     if (isFragment) {
       callback(result.html);
     } else {

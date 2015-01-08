@@ -18,5 +18,9 @@ ngModule.controller('AttributeCtrl',
           a.parent.children.push(a);
         }
       });
+
+      $scope.rootAttributes = _.filter($scope.attributes, function(attr) {
+        return attr.parent === null || attr.parent === undefined;
+      });
     });
   });

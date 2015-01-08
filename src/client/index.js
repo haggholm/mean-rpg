@@ -2,4 +2,3 @@
 
 require('./app');
 require('./states');
-//require('templates');

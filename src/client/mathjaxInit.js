@@ -3,8 +3,10 @@
 var _ = require('lodash')
   , browser = require('jquery-browser-plugin');
 
+var useMathJax = !browser.mozilla;
+
 var typeset;
-if (browser.mozilla) {
+if (!useMathJax) {
   console.info('Not loading MathJax: Firefox implements MathML!');
   typeset = function() {
     // nop
@@ -95,16 +97,13 @@ if (browser.mozilla) {
     }
   };
 
-  var local = false
-  , base = local ? 'MathJax/' : '//cdn.mathjax.org/mathjax/2.4-latest/';
-  mathJaxScript.src = (true ?
-    base + 'MathJax.js' :
-    base + 'MathJax.js?config=TeX-AMS-MML_HTMLorMML-full');
+  mathJaxScript.src = '//cdn.mathjax.org/mathjax/2.4-latest/MathJax.js';
   head.appendChild(mathJaxScript);
 }
 
 module.exports = {
   typeset: function(domNode) {
     typeset(domNode);
-  }
+  },
+  useMathJax: useMathJax
 };

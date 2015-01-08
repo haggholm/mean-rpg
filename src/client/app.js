@@ -55,7 +55,12 @@ app.run(function($rootScope, $state) {
       var s = $state.$current, titles = [];
       while (s) {
         if (s.data && s.data.title) {
-          titles.push(s.data.title);
+          titles.push(
+            s.data.title
+              .replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+          );
         }
         s = s.parent;
       }

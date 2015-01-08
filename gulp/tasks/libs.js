@@ -5,6 +5,7 @@ var _ = require('lodash')
   , concat = require('gulp-concat')
   , gulp = require('gulp')
   , gulpif = require('gulp-if')
+  , path = require('path')
   , plumber = require('gulp-plumber')
   , sourceStream = require('vinyl-source-stream')
   , uglify = require('gulp-uglify');
@@ -20,8 +21,10 @@ module.exports = gulp.task('libs', function() {
     commondir: 'src/client',
     paths: ['src/client']
   }, watchify.args));
-  _.forEach(config.libs, function(l) {
-    bundler.require(l.src || l.name, {expose: l.name});
+
+  var clientLibModule = path.join(__dirname, '../../src/client/lib.js');
+  _.forEach(_.keys(require(clientLibModule)), function(l) {
+    bundler.require(l, {expose: l});
   });
 
   var libBundleStream = bundler.bundle()
@@ -33,14 +36,29 @@ module.exports = gulp.task('libs', function() {
     .pipe(sourcemaps.write('sourcemaps'))
     .pipe(gulp.dest('build/'));
 
-  var d3stream = gulp.src([
-    'node_modules/d3/d3.min.js',
-    'node_modules/nvd3/build/nv.d3.min.js'])
+  var d3modules = ['node_modules/d3/d3.min.js'].concat(
+    _.map([
+      'core.js',
+      'interactiveLayer.js',
+      'tooltip.js',
+      'utils.js',
+      'models/axis.js',
+      //'models/discreteBar.js',
+      //'models/discreteBarChart.js',
+      'models/legend.js',
+      'models/multiBar.js',
+      'models/multiBarChart.js',
+      'models/multiBarHorizontal.js',
+      'models/multiBarHorizontalChart.js'
+      // nvd3 by default includes 'models/*.js'.
+    ], function(pth) { return 'node_modules/nvd3/src/'+pth; })
+  );
+  var d3stream = gulp.src(d3modules)
     .pipe(plumber())
     .pipe(gulpif(config.libmaps, sourcemaps.init({loadMaps: true})))
     .pipe(concat('d3-libs.js'))
     // No need to uglify if the libs are already minified
-    //.pipe(gulpif(config.uglify, uglify()))
+    .pipe(gulpif(config.uglify, uglify()))
     .pipe(sourcemaps.write('sourcemaps'))
     .pipe(gulp.dest('build/'));
 

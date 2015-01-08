@@ -16,7 +16,7 @@ module.exports = gulp.task('less', function() {
     .pipe(gulpif(config.sourcemaps, sourcemaps.init()))
     .pipe(less({
       plugins: [
-        new LessPluginAutoPrefix({browsers: ["last 2 versions"]})
+        new LessPluginAutoPrefix({browsers: ['last 2 versions']})
       ].concat(
         config.uglify ? [new LessPluginCleanCSS({advanced: true})] : []),
       ieCompat: false,

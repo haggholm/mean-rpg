@@ -9,9 +9,11 @@ var $ = require('jquery')
   , ngModule = require('../RPG.Directives')
   , mathjax = require('mathjaxInit');
 
-
-module.exports = {
-  rpgMath: ngModule.directive('math',
+var exportSymbol;
+if (!mathjax.useMathJax) {
+  exportSymbol = null;
+} else {
+  exportSymbol = ngModule.directive('math',
     function() {
       return {
         restrict: 'E',
@@ -23,5 +25,9 @@ module.exports = {
             });
         }
       };
-    })
+    });
+}
+
+module.exports = {
+  math: exportSymbol
 };

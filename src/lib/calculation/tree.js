@@ -25,7 +25,7 @@ function pointsToValue(points) {
   if (points < 0) {
     return -pointsToValue(-points);
   }
-  //return Math.floor(Math.sqrt(5.0 * points));
+  // Inverse of Σ[n=1..value](n)  ->  ½ * [ √(8n+1) - 1 ]
   return Math.floor(
     (Math.sqrt(8.0 * points + 1.0) - 1.0) / 2.0
   );
@@ -35,6 +35,7 @@ function valueToPoints(value) {
   if (value < 0) {
     return -valueToPoints(-value);
   }
+  // Σ[n=1..value](n)
   return (value * (value+1)) / 2;
 }
 
