@@ -12,6 +12,7 @@ module.exports = ngModule.service('ModelService',
       {id: '@_id'},
       {update: {method: 'PUT'}}
     );
+    console.log(models.Attribute);
 
     return models;
   });

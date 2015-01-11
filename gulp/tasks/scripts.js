@@ -36,9 +36,9 @@ module.exports = gulp.task('scripts', function() {
     paths: ['src/client', '.tmp']
   }, watchify.args));
   bundler.external('./lib');
-  _.forEach(config.libs, function(l){ bundler.external(l.name); });
-  bundler.external('d3');
-  bundler.external('nv');
+  _.forEach(require('./libs').external, function(l){
+    bundler.external(l.name);
+  });
 
   if (config.dev) {
     console.log(config.logTimestamp() + chalk.green('Watchifying scripts'));
@@ -57,13 +57,15 @@ module.exports = gulp.task('scripts', function() {
         .pipe(gulp.dest('build/'));
     };
     bundler.on('update', rebundle);
+    bundler.on('bundle', function(){console.log('...');});
     return rebundle();
   } else {
     return bundler.bundle()
+      .on('error', gutil.log.bind(gutil, 'Browserify error'))
       .pipe(sourceStream(getBundleName() + '.js'))
       .pipe(buffer())
       .pipe(gulpif(config.sourcemaps, sourcemaps.init({loadMaps: true})))
-      .pipe(gulpif(config.uglify, uglify()))
+      .pipe(gulpif(config.uglify, uglify({nomunge: config.dev})))
       .pipe(gulpif(config.sourcemaps, sourcemaps.write('sourcemaps')))
       .pipe(gulp.dest('build/'));
   }

@@ -6,7 +6,7 @@ module.exports = {
   debug: true,
   port: 9000,
   sourcemaps: true,
-  libmaps: true,
+  libmaps: false,
   uglify: true,//!dev,
   watching: dev,
   libs: [

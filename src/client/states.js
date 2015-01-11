@@ -14,15 +14,16 @@ app.config(function($stateProvider) {
 
   $stateProvider.state('attribute', {
     url: '/attributes',
-    templateUrl: '/templates/attributes.html',
-    controller: 'AttributeCtrl',
+    abstract: true,
+    template: '<div ui-view></div>',
     data: { title: 'Attributes' }
   });
 
   $stateProvider.state('attribute.edit', {
     url: '/{id}',
     templateUrl: '/templates/attribute-edit.html',
-    controller: 'AttributeEditCtrl'
+    controller: 'AttributeEditCtrl',
+    data: { title: 'Edit' }
   });
 
   $stateProvider.state('attribute-values', {

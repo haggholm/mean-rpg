@@ -8,21 +8,28 @@ var chalk = require('chalk')
 
 var PLUGIN_NAME = 'gulp-mathjaxify';
 
-mjAPI.config({
-  MathJax: {
-    menuSettings: {
-      semantics: true,
-      texHints: false
-    }
-  }
-});
-mjAPI.start();
-var n = 0;
+
+var TIMEOUT =  300 * 1000;
+var mathjaxStarted = false;
 
 /**
  * Process an HTML file:
  */
 function processHTML(html, callback) {
+  if (!mathjaxStarted) {
+    mjAPI.config({
+      MathJax: {
+        menuSettings: {
+          semantics: true,
+          texHints: false
+        },
+        timeout: TIMEOUT
+      }
+    });
+    mjAPI.start();
+    mathjaxStarted = true;
+  }
+
   var isFragment = !/(\s*<!DOCTYPE html>)\s*<html/im.test(html);
   var document, xmlns;
   try {
@@ -37,20 +44,48 @@ function processHTML(html, callback) {
     console.log(chalk.red('Failed to infer xmlns'));
     throw e;
   }
-  //console.log('Typesetting '+ (++n));
+
+
+  //var defaults = {
+  //  ex: 6,         // ex-size in pixels
+  //  width: 100,    // width of container (in ex) for linebreaking and tags
+  //
+  //  linebreaks: false,       // do linebreaking?
+  //  equationNumbers: "none", // or "AMS" or "all"
+  //  singleDollars: true,     // allow single-dollar delimiter for inline TeX?
+  //
+  //  html: "",          // the HTML snippet to process
+  //
+  //  xmlns: "mml",      // the namespace to use for MathML
+  //  inputs: ["AsciiMath","TeX","MathML"],
+  //  renderer: "SVG",   // the output format
+  //                     //    ("SVG", "NativeMML", "IMG", "PNG", or "None")
+  //  dpi: 144,          // dpi for png image
+  //
+  //  addPreview: false, // turn turn into a MathJax preview, and keep the jax
+  //  removeJax: true,   // remove MathJax <script> tags?
+  //
+  //  speakText: false,
+  //  speakRuleset: "mathspeak",
+  //  speakStyle: "default",
+  //
+  //  timeout: 60 * 1000
+  //};
+
   mjAPI.typeset({
     html: document.body.innerHTML,
-    renderer: "NativeMML",
-    inputs: ['AsciiMath','TeX','MathML'],
-    equationNumbers: false,
-    singleDollars: false,
+    renderer: 'NativeMML',
+    inputs: ['TeX'],
+    equationNumbers: 'none',
+    singleDollars: false,// allow single-dollar delimiter for inline TeX?
     removeJax: false,
-    addPreview: true, //argv.preview,
+    addPreview: false, //argv.preview,
     speakText: false,
-    speakRuleset: null,//argv.speechrules.replace(/^chromevox$/i, "default"),
-    speakStyle: null,//argv.speechstyle,
+    timeout: TIMEOUT,
+
     //ex: 6,//px argv.ex,
     //width: 100, //argv.width,
+
     xmlns: xmlns
   }, function(result) {
     //console.log('Done typesetting '+(--n));
@@ -94,9 +129,6 @@ module.exports = function() {
     //      PLUGIN_NAME + ': Streaming not supported'));
     //}
     var self = this;
-    var done = function(data) {
-      return cb();
-    };
     try {
       if (file.isBuffer()) {
         processHTML(String(file.contents), function(data){
@@ -105,7 +137,10 @@ module.exports = function() {
           cb();
         });
       } else if (file.isStream()) {
-        throw 'Doesn\'t support streams';
+        return this.emit('error',
+          new PluginError(
+            PLUGIN_NAME,
+            PLUGIN_NAME + ': Doesn\'t support streams'));
       }
     } catch (e) {
       console.log(chalk.red(e));

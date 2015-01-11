@@ -1,5 +1,9 @@
 'use strict';
 
+// My computer is slow, and MathJax can time out.
+// Let's start it loading ASAP.
+require('./mathjaxify');
+
 var chalk = require('chalk')
   , config = require('./gulp/config');
 
@@ -11,7 +15,6 @@ require('./gulp/tasks/html');
 require('./gulp/tasks/images');
 require('./gulp/tasks/less');
 require('./gulp/tasks/libs');
-require('./gulp/tasks/mathjax');
 require('./gulp/tasks/scripts');
 require('./gulp/tasks/templates');
 require('./gulp/tasks/watch');
@@ -22,14 +25,8 @@ var gulp = require('gulp')
 require('clean-css');
 
 
-gulp.task('build', function() {
-  return require('run-sequence')(
-    'clean',
-    ['libs', 'scripts', 'fonts', 'images', 'less', 'html', 'templates']
-//    'postprocess',
-//    'cdnize'
-  );
-});
+gulp.task('build',
+  ['libs', 'scripts', 'fonts', 'images', 'less', 'html', 'templates']);
 
 
 gulp.task('package', ['build'], function() {

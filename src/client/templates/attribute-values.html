@@ -9,18 +9,18 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="a in ::attributes">
+      <tr ng-repeat="a in ::attributeValueNodes">
         <td>
           <!--<div style="padding-left:{{:: 2 * a.depth}}em;">-->
           <p class="form-control-static">
-            <span class="text-muted">{{:: '....'.repeat(a.depth) }}&nbsp;</span>{{::a.name}}
+            <span class="text-muted">{{:: '....'.repeat(a.depth) }}&nbsp;</span>{{::a.object.name}}
           <!--</div>-->
         </td>
         <td>
           <div ng-if=":: !a.children">
-            <label for="attr-points-{{::a._id}}" class="sr-only" ng-bind="::a.name"></label>
+            <label for="attr-points-{{::a.object._id}}" class="sr-only" ng-bind="::a.object.name"></label>
             <input class="form-control number"
-                id="attr-points-{{::a._id}}" type="number" ng-model="a.points"/>
+                id="attr-points-{{::a.object._id}}" type="number" ng-model="a.points"/>
           </div>
         </td>
         <td class="text-right">
@@ -31,12 +31,12 @@
           </p>
         </td>
         <td>
-          <div ng-if="::a.nvd3data.length">
+          <div ng-if=":: a.nvd3data.length">
             <nvd3 config="nvd3config"
                   class="stat-vs-summary"
                   options="a.nvd3options"
                   api="a.nvd3api"
-                  data="a.nvd3data" id="sv-{{::a._id}}-vs"></nvd3>
+                  data="a.nvd3data" id="sv-{{::a.object._id}}-vs"></nvd3>
           </div>
         </td>
       </tr>

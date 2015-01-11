@@ -16,18 +16,11 @@ var AttributeValueSchema = new Schema({
 		ref: 'Attribute',
 		required: 'Every value must refer to an attribute'
 	},
-  type: {
-    type: String,
-    default: 'skill',
-    enum: ['skill', 'attribute'],
-    required: 'Every attribute must have a type'
-  },
-	description: {
-		type: String,
-		default: '',
-		trim: true,
-    required: 'Description may not be empty'
-	}
+  points: {
+    type: Number,
+    default: 0,
+    required: 'Required'
+  }
 });
 
 

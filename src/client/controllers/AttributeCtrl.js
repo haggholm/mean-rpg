@@ -1,26 +1,19 @@
 'use strict';
 
-var _ = require('lodash')
-  , ngModule = require('../RPG.Controllers');
+var ngModule = require('../RPG.Controllers')
+  , tree = require('../../lib/calculation/tree');
 require('../services/models');
 
 ngModule.controller('AttributeCtrl',
   function($scope, ModelService) {
-    $scope.attrById = {};
-    $scope.attributes = ModelService.Attribute.query(function() {
-      _.each($scope.attributes, function(a) {
-        $scope.attrById[a._id] = a;
-        a.children = [];
-      });
-      _.each($scope.attributes, function(a) {
-        if (a.parent !== undefined) {
-          a.parent = $scope.attrById[a.parent];
-          a.parent.children.push(a);
+    $scope.updateAttributes = function(cb) {
+      ModelService.Attribute.query(function(attrs) {
+        $scope.attributeNodes = tree.makeTree(attrs);
+        $scope.rootAttributeNodes = tree.roots($scope.attributeNodes);
+        if (cb) {
+          cb($scope.attributeNodes);
         }
       });
-
-      $scope.rootAttributes = _.filter($scope.attributes, function(attr) {
-        return attr.parent === null || attr.parent === undefined;
-      });
-    });
+    };
+    $scope.updateAttributes();
   });

@@ -12,3 +12,7 @@ module.exports = gulp.task('connect', ['build'], function() {
     livereload: true
   });
 });
+
+gulp.task('connect.reload', function(){
+  return connect.reload();
+});

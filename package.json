@@ -4,7 +4,8 @@
   "description": "MEAN webapp for an experimental RPG system",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "gulp build-libs"
   },
   "author": "Petter Häggholm",
   "license": "Proprietary",
@@ -56,6 +57,7 @@
     "es5-shim": "^4.0.5",
     "font-awesome": "^4.2.0",
     "gulp": "^3.8.10",
+    "gulp-add-src": "^0.2.0",
     "gulp-angular-templatecache": "^1.5.0",
     "gulp-concat": "^2.4.3",
     "gulp-connect": "^2.2.0",
@@ -93,13 +95,6 @@
     "vinyl-transform": "^1.0.0",
     "watchify": "^2.2.1"
   },
-  "browser": {
-    "angular": "./node_modules/angular/angular.js",
-    "angular-ui-router": "./node_modules/angular-ui-router/release/angular-ui-router.js",
-    "angular-nvd3": "./node_modules/angular-nvd3/dist/angular-nvd3.js",
-    "angular-resource": "./node_modules/angular-resource/angular-resource.js",
-    "bootstrap": "./node_modules/bootstrap/dist/js/bootstrap.js"
-  },
   "browserify": {
     "transform": [
       "browserify-shim",
@@ -107,35 +102,11 @@
     ]
   },
   "browserify-shim": {
-    "angular": {
-      "exports": "angular",
-      "depends": [
-        "jquery:jQuery"
-      ]
-    },
-    "angular-nvd3": {
-      "exports": "angular.module('nvd3').name",
-      "depends": [
-        "angular"
-      ]
-    },
-    "angular-resource": {
-      "exports": "angular.module('ngResource').name",
-      "depends": [
-        "angular"
-      ]
-    },
-    "angular-ui-router": {
-      "exports": "angular.module('ui.router').name",
-      "depends": [
-        "angular"
-      ]
-    },
-    "bootstrap": {
-      "depends": [
-        "jquery:jQuery"
-      ]
-    },
+    "angular": "global:angular",
+    "angular-nvd3": "global:angular.module('nvd3').name",
+    "angular-resource": "global:angular.module('ngResource').name",
+    "angular-ui-router": "global:angular.module('ui.router').name",
+    "bootstrap": "global:$",
     "d3": "global:d3",
     "nv": "global:nv"
   }

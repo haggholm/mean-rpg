@@ -28,6 +28,6 @@ module.exports = gulp.task('templates', function() {
       module: 'meanrpgclient',
       root: '/templates'
     }))
-    .pipe(gulpif(config.uglify, uglify()))
+    //.pipe(gulpif(config.uglify, uglify()))
     .pipe(gulp.dest('build'));
 });

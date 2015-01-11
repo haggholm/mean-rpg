@@ -1,21 +1,42 @@
-<form role="form">
+<div class="col-md-2 col-sm-12">
+  <div class="list-group">
+    <attr-list ng-repeat="a in rootAttributeNodes|orderBy:'name'"
+               attribute-node="a"
+               selected-attribute-node="activeAttributeNode"></attr-list>
+    <a class="list-group-item"
+       ui-sref="attribute.edit({id: null, parentId: null})">
+      <span class="fa fa-plus"></span> New
+    </a>
+  </div>
+</div>
+
+<form role="form" class="col-md-9 col-md-offset-1 col-sm-12" >
+  {{activeAttributeNode.parent.object}}
+  {{attributeNodes}}
+  <ul>
+    {{activeAttributeNode.parent.object._id}}
+    <li ng-repeat="a in attributeNodes">
+      {{a.object._id}}
+      {{a.object.name}}
+    </li>
+  </ul>
   <div class="form-group">
     <label for="attribute-parent">Parent</label>
     <select id="attribute-parent"
             class="form-control"
-            data-ng-model="attribute.parent"
-            data-ng-options="a._id as a.name for a in attributes"></select>
+            ng-model="activeAttributeNode.parent"
+            ng-options="a.object._id as a.object.name for a in attributeNodes"></select>
   </div>
   <div class="form-group">
     <label for="attribute-name">Name</label>
     <input id="attribute-name" class="form-control"
-           data-ng-model="attribute.name" placeholder="Name"/>
+           data-ng-model="activeAttributeNode.object.name" placeholder="Name"/>
   </div>
   <div class="form-group">
     <label for="attribute-description">Description</label>
     <textarea id="attribute-description"
               class="form-control"
-              data-ng-model="attribute.description"
+              data-ng-model="activeAttributeNode.object.description"
               placeholder="Description"></textarea>
   </div>
   <div class="form-group">
@@ -24,6 +45,6 @@
 </form>
 <div class="row">
   <ul>
-    <li data-ng-repeat="child in a.children" data-ng-bind="child.name"></li>
+    <li data-ng-repeat="child in a.children" data-ng-bind="child.object.name"></li>
   </ul>
 </div>

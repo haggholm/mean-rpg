@@ -3,6 +3,7 @@
 var _ = require('lodash')
   , ngModule = require('../RPG.Controllers')
   , tree = require('../../lib/calculation/tree')
+  , attrValCalc = require('../../lib/calculation/attr-vals')
   , simdata = require('../../data/rolls.processed.json')
   , util = require('../util')
   , d3 = require('d3');
@@ -69,26 +70,31 @@ module.exports = ngModule.controller('AttributeValueCtrl',
     };
 
     ModelService.Attribute.query(function(attrs) {
-      attrs.forEach(function(a) {
-        a.points = 0;
+      var attrVals = _.map(attrs, function(attr){
+        return {
+          _id: attr._id, // @TODO
+          name: attr.name,
+          points: 0,
+          value: 0
+        };
       });
-      $scope.attributes = attrs;
-
-      tree.treeify(attrs);
+      $scope.attributeValueNodes = tree.makeTree(attrVals);
+      _.forEach($scope.attributeValueNodes, function(node){
+        node.name = node.value.name;
+      });
 
       var getFullName = /*_.memoize(*/function(node) {
-        var n = node, names = [node.name];
+        var n = node, names = [node.object.name];
         while (n.parent) {
-          names.push(n.parent.name);
+          names.push(n.parent.value.name);
           n = n.parent;
         }
         names.reverse();
-        node.depth = names.length - 1;
         node.fullName = names.join(' ');
         return names.join(' ');
       }/*, function(n) { return n._id; })*/;
 
-      attrs.sort(function(a, b) {
+      $scope.attributeValueNodes.sort(function(a, b) {
         var aName = getFullName(a)
           , bName = getFullName(b);
         return aName < bName ? -1 : +1;
@@ -143,35 +149,35 @@ module.exports = ngModule.controller('AttributeValueCtrl',
       var idGen = 0;
       var recalculate = function() {
         var changedNodes = [];
-        _.forEach($scope.attributes, function(attr) {
-          if (attr.points === attr._oldPoints) {
+        _.forEach($scope.attributeValueNodes, function(node) {
+          if (node.object.points === node.oldPoints) {
             // No need to recalculate if points didn't change.
             return;
           }
-          attr._oldPoints = attr.points;
+          node.oldPoints = node.object.points;
 
-          var root = getRoot(attr);
+          var root = getRoot(node);
           if (changedNodes.indexOf(root) === -1) {
             changedNodes = changedNodes
               .concat([root], getAllChildren(root));
           }
         });
 
-        tree.recalculateValues(changedNodes);
+        attrValCalc.recalculateValues(changedNodes);
 
-        _.forEach($scope.attributes, function(attr) {
-          if (attr.value === attr._oldValue) {
+        _.forEach($scope.attributeValueNodes, function(node) {
+          if (node.value === node.oldValue) {
             // No need to redraw the chart if the value didn't change.
             return;
           }
-          attr._oldValue = attr.value;
+          node.oldValue = node.value;
 
-          if (attr.value < 0) {
-            attr.level = levels[0];
+          if (node.value < 0) {
+            node.level = levels[0];
           } else {
-            for (i = attr.value; i >= 0; i--) {
+            for (i = node.value; i >= 0; i--) {
               if (levels.hasOwnProperty(i)) {
-                attr.level = levels[i];
+                node.level = levels[i];
                 break;
               }
             }
@@ -182,18 +188,18 @@ module.exports = ngModule.controller('AttributeValueCtrl',
           delete l2[20];
           var nvd3values = _.map(l2, function(l, idx) {
             var opponentLevel = Number(idx)
-              , advantage = attr.value - opponentLevel
+              , advantage = node.value - opponentLevel
               , pct = getValue(advantage);
             return {vs: opponentLevel, pct: pct};
           });
 
-          if (attr.nvd3data === undefined) {
-            attr.nvd3data = [{key: '…', values: nvd3values}];
-            attr.nvd3options = {
+          if (node.nvd3data === undefined) {
+            node.nvd3data = [{key: '…', values: nvd3values}];
+            node.nvd3options = {
               chart: _.extend({id: 'nvd3-' + (++idGen)}, chartOptions)
             };
           } else {
-            var aValues = attr.nvd3data[0].values;
+            var aValues = node.nvd3data[0].values;
             for (i = nvd3values.length - 1; i >= 0; i--) {
               if (aValues[i] !== nvd3values[i]) {
                 aValues[i] = nvd3values[i];
@@ -205,7 +211,9 @@ module.exports = ngModule.controller('AttributeValueCtrl',
 
       $scope.$watch(
         function() {
-          return _.pluck($scope.attributes, 'points');
+          return _.map($scope.attributeValueNodes, function(node){
+            return node.object.points;
+          });
         },
         recalculate,
         true

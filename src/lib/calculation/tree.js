@@ -3,123 +3,95 @@
 var _ = require('lodash');
 
 
-function getId(node) {
-  return node._id;
-}
-
-function isLeaf(node) {
-  return node.children === undefined ||
-         node.children === null ||
-         node.children.length === 0;
-}
-
-function add(a, b) {
-  return a + b;
-}
-
-function sum(values) {
-  return _.reduce(values, add, 0);
-}
-
-function pointsToValue(points) {
-  if (points < 0) {
-    return -pointsToValue(-points);
+/**
+ * @param {object} object
+ * @param {object} opts
+ * @param {TreeNode} opts.parent
+ * @param {TreeNode[]} opts.children
+ *
+ * @property {object} object
+ * @property {TreeNode} parent
+ * @property {TreeNode[]} children
+ * @class
+ */
+function TreeNode(object, opts) {
+  if (object === null || object === undefined) {
+    throw 'TreeNode value object must be defined';
   }
-  // Inverse of Σ[n=1..value](n)  ->  ½ * [ √(8n+1) - 1 ]
-  return Math.floor(
-    (Math.sqrt(8.0 * points + 1.0) - 1.0) / 2.0
-  );
+  this.object = object;
+  this.children = (opts && opts.children) || [];
+  this.parent = (opts && opts.parent) || null;
 }
 
-function valueToPoints(value) {
-  if (value < 0) {
-    return -valueToPoints(-value);
-  }
-  // Σ[n=1..value](n)
-  return (value * (value+1)) / 2;
-}
-
-function ensureParent(parent, child) {
-  if (parent.children === undefined || parent.children === null) {
-    parent.children = [child];
-  } else if (parent.children.indexOf(child) === -1) {
-    parent.children.push(child);
-  }
-}
-
-function getParentId(node) {
-  if (typeof(node.parent) === 'object') {
-    ensureParent(node.parent, node);
-    return node.parent._id;
-  } else if (typeof(node.parent) === 'string') {
-    return node.parent;
-  } else if (node.parentId !== undefined) {
-    return node.parentId;
-  } else {
-    return null;
-  }
-}
-
-function treeify(nodes) {
-  var nodesById = _.indexBy(nodes, '_id');
-
-  // Read tree structure
-  _.each(nodes, function(node){
-    var parentId = getParentId(node);
-    if (parentId) {
-      var parent = node.parent = nodesById[parentId];
-      ensureParent(parent, node);
-    }
-  });
-  return nodes;
-}
-
-var EXP_SHARE_FACTOR = 3;
 
 module.exports = {
-  pointsToValue: pointsToValue,
-  valueToPoints: valueToPoints,
-
-  treeify: treeify,
-
   /**
-   * @param {Tree[]} trees
+   * @param {TreeNode} node
+   * @returns {boolean}
    */
-  leaves: function leaves(trees) {
-    var i, node, result = [];
-    for (i = 0; i < trees.length; i++) {
-      node = trees[i];
-      if (isLeaf(node)) {
-        result.push(node);
-      } else {
-        result = result.concat(leaves(node.children));
-      }
-    }
-    return result;
+  isLeaf: function isLeaf(node) {
+    return node.children === undefined ||
+           node.children === null ||
+           node.children.length === 0;
   },
 
-  recalculateValues: function(nodes) {
-    var getAccumulatedPoints = _.memoize(function(node) {
-      node.accumulatedPoints = (node.points +
-             sum(_.map(node.children, getAccumulatedPoints)));
-      return node.accumulatedPoints;
-    }, getId);
-    var getEffectivePoints = _.memoize(function(node) {
-      if (node.parent !== undefined && node.parent !== null) {
-        node.effectivePoints =
-          node.points * (EXP_SHARE_FACTOR-1)/EXP_SHARE_FACTOR +
-          getAccumulatedPoints(node.parent) / EXP_SHARE_FACTOR;
-      } else {
-        node.effectivePoints = node.points;
-      }
-      return node.effectivePoints;
-    }, getId);
+  /**
+   * @param {TreeNode} node
+   * @returns {boolean}
+   */
+  isRoot: function isRoot(node) {
+    return node.parent === undefined || node.parent === null;
+  },
 
-    treeify(nodes);
-    _.map(nodes, function(node){
-      node.value = node.children ?
-        pointsToValue(node.accumulatedPoints / EXP_SHARE_FACTOR) :
-        pointsToValue(getEffectivePoints(node));
+  TreeNode: TreeNode,
+
+  /**
+   * @param {object[]} objects Objectswith _id property
+   * @return {TreeNode[]} TreeNodes containing objects, with fully initialised
+   *                  tree structure
+   * @function
+   */
+  makeTree: function makeTree(objects) {
+    var nodesById = {};
+    _.forEach(objects, function(ob) {
+      nodesById[ob._id] = new TreeNode(ob);
     });
+
+    _.forEach(nodesById, function(node) {
+      var parentId = node.object.parent;
+      node.parent = nodesById[parentId];
+      if (parentId !== undefined && parentId !== null && !node.parent) {
+        throw 'Parent ' + parentId + 'of ' + node.object._id +
+              ' not found in tree!';
+      } else if (node.parent) {
+        node.parent.children.push(node);
+      }
+    });
+
+    var setDepth = function(node, depth) {
+      node.depth = depth;
+      _.forEach(node.children, function(ch) {
+        setDepth(ch, depth + 1);
+      });
+    };
+    _.forEach(_.filter(nodesById, exports.isRoot), function(root) {
+      setDepth(root, 0);
+    });
+
+    return nodesById;
+  },
+
+  /**
+   * @param {TreeNode[]} trees
+   */
+  leaves: function leaves(trees) {
+    return _.filter(trees, exports.isLeaf);
+  },
+
+  /**
+   * @param {TreeNode[]} trees
+   */
+  roots: function leaves(trees) {
+    return _.filter(trees, exports.isRoot);
   }
 };
