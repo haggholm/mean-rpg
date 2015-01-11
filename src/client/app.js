@@ -1,27 +1,24 @@
 'use strict';
 
-var ng = require('angular');
-// Load Angular modules needed for app initialization
-require('angular-resource');
-require('angular-ui-router');
-
+var page = require('page');
 require('bootstrap');
 
 // Directives module must be loaded; disable dev logging.
 require('nv').dev = false;
 require('angular-nvd3');
 
-// Submodules
-require('./RPG.Controllers');
-require('./RPG.Directives');
-require('./RPG.Filters');
-require('./RPG.Services');
 
-// Directives and filters are implicitly pulled in by templates;
-// make sure they're always available.
-require('./directives/_all');
-require('./filters/_all');
+(function() {
+  page({hashbang: true});
 
+  page('/*', require('ui/index'));
+  page('/attributes/edit', function(){});
+  page('/attributes', function(){});
+})();
+
+
+module.exports = {
+};
 
 var app = ng.module('meanrpgclient', [
   'ui.router',

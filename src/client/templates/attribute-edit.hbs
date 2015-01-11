@@ -1,12 +1,12 @@
 <div class="col-md-2 col-sm-12">
   <div class="list-group">
-    <attr-list ng-repeat="a in rootAttributeNodes|orderBy:'name'"
-               attribute-node="a"
-               selected-attribute-node="activeAttributeNode"></attr-list>
     <a class="list-group-item"
        ui-sref="attribute.edit({id: null, parentId: null})">
       <span class="fa fa-plus"></span> New
     </a>
+    <attr-list ng-repeat="a in rootAttributeNodes|orderBy:'name'"
+               attribute-node="a"
+               selected-attribute-node="activeAttributeNode"></attr-list>
   </div>
 </div>
 
